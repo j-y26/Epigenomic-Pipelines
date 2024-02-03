@@ -1,9 +1,3 @@
----
-layout: default
-title: Epigenomic Analysis Pipelines
-nav_order: 1
----
-
 # Epigenomic Pipelines
 
 Standardized pipelines for processing epigenomic NGS data

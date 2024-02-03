@@ -69,7 +69,7 @@ To use the pipelines, detailed descriptions and instructions are provided:
 
 - [Transcriptome Analysis](transcriptome/README.md)
 - [Chromatin Accessibility Analysis](chromatin_accessibility/README.md)
-- [Protein-DNA Interaction Analysis](protein-dna-interaction/README.md)
+- [Protein-DNA Interaction Analysis](protein_dna_interaction/README.md)
 
 Each directory contains a `README.md` file with detailed instructions on how to
 use the pipeline. These directories also contain the scripts and configuration
@@ -91,6 +91,16 @@ A general example for executing the scripts is as follows:
 ```bash
 ./epigenomic-pipelines/pipeline_folder/script.sh -c /path/to/config.cfg
 ```
+
+To reduce the risk of errors, some scripts that perform common tasks are created
+using symbolic links. These scripts can be used the same way as the original
+scripts. Documentation of these symbolic links can be found [here](docs/symlinks.md).
+
+## Contributing
+
+Contributions are welcome! For major changes, please open an issue first to
+discuss what you would like to change. For any issues, please open an issue in
+the [issue tracker](https://github.com/j-y26/Epigenomic-Pipelines/issues).
 
 ## License
 

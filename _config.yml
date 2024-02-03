@@ -8,18 +8,8 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-feed
-
-# Custom Table of Contents
-navbar:
-  - title: "Home"
-    url: "/"
-  - title: "Transcriptomics"
-    url: "/transcriptome/"
-  - title: "Chromatin Accessibility"
-    url: "/chromatin_accessibility/"
-  - title: "Protein-DNA Interaction"
-    url: "/protein_dna_interaction/"
-  - title: "Notes"
-    children:
-      - title: "Symbolic Links"
-        url: "/docs/symlinks"
+aux_links:
+  "Pipelines on GitHub":
+    - "//github.com/j-y26/Epigenomic-Pipelines"
+heading_anchors: true
+color_scheme: dark

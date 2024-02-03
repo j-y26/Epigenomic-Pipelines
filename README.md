@@ -1,6 +1,23 @@
+---
+layout: default
+title: Epigenomic Analysis Pipelines
+nav_order: 1
+---
+
 # Epigenomic Pipelines
 
 Standardized pipelines for processing epigenomic NGS data
+
+### Table of Contents
+
+- [Epigenomic Pipelines](#epigenomic-pipelines)
+    - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+    - [Implemented Pipelines](#implemented-pipelines)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## Introduction
 
@@ -11,9 +28,7 @@ protein-DNA interactions.
 The pipelines primarily focus on the processing of raw sequencing data to the
 generation of high-quality data files that can be used for downstream analysis.
 The pipelines are designed to be modular, allowing for the easy addition of new
-tools and methods. In addition, the pipelines are implemented for generation of
-reproducible results, where a standardized set of input parameters and
-configuration files are used cross the analysis.
+tools and methods. In addition, the pipelines are implemented for gene- [Epigenomic Pipelines](#epigenomic-pipelines)
 
 ### Implemented Pipelines
 

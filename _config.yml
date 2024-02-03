@@ -12,6 +12,7 @@ aux_links:
   "Pipelines on GitHub":
     - "//github.com/j-y26/Epigenomic-Pipelines"
 heading_anchors: true
-footer_content: "_includes/footer.html"
+includes:
+  before_footer: "_includes/footer.html"
 logo: "/docs/assets/page_logo.png"
 favicon: "/docs/assets/favicon.ico"

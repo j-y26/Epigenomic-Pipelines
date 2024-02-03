@@ -1,21 +1,13 @@
----
-layout: default
----
-
-# Epigenomic Pipelines
-
-Standardized pipelines for processing epigenomic NGS data
+![](/docs/assets/page_logo.png)
 
 ### Table of Contents
 
-- [Epigenomic Pipelines](#epigenomic-pipelines)
-    - [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
-    - [Implemented Pipelines](#implemented-pipelines)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Contributing](#contributing)
-  - [License](#license)
+- [Introduction](#introduction)
+- [Implemented Pipelines](#implemented-pipelines)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Introduction
 
@@ -28,7 +20,7 @@ generation of high-quality data files that can be used for downstream analysis.
 The pipelines are designed to be modular, allowing for the easy addition of new
 tools and methods. In addition, the pipelines are implemented for gene- [Epigenomic Pipelines](#epigenomic-pipelines)
 
-### Implemented Pipelines
+## Implemented Pipelines
 
 Currently, the following analysis pipelines are implemented:
 

@@ -3,8 +3,23 @@ name: Jielin Yang
 author:
   github: https://github.com/j-y26
   email: jielin.yang@sickkids.ca
-url: https://alexharv074.github.io/
+url: https://j-y26.github.io/j-yang/
 plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-feed
+
+# Custom Table of Contents
+navbar:
+  - title: "Home"
+    url: "/"
+  - title: "Transcriptomics"
+    url: "/transcriptome/"
+  - title: "Chromatin Accessibility"
+    url: "/chromatin_accessibility/"
+  - title: "Protein-DNA Interaction"
+    url: "/protein_dna_interaction/"
+  - title: "Notes"
+    children:
+      - title: "Symbolic Links"
+        url: "/docs/symlinks"

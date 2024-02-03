@@ -1,0 +1,10 @@
+remote_theme: "just-the-docs/just-the-docs"
+name: Jielin Yang
+author:
+  github: https://github.com/j-y26
+  email: jielin.yang@sickkids.ca
+url: https://alexharv074.github.io/
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed

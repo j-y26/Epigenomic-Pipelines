@@ -94,7 +94,7 @@ syntax when working with the configuration file.
 A general example for executing the scripts is as follows:
 
 ```bash
-./epigenomic-pipelines/pipeline_folder/script.sh -c /path/to/config.cfg
+./epigenomic-pipelines/pipeline_folder/script.sh /path/to/config.sh
 ```
 
 To reduce the risk of errors, some scripts that perform common tasks are created

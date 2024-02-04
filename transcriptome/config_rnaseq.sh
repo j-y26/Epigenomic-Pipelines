@@ -22,3 +22,10 @@ threads="8" # Number of threads to use for the analysis
 
 # Data preprocessing
 fastqcOutDir="${projPath}/fastqc" # Path to the directory containing the FASTQC output
+TRIMMOMATIC_JAR="/path/to/trimmomatic.jar" # Path to the Trimmomatic JAR file
+TRIMMOMATIC_ADAPTER_FILE="/path/to/adapter.fa" # Path to the Trimmomatic adapter file
+# Note that the adapter must be chosen corresponding to the library generation method
+# These fasta files are usually stored along with the Trimmomatic JAR file
+
+trimmedDir="${projPath}/fastq_trimmed" # Path to the directory containing the trimmed FASTQ files
+

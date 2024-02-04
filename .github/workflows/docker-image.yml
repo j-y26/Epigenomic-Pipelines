@@ -1,0 +1,26 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Docker Login
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run:
+        echo $DOCKER_PASSWORD | docker login docker.io -u $DOCKER_USER --password-stdin
+    - name: Build the Docker image for Epigenomic Pipelines
+      run: docker build . --file Dockerfile --tag jyang26/epigenomic-pipelines:v1.0
+    - name: Push Epigenomic Pipelines to Docker Hub
+      run: docker push jyang26/epigenomic-pipelines:v1.0

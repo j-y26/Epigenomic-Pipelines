@@ -18,7 +18,7 @@ protein-DNA interactions.
 The pipelines primarily focus on the processing of raw sequencing data to the
 generation of high-quality data files that can be used for downstream analysis.
 The pipelines are designed to be modular, allowing for the easy addition of new
-tools and methods. In addition, the pipelines are implemented for gene- [Epigenomic Pipelines](#epigenomic-pipelines)
+tools and methods.
 
 ## Implemented Pipelines
 
@@ -44,7 +44,7 @@ cd Epigenomic-Pipelines
 ```
 
 In this pipeline, we assume that the required tools are installed and available
-in the system path. The required tools are listed in the `requirements.txt` file,
+in the system path. The required tools are listed in the `requirements.md` file,
 and all tools are publicly available.
 
 Alternatively, a Docker image is provided that contains all the required tools

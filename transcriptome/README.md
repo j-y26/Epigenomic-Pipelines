@@ -21,6 +21,9 @@ Here, we describe the analysis from the input fastq files.
     - [Trimming](#trimming)
     - [Quality control after trimming](#quality-control-after-trimming)
   - [Alignment](#alignment)
+    - [Building STAR index](#building-star-index)
+    - [Alignment](#alignment-1)
+  - [Post-alignment processing](#post-alignment-processing)
 
 
 ## Configuration
@@ -110,3 +113,48 @@ This will facilitate a better alignment to the reference genome.
 <br><br/>
 
 ## Alignment
+
+Aligning the reads to the reference genome is the next step in the analysis. This
+can be done using tools such as `STAR`, which is a fast and accurate aligner for
+RNA-seq data. However, `STAR` is memory-intensive, and the amount of memory
+required depends on the size of the reference genome. For example, the human
+reference genome requires approximately 30GB of memory.
+
+### Building STAR index
+
+Before running the alignment, it is important to prepare the reference genome
+index. This can be done using the `STAR --runMode genomeGenerate` command.
+You can download the reference genome FASTA file and GTF annotation file from
+a database such as Ensembl or UCSC. Alternatively, STAR provides a set of
+pre-built reference genome indexes for many species, which can be downloaded
+from the STAR website.
+
+To build the index of the reference genome, we use the `build_star_index.sh`
+script.
+
+```bash
+./build_star_index.sh config_rnaseq.sh
+```
+
+Ensure that you have the path to the reference genome FASTA file and GTF
+annotation file set in the `config_rnaseq.sh` file. The `STAR` program will
+use these files to build the index and output the index files to the
+directory you specified.
+
+### Alignment
+
+After building the index, we can now align the reads to the reference genome.
+Here we use the `star_alignment.sh` script.
+
+```bash
+./star_alignment.sh config_rnaseq.sh
+```
+
+The script will align the reads to the reference genome and output the aligned
+reads in the BAM format. The BAM file is a binary format, and can be converted
+to a human-readable SAM format using the `samtools view` command. Furthermore,
+the default behavior of the pipeline ensures that the BAM file is sorted by
+coordinate, which are usually required for indexing the BAM file and for
+some downstream analysis.
+
+## Post-alignment processing

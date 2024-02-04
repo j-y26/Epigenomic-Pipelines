@@ -14,18 +14,45 @@
 # Note that the input file name must follow illumina's naming convention:
 # <sample_name>_<lane>_R<read_number>_001.fastq.gz
 
-# Global parameters
-projPath="/your/project/path" # Path to the project home directory
-fastqDir="${projPath}/fastq" # Path to the directory containing the FASTQ files
-lane="L001" # Lane identifier
-threads="8" # Number of threads to use for the analysis
+# ====== Global parameters =====================================================
+# Path to the project home directory
+projPath="/your/project/path"
 
-# Data preprocessing
-fastqcOutDir="${projPath}/fastqc" # Path to the directory containing the FASTQC output
-TRIMMOMATIC_JAR="/path/to/trimmomatic.jar" # Path to the Trimmomatic JAR file
-TRIMMOMATIC_ADAPTER_FILE="/path/to/adapter.fa" # Path to the Trimmomatic adapter file
+# Path to the directory containing the FASTQ files
+fastqDir="${projPath}/fastq" 
+
+# Lane identifier
+lane="L001" 
+
+# Number of threads to use for the analysis (check your CPU for this value)
+threads="8" 
+
+# ======= Data preprocessing ===================================================
+# Path to the directory containing the FASTQC output
+fastqcOutDir="${projPath}/fastqc" 
+
+# Path to the Trimmomatic JAR file
+TRIMMOMATIC_JAR="/path/to/trimmomatic.jar" 
+
+# Path to the Trimmomatic adapter file
+TRIMMOMATIC_ADAPTER_FILE="/path/to/adapter.fa" 
 # Note that the adapter must be chosen corresponding to the library generation method
 # These fasta files are usually stored along with the Trimmomatic JAR file
 
-trimmedDir="${projPath}/fastq_trimmed" # Path to the directory containing the trimmed FASTQ files
+# Path to the directory containing the trimmed FASTQ files
+trimmedDir="${projPath}/fastq_trimmed" 
 
+# ====== Alignment =============================================================
+# Path to the STAR index directory
+STARIndexDir="/path/to/STARIndex"
+# if you do not have a STAR index, the pipeline will create one in this directory
+
+# Path to the genome FASTA file
+genomeFastaFile="/path/to/genome.fa"
+
+# Path to the genome GTF file
+genomeGtfFile="/path/to/genome.gtf" 
+# Note that the genome FASTA and GTF files are not used if you already have a STAR index
+
+# Path to the output directory for the alignment
+STAROutputDir="${projPath}/star_output"

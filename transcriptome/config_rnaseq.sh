@@ -56,3 +56,17 @@ genomeGtfFile="/path/to/genome.gtf"
 
 # Path to the output directory for the alignment
 STAROutputDir="${projPath}/star_output"
+
+# ====== Post-alignment processing =============================================
+# Path to the directory containing the BAM files sorted by name
+nameSortedDir="${projPath}/samtools_sort_name"
+
+# Path to the output directory of featureCounts
+featureCountsDir="${projPath}/feature_counts"
+
+# Name of the output file for the featureCounts table
+outCountFile="raw_counts.txt"
+
+
+
+# [END] 

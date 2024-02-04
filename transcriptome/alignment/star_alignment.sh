@@ -8,6 +8,7 @@ config_script=$1
 source ${config_script}
 echo "Running with config:"
 echo "STARIndexDir: ${STARIndexDir}"
+echo "STAROutputDir: ${STAROutputDir}"
 
 # [Main]
 

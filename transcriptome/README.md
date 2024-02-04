@@ -24,6 +24,8 @@ Here, we describe the analysis from the input fastq files.
     - [Building STAR index](#building-star-index)
     - [Alignment](#alignment-1)
   - [Post-alignment processing](#post-alignment-processing)
+    - [Sorting BAM file by name](#sorting-bam-file-by-name)
+    - [Generating count matrix](#generating-count-matrix)
 
 
 ## Configuration
@@ -157,4 +159,37 @@ the default behavior of the pipeline ensures that the BAM file is sorted by
 coordinate, which are usually required for indexing the BAM file and for
 some downstream analysis.
 
+<br><br/>
+
 ## Post-alignment processing
+
+After aligning the reads to the reference genome, it is important to check the
+quality of the alignment. In particular, `STAR` provides a set of quality
+metrics that can be used to assess the quality of the alignment, particularly,
+the alignment rate, the number of uniquely mapped reads, and the number of
+multi-mapped reads.
+
+Furthermore, we need to translate the alignment files into a count matrix,
+which can be used for downstream differential expression analysis.
+
+### Sorting BAM file by name
+
+To use `featureCounts` to generate the count matrix, it is important to sort the
+BAM file by name. This can be done using the `samtools sort` command.
+
+The `sort_bam_by_name.sh` script sorts the BAM file by name.
+
+```bash
+./sort_bam_by_name.sh config_rnaseq.sh
+```
+
+The script will output a sorted BAM file, which can be used for generating the
+count matrix using `featureCounts`. Note, this file is sorted by name, unlike
+the output of the `star_alignment.sh` script, which is sorted by coordinate.
+
+### Generating count matrix
+
+The final step in the analysis is to generate the count matrix. This can be done
+using tools such as `featureCounts`, which is a program in the `subread` package
+that can be used to count the number of reads that map to each gene in the
+reference genome.

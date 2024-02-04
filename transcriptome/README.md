@@ -193,3 +193,13 @@ The final step in the analysis is to generate the count matrix. This can be done
 using tools such as `featureCounts`, which is a program in the `subread` package
 that can be used to count the number of reads that map to each gene in the
 reference genome.
+
+We can perform this via the `featureCounts_gene.sh` script.
+
+```bash
+./featureCounts_gene.sh config_rnaseq.sh
+```
+
+The script will output a count matrix, which can be used for downstream
+differential expression analysis. Here, the count matrix is generated at the
+gene level.

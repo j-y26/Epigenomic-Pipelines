@@ -67,6 +67,23 @@ featureCountsDir="${projPath}/feature_counts"
 # Name of the output file for the featureCounts table
 outCountFile="raw_counts.txt"
 
+# Path to the coverage files for visualizing RNAseq tracks
+coverageFilePath="${projPath}/coverage_tracks"
+
+# Coverage file format, either "bedgraph" or "bigwig"
+outCoverageFormat="bigwig"
+
+# Normalization method for the coverage files, one of RPKM, CPM, BPM, RPGC, None
+coverageNorm="CPM"
+
+# Effective genome size for the coverage files, used for normalization
+# Refer to utils/resources
+genomeSize="XXXXXXXXXX"
+
+# Bin size for the coverage files
+binSize="20"
+
+
 
 
 # [END] 

@@ -26,6 +26,7 @@ Here, we describe the analysis from the input fastq files.
   - [Post-alignment processing](#post-alignment-processing)
     - [Sorting BAM file by name](#sorting-bam-file-by-name)
     - [Generating count matrix](#generating-count-matrix)
+    - [Visualizing the RNA-seq Tracks](#visualizing-the-rna-seq-tracks)
 
 
 ## Configuration
@@ -203,3 +204,32 @@ We can perform this via the `featureCounts_gene.sh` script.
 The script will output a count matrix, which can be used for downstream
 differential expression analysis. Here, the count matrix is generated at the
 gene level.
+
+### Visualizing the RNA-seq Tracks
+
+Visually inspecting the RNA-seq reads on different regions of the genome
+is an important way to understand the expression of the genes, especially
+when integrating gene expression with other genomic data. This can be done
+using tools such as the Integrative Genomics Viewer (IGV), which is a
+high-performance visualization tool for interactive exploration of large,
+integrated genomic datasets.
+
+Visualizing the genome track requires a compatible file format, such as the
+`bigWig` or `bedgraph` format. In addition, the reads must be normalized so that 
+the tracks can be compared across different samples.
+
+The `bam_to_bigwig.sh` script can be used to convert the BAM file to the bigWig
+format.
+
+```bash
+./bam_to_coverage.sh config_rnaseq.sh
+```
+
+For transcriptomic data, which are splice-aware, it is important not to use the
+`--extendReads` option, as this will extend the reads across the splice junctions,
+which is not biologically meaningful. For choosing the normalization method, the
+`CPM` (counts per million) method is recommended, as it is robust to differences
+in library size and can be used to compare between samples. If relative expression
+between genes is important, the `RPKM` (reads per kilobase per million) or the
+`FPKM` (fragments per kilobase per million) method can be used as they take into
+account the gene length.

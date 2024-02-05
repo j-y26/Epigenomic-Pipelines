@@ -14,6 +14,7 @@ nav_order: 1
 - STAR
 - samtools
 - featureCounts (subread)
+- deepTools
 - R (with DESeq2, ggplot2, etc.)
 
 ## Chromatin Accessibility (ATAC-Seq)
@@ -24,7 +25,7 @@ nav_order: 1
 - samtools
 - picard
 - macs2
-- deeptools
+- deepTools
 - bedtools
 
 ## Protein-DNA Interaction (ChIP-Seq, CUT&RUN, CUT&Tag)
@@ -35,6 +36,6 @@ nav_order: 1
 - samtools
 - picard
 - macs2
-- deeptools
+- deepTools
 - bedtools
 

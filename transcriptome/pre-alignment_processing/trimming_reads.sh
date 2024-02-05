@@ -32,7 +32,7 @@ if [ ! -d ${trimmedDir}/unpaired ]; then
 fi
 
 # Loop through the directory to match patterns ending in _R1_*.fastq.gz
-# and run FastQC on the paired files
+# and perform trimming using Trimmomatic
 
 for file in $(find ${fastqDir} -type f -name '*_R1_*.fastq.gz'); do
     sample=$(basename $file _${lane}_R1_001.fastq.gz)

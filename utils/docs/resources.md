@@ -38,18 +38,12 @@ can be found here:
 
 When **multi-mapping reads are included**, we use the non-N bases in the genome:
 
-<div align="center">
-
 | Genome | Effective Genome Size |
 |----------|----------|
 | mm10/GRCm38 | `2652783500` |
 | hg38/GRCh38 | `2913022398` |
 
-</div>
-
 When **multi-mapping reads are excluded**, we use the uniquely mappable genome size:
-
-<div align="center">
 
 | Read Length | mm10/GRCm38 | hg38/GRCh38 |
 |-------------|--------------|-------------|

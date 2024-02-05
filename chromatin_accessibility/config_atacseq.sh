@@ -1,5 +1,5 @@
 # This is an example configuration file for the analysis of transcriptomic data
-# using the RNA-seq pipeline. The configuration file is in bash format.
+# using the ATAC-seq pipeline. The configuration file is in bash format.
 # The configuration file is divided into sections, each section corresponding to
 # a step in the pipeline. Each section contains a list of parameters that are
 # used by the pipeline to perform the analysis. The parameters are defined as
@@ -30,14 +30,6 @@ threads="8"
 # ======= Data preprocessing ===================================================
 # Path to the directory containing the FASTQC output
 fastqcOutDir="${projPath}/fastqc_output" 
-
-# Path to the Trimmomatic JAR file
-TRIMMOMATIC_JAR="/path/to/trimmomatic.jar" 
-
-# Path to the Trimmomatic adapter file
-TRIMMOMATIC_ADAPTER_FILE="/path/to/adapter.fa" 
-# Note that the adapter must be chosen corresponding to the library generation method
-# These fasta files are usually stored along with the Trimmomatic JAR file
 
 # Path to the directory containing the trimmed FASTQ files
 trimmedDir="${projPath}/fastq_trimmed" 

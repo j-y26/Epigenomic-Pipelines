@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Resources
-parent: Utility Scripts
+parent: Utilities
 nav_order: 1
 ---
 

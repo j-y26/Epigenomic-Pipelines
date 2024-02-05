@@ -26,6 +26,18 @@ Suppose `.` is the root of the project directory.
   ln ./transcriptome/pre-alignment_processing/fastqc_pre-trimming.sh ./protein_dna_interaction/pre-alignment_processing/fastqc_pre-trimming.sh
   ```
 
+- Trimming of reads with `fastp`
+
+  - `chromatin_accessibility` -> `protein_dna_interaction`
   
+  ```bash
+  ln ./chromatin_accessibility/pre-alignment_processing/trimming_reads.sh ./protein_dna_interaction/pre-alignment_processing/trimming_reads.sh
+  ```
 
-
+- FastQC processing of post-trimmed reads: 
+  
+  - `chromatin_accessibility` -> `protein_dna_interaction`
+  
+  ```bash
+  ln ./chromatin_accessibility/pre-alignment_processing/fastqc_post-trimming.sh ./protein_dna_interaction/pre-alignment_processing/fastqc_post-trimming.sh
+  ```

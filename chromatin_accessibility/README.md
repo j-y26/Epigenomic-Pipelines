@@ -24,6 +24,7 @@ experiments.
     - [Building the reference genome index](#building-the-reference-genome-index)
     - [Alignment of reads](#alignment-of-reads)
     - [Spike-in alignment (optional)](#spike-in-alignment-optional)
+  - [Post-alignment QC and processing](#post-alignment-qc-and-processing)
 
 ## Configuration
 
@@ -228,3 +229,8 @@ bowtie2 --end-to-end --very-sensitive --no-overlap --no-dovetail --no-mixed --no
     -2 sample_R2_trimmed.fastq.gz \
     -S output_bowtie2.sam &> bowtie2_summary.txt
 ```
+
+<br><br/>
+
+## Post-alignment QC and processing
+

@@ -54,3 +54,12 @@ Suppose `.` is the root of the project directory.
   ln ./chromatin_accessibility/alignment/bowtie2_align.sh \
     ./protein_dna_interaction/alignment/bowtie2_align.sh
   ```
+
+- Deduplication of aligned reads
+  
+  - `chromatin_accessibility` -> `protein_dna_interaction`
+  
+  ```bash
+  ln ./chromatin_accessibility/post-alignment_processing/dedup_bam.sh \
+    ./protein_dna_interaction/post-alignment_processing/dedup_bam.sh
+  ```

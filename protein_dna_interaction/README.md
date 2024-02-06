@@ -24,6 +24,9 @@ raw data files for ChIP-seq, CUT&Tag, and CUT&RUN experiments.
     - [Building the reference genome index](#building-the-reference-genome-index)
     - [Alignment of reads](#alignment-of-reads)
     - [Spike-in alignment (optional)](#spike-in-alignment-optional)
+  - [Post-alignment QC and processing](#post-alignment-qc-and-processing)
+    - [Alignment rate](#alignment-rate)
+    - [Duplicate removal](#duplicate-removal)
 
 
 ## Configuration
@@ -228,3 +231,34 @@ bowtie2 --end-to-end --very-sensitive --no-overlap --no-dovetail --no-mixed --no
     -2 sample_R2_trimmed.fastq.gz \
     -S output_bowtie2.sam &> bowtie2_summary.txt
 ```
+
+<br><br/>
+
+## Post-alignment QC and processing
+
+After aligning the reads to the reference genome, we perform post-alignment QC
+and processing.
+
+### Alignment rate
+
+The alignment rate is show in the `bowtie2.txt` file under the `alignment/bowtie2_summary` folder. The alignment rate
+is calculated as the number of reads that are aligned to the reference genome 
+(both uniquely aligned and multi-mapping reads) divided by the total number of
+reads in the fastq files. It is expected that a successful alignment rate is about 80-90%.
+
+### Duplicate removal
+
+After alignment, we remove duplicates using `picard` tools. The removal of
+duplicates is important to ensure that only unique reads are used for the
+downstream analysis. This is because PCR duplicates are not informative and
+will cause bias when algorithms tries to identify the enriched regions.
+
+The following command removes duplicates from the aligned BAM file:
+
+```bash
+./dedup_bam.sh config_chipseq.sh
+```
+
+Note that we also use `samtools` to sort the BAM file before removing duplicates.
+This is required by `picard`. Furthermore, the path to the `picard.jar` file
+must be set in the configuration file.

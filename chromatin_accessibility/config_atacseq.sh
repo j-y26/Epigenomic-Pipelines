@@ -55,14 +55,12 @@ maxInsertLength="1000"
 keepSAM="false"
 
 # ====== Post-alignment processing =============================================
-# Path to the directory containing the BAM files sorted by name
-nameSortedDir="${projPath}/samtools_sort_name"
+# Path to Picard JAR file
+PICARD_JAR="/path/to/picard.jar"
 
-# Path to the output directory of featureCounts
-featureCountsDir="${projPath}/feature_counts"
 
-# Name of the output file for the featureCounts table
-outCountFile="raw_counts.txt"
+
+
 
 # Path to the coverage files for visualizing RNAseq tracks
 coverageFilePath="${projPath}/coverage_tracks"

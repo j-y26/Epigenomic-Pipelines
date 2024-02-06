@@ -7,10 +7,10 @@ fi
 config_script=$1
 source ${config_script}
 echo "Running with config:"
-echo "  trimmedDir: ${trimmedDir}"
-echo "  bowtieIndex: ${bowtieIndex}"
-echo "  alignmentDir: ${alignmentDir}"
-echo "  maxInsertLength: ${maxInsertLength}"
+echo "  Trimmed fastq file directory: ${trimmedDir}"
+echo "  bowtie2 Index: ${bowtieIndex}"
+echo "  Alignment directory: ${alignmentDir}"
+echo "  Maximum insert size: ${maxInsertLength}"
 echo "  keep SAM files: ${keepSAM}"
 
 # [Main]

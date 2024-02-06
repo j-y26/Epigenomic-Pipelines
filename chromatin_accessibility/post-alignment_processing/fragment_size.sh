@@ -7,7 +7,8 @@ fi
 config_script=$1
 source ${config_script}
 echo "Running with config:"
-echo "  alignmentDir: ${alignmentDir}"
+echo "  Alignment directory: ${alignmentDir}"
+echo "  Fragment size file directory: ${alignmentDir}/fragment_size"
 
 
 # [Main]

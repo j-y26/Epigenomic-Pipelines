@@ -7,8 +7,8 @@ fi
 config_script=$1
 source ${config_script}
 echo "Running with config:"
-echo "  fastqDir: ${fastqDir}"
-echo "  fastqcOutDir: ${fastqcOutDir}"
+echo "  fastq raw file directory: ${fastqDir}"
+echo "  FastQC output directory: ${fastqcOutDir}"
 echo "  threads: ${threads}"
 
 # [Main]

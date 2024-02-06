@@ -7,7 +7,7 @@ fi
 config_script=$1
 source ${config_script}
 echo "Running with config:"
-echo "  alignmentDir: ${alignmentDir}"
+echo "  Alignment directory: ${alignmentDir}"
 echo "  PICARD_JAR: ${PICARD_JAR}"
 
 # [Main]

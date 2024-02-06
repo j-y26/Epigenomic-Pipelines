@@ -35,19 +35,24 @@ fastqcOutDir="${projPath}/fastqc_output"
 trimmedDir="${projPath}/fastq_trimmed" 
 
 # ====== Alignment =============================================================
-# Path to the STAR index directory
-STARIndexDir="/path/to/STARIndex"
-# if you do not have a STAR index, the pipeline will create one in this directory
+# Path to the Bowtie2 index
+# Note that the end of the below path must be the prefix of the index
+bowtieIndex="/path/to/bowtie2_index"
 
 # Path to the genome FASTA file
 genomeFastaFile="/path/to/genome.fa"
 
 # Path to the genome GTF file
-genomeGtfFile="/path/to/genome.gtf" 
-# Note that the genome FASTA and GTF files are not used if you already have a STAR index
+genomeGtfFile="/path/to/genome.gtf"
 
 # Path to the output directory for the alignment
-STAROutputDir="${projPath}/star_output"
+alignmentDir="${projPath}/alignment"
+
+# Maximum insert length for paired-end reads
+maxInsertLength="1000"
+
+# Whether to preserve the human-readable SAM files, must be their "true" or "false"
+keepSAM="false"
 
 # ====== Post-alignment processing =============================================
 # Path to the directory containing the BAM files sorted by name

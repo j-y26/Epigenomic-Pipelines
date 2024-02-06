@@ -20,6 +20,10 @@ raw data files for ChIP-seq, CUT&Tag, and CUT&RUN experiments.
     - [Quality control](#quality-control)
     - [Trimming](#trimming)
     - [Quality control after trimming](#quality-control-after-trimming)
+  - [Alignment](#alignment)
+    - [Building the reference genome index](#building-the-reference-genome-index)
+    - [Alignment of reads](#alignment-of-reads)
+    - [Spike-in alignment (optional)](#spike-in-alignment-optional)
 
 
 ## Configuration
@@ -95,4 +99,132 @@ We should expect low quality bases are removed, along with adapter sequences.
 
 ```bash
 ./fastqc_post-trimming.sh config_chipseq.sh
+```
+
+<br><br/>
+
+## Alignment
+
+The heaviest computational step involves the alignment of the reads to the
+reference genome. A common program used to align reads is `bowtie2`, which is
+a fast and memory-efficient tool for aligning sequencing reads to long reference
+sequences. Unlike the alignment of transcriptomic data, which is splice-aware,
+reads generated from genomic DNA (either IP of fragmented chromatin or
+tagmented DNA) are aligned against the entire mappable region of the genome.
+Although without the need for understanding the splicing pattern, the regions of
+alignment becomes more complex due to different genomic features associated with
+the DNA-protein interaction, for example, the presence of repetitive elements,
+heterochromatin, and methylation patterns.
+
+The processing of epigenomic data usually requires a thorough annotation of the
+genomic features of the reference genome, including the "blacklisted" regions
+where the alignment is not reliable, as well as additional annotations such as
+promoters and enhancers that are critical to the interpretation of the data.
+Therefore, as of `2024`, the most common reference genome used for human is
+`hg38` and for mouse is `mm10`. It is recommended to use them due to their
+comprehensive annotations. Although the mouse genome has been updated to `mm39`,
+the annotations are not as comprehensive as `mm10`.
+
+### Building the reference genome index
+
+Before aligning the reads, we need to build the index of the reference genome.
+This is a one-time step and the index can be reused for multiple samples. The
+index is a set of files that `bowtie2` uses to quickly align the reads to the
+reference genome. The index is built using the `bowtie2-build` command, which
+requires the reference genome in `fasta` format.
+
+The following command builds the index of the reference genome:
+
+```bash
+bowtie2-build --threads <threads> <reference_genome.fa> <index_name>
+```
+
+Note that `<index_name>` is the prefix of the index files, rather than the name
+of a directory. To keep the index files organized, it is recommended to create
+a separate directory for only the bowtie2 index files. For example, the resulting
+file can be stored at `/path/to/reference_genome/bowtie2_index/<index_name>`.
+Index name is important for `bowtie2` to properly identify the index files when
+aligning the reads.
+
+As an example for the `mm10` mouse genome, the following command builds the index:
+
+```bash
+# Assuming mm10.fa is the fasta file of the reference genome
+cd /path/to/reference_genome
+mkdir ./mm10/bowtie2_index
+bowtie2-build --threads  ./mm10/mm10.fa ./reference_genome/bowtie2_index/mm10
+```
+
+This will lead to a set of files in the `./mm10/bowtie2_index` directory with
+the prefix `mm10` that are used by `bowtie2` for alignment. These files include
+`mm10.1.bt2`, `mm10.2.bt2`, `mm10.3.bt2`, `mm10.4.bt2`, `mm10.rev.1.bt2`, and
+`mm10.rev.2.bt2`.
+
+### Alignment of reads
+
+Upon having the index of the reference genome, we can now align the reads to the
+genome. The alignment is performed using the `bowtie2` command. The following
+command aligns the reads to the reference genome as part of the pipeline:
+
+```bash
+./bowtie2_align.sh config_chipseq.sh
+```
+
+Note that in the configuration file, it is necessary to set the path to the
+reference genome index, which is the `bowtieIndex` parameter. This path must 
+follow the following format: `/path/to/index_directory/index_name`.
+
+In addition, the choice of the maximum fragment length is important for the
+alignment. This value could be different depending on the specific experiment.
+For CUT&Tag, in which nucleosomes are tagmented by the transposase, the maximum
+fragment length is usually set to `700 bp`. For ChIP-seq, the maximum fragment
+size distribution could be wider, and the maximum fragment length could be set
+to `1200 bp`. However, consult your Bioanalyzer QC result for the library and
+the method for library preparation to determine this value.
+
+Here, we use the following alignment parameters:
+
+```bash
+--local --very-sensitive --no-mixed --no-discordant --phred33
+```
+
+Here is the explanation of the parameters used:
+
+* `--local`: local alignment is performed
+* `--very-sensitive`: the most sensitive alignment is performed (which could be computationally expensive)
+* `--no-mixed`: do not match reads (paired reads) that have both unaligned and aligned parts
+* `--no-discordant`: reads that do not aligns with the expected relative mate orientation or with the expected range of distances are not reported
+* `--phred33`: the quality score is in phred33 format
+
+In case users are performing sequencing with `read length = 25 bp`, there is no
+need to trim the reads since adapter contents are not sequenced for `inserts > 25 bp`.
+In this case, the `--local` parameter is not necessary and the alignment can be
+performed with the following parameters:
+
+```bash
+--end-to-end --very-sensitive --no-mixed --no-discordant --phred33
+```
+
+During alignment, we have also converted SAM files to BAM files, which are the
+binary version of SAM files. This means that BAM files are smaller and faster
+to process.
+
+### Spike-in alignment (optional)
+
+In some experiments, spike-in controls are used to normalize the data. These
+spike-in could result from additional spike-in of DNA fragments from another
+species. Alternatively, in CUT&Tag experiment, bacterial DNA is carried over
+during the manufacturing of the Tn5 transposase. However, our experience shows
+that a very low percentage of reads are aligned to the spike-in genome, and
+it may not be an optimal way to perform spike-in normalization.
+
+To align the spike-in reads, the following command can be used:
+
+```bash
+bowtie2 --end-to-end --very-sensitive --no-overlap --no-dovetail --no-mixed --no-discordant  --phred33 \
+    -I 10 -X 700 \
+    -p ${threads} -x ${bowtieIndex} \   # spike-in genome index
+    -1 sample_R1_trimmed.fastq.gz \
+    -2 sample_R2_trimmed.fastq.gz \
+    -S output_bowtie2.sam &> bowtie2_summary.txt
 ```

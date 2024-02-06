@@ -1,4 +1,4 @@
-![](/docs/assets/page_logo.png)
+[![](/docs/assets/page_logo.png)](https://j-y26.github.io/Epigenomic-Pipelines/)
 
 ### Table of Contents
 

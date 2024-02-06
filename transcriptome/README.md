@@ -218,7 +218,7 @@ Visualizing the genome track requires a compatible file format, such as the
 `bigWig` or `bedgraph` format. In addition, the reads must be normalized so that 
 the tracks can be compared across different samples.
 
-The `bam_to_bigwig.sh` script can be used to convert the BAM file to the bigWig
+The `bam_to_coverage.sh` script can be used to convert the BAM file to the bigWig
 format.
 
 ```bash

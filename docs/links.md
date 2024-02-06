@@ -63,3 +63,14 @@ Suppose `.` is the root of the project directory.
   ln ./chromatin_accessibility/post-alignment_processing/dedup_bam.sh \
     ./protein_dna_interaction/post-alignment_processing/dedup_bam.sh
   ```
+
+- Fragment size distribution
+    
+  - `chromatin_accessibility` -> `protein_dna_interaction`
+  
+  ```bash
+  ln ./chromatin_accessibility/post-alignment_processing/fragment_size.sh \
+    ./protein_dna_interaction/post-alignment_processing/fragment_size.sh
+  ```
+
+  

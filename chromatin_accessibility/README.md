@@ -27,6 +27,7 @@ experiments.
   - [Post-alignment QC and processing](#post-alignment-qc-and-processing)
     - [Alignment rate](#alignment-rate)
     - [Duplicate removal](#duplicate-removal)
+    - [Fragment size distribution](#fragment-size-distribution)
 
 ## Configuration
 
@@ -253,6 +254,12 @@ duplicates is important to ensure that only unique reads are used for the
 downstream analysis. This is because PCR duplicates are not informative and
 will cause bias when algorithms tries to identify the enriched regions.
 
+While many downstream analysis tools can remove duplicates on-the-fly, it is
+still recommended to remove duplicates at this step to ensure that the
+downstream analysis is consistent and reproducible. In this case, when
+specifying some downstream analysis parameters, we need to ensure that these
+downstream tools `ignore duplicates`.
+
 The following command removes duplicates from the aligned BAM file:
 
 ```bash
@@ -262,4 +269,24 @@ The following command removes duplicates from the aligned BAM file:
 Note that we also use `samtools` to sort the BAM file before removing duplicates.
 This is required by `picard`. Furthermore, the path to the `picard.jar` file
 must be set in the configuration file.
+
+### Fragment size distribution
+
+The fragment size distribution is important to assess the quality of the library
+and to determine the size of the DNA fragments that are sequenced. This result
+is very likely different from the fragment size distribution of the original
+library QC by Bioanalyzer, since both the alignment step and duplicate removal
+step could affect the fragment size distribution.
+
+The SAM/BAM format stores the size of each fragment in the 9th column of the
+file. Here, we use the `fragment_size.sh` script to extract the fragment size
+calculate the distribution.
+
+```bash
+./fragment_size.sh config_atacseq.sh
+```
+
+The size distribution can be plotted in R, using the `ggplot2` package. The
+resulting plot can be used to assess the quality of the library and to determine
+the size of the DNA fragments that are sequenced.
 

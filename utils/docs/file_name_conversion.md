@@ -2,7 +2,7 @@
 layout: default
 title: Convert file names
 parent: Utilities
-nav_order: 2
+nav_order: 4
 ---
 
 # Batch file name conversion
@@ -26,7 +26,7 @@ can contain additional metadata information for each sample. For example, in
 ChIP-seq experiments, the csv file can contain the following columns:
 - `Sample`: the original sample name
 - `Label`: the user-defined label
-- `Treatment`: the treatment condition
+- `Group`: the grouping condition
 - `Batch`: the batch number
 - `Replicate`: the biological replicate number
 - `Mark`: the antibody used
@@ -54,3 +54,6 @@ python3 file_name_conversion.py sample_tracking.csv /path/to/directory/ _bowtie2
 ```
 
 will rename the file to `ctrl1_H3K27me3_rep1_bowtie2.bam`.
+
+To generate a basic sample matrix csv file, users can use the `generate_sample_matrix.py`
+script as described [here](generate_sample_matrix.md).

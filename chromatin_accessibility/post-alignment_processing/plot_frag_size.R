@@ -10,11 +10,29 @@
 # The output of this script is a set of PDF file, which contains the fragment
 # size distribution plot for each mark.
 
-# Usage: Rscript plot_frag_size.R <frag_size_file_dir> <plot_width> <plot_height>
+# Usage: Rscript plot_frag_size.R <frag_size_file_dir> [<plot_width>] [<plot_height>]
 
 # Check if the required arguments were provided
-if (length(commandArgs(trailingOnly = TRUE)) != 1) {
-    stop("Please provide the fragment size distribution file directory.")
+args <- commandArgs(trailingOnly = TRUE)
+if (length(args) < 1) {
+    stop("Usage: Rscript plot_frag_size.R <frag_size_file_dir> [<plot_width>] [<plot_height>]")
+}
+
+# Define the global variables
+fragSizeDir <- commandArgs(trailingOnly = TRUE)[1]
+if (! dir.exists(fragSizeDir)) {
+    stop(cat("The fragment size distribution directory does not exist.\n",
+             "Usage: Rscript plot_frag_size.R <frag_size_file_dir> [<plot_width>] [<plot_height>]"))
+}
+
+if (length(commandArgs(trailingOnly = TRUE)) == 3) {
+    plotWidth <- commandArgs(trailingOnly = TRUE)[2]
+    plotWidth <- as.numeric(plotWidth)
+    plotHeight <- commandArgs(trailingOnly = TRUE)[3]
+    plotHeight <- as.numeric(plotHeight)
+} else {
+    plotWidth <- 8
+    plotHeight <- 6
 }
 
 # Check if the required R packages are installed, if not, install them
@@ -24,13 +42,6 @@ if (!requireNamespace("ggplot2", quietly = TRUE)) {
 if (!requireNamespace("ggpubr", quietly = TRUE)) {
     install.packages("ggpubr")
 }
-
-# Define the global variables
-fragSizeDir <- commandArgs(trailingOnly = TRUE)[1]
-plotWidth <- commandArgs(trailingOnly = TRUE)[2]
-plotWidth <- as.numeric(plotWidth)
-plotHeight <- commandArgs(trailingOnly = TRUE)[3]
-plotHeight <- as.numeric(plotHeight)
 
 # Given the directory containing the fragment size distribution files,
 # obtain the list of file names

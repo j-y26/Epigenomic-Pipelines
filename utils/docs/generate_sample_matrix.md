@@ -49,10 +49,20 @@ The generated `sample_matrix.csv` will look like this:
 
 | Sample | Label | Group | Replicate | Batch | Mark | PeakType | FileName |
 |--------|-------|-------|-----------|-------|------|----------|----------|
-| sample1_rep1 | | | | | | | sample1_rep1_trimmed.fastq.gz |
-| sample2_rep2 | | | | | | | sample2_rep2_trimmed.fastq.gz |
-| sample3_rep1 | | | | | | | sample3_rep1_trimmed.fastq.gz |
+| sample1_rep1 | sample1_rep1 | | | | | | sample1_rep1_trimmed.fastq.gz |
+| sample2_rep2 | sample2_rep2 | | | | | | sample2_rep2_trimmed.fastq.gz |
+| sample3_rep1 | sample3_rep1 | | | | | | sample3_rep1_trimmed.fastq.gz |
 
 This sample matrix is applicable to most type of analysis. However, some columns
 may not be applicable to some analysis, and the user can choose to remove them
 from the sample matrix.
+
+The script will automatically populate the `Label` column with the same content
+as the `Sample` column. However, users can choose to modify the `Label` column
+to better reflect the properties of the samples. The `Label` column is used
+to identify the files in the sample matrix, so it is important to make sure
+that the `Label` column is unique and matches the file names without extension.
+
+If `Label` has been modified in the sample matrix, ensure that you also run
+`file_name_conversion.py` to rename the files in the directory to match the
+`Label` column in the sample matrix. For details, see [here](file_name_conversion.md).

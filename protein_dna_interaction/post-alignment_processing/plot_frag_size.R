@@ -14,11 +14,34 @@
 # The output of this script is a set of PDF file, which contains the fragment 
 # size distribution plot for each mark.
 
-# Usage: Rscript plot_frag_size.R <frag_size_file_dir> <plot_width> <plot_height> <sample_matrix>
+# Usage: Rscript plot_frag_size.R <frag_size_file_dir> <sample_matrix> [<plot_width>] [<plot_height>]
 
 # Check if the required arguments were provided
-if (length(commandArgs(trailingOnly = TRUE)) != 4) {
-    stop("Usage: Rscript plot_frag_size.R <frag_size_file_dir> <plot_width> <plot_height> <sample_matrix>")
+args <- commandArgs(trailingOnly = TRUE)
+if (length(args) < 2) {
+    stop("Usage: Rscript plot_frag_size.R <frag_size_file_dir> <sample_matrix> [<plot_width>] [<plot_height>]")
+}
+
+# Define the global variables
+fragSizeDir <- commandArgs(trailingOnly = TRUE)[1]
+if (! dir.exists(fragSizeDir)) {
+    stop(cat("The fragment size distribution directory does not exist.\n",
+             "Usage: Rscript plot_frag_size.R <frag_size_file_dir> <sample_matrix> [<plot_width>] [<plot_height>]"))
+}
+sampleMatrix <- commandArgs(trailingOnly = TRUE)[2]
+if (! file.exists(sampleMatrix)) {
+    stop(cat("The sample matrix file does not exist.\n",
+             "Usage: Rscript plot_frag_size.R <frag_size_file_dir> <sample_matrix> [<plot_width>] [<plot_height>]"))
+}
+
+if (length(commandArgs(trailingOnly = TRUE)) == 4) {
+    plotWidth <- commandArgs(trailingOnly = TRUE)[3]
+    plotWidth <- as.numeric(plotWidth)
+    plotHeight <- commandArgs(trailingOnly = TRUE)[4]
+    plotHeight <- as.numeric(plotHeight)
+} else {
+    plotWidth <- 8
+    plotHeight <- 6
 }
 
 # Check if the required R packages are installed, if not, install them
@@ -28,14 +51,6 @@ if (!requireNamespace("ggplot2", quietly = TRUE)) {
 if (!requireNamespace("ggpubr", quietly = TRUE)) {
     install.packages("ggpubr")
 }
-
-# Define the global variables
-fragSizeDir <- commandArgs(trailingOnly = TRUE)[1]
-plotWidth <- commandArgs(trailingOnly = TRUE)[2]
-plotWidth <- as.numeric(plotWidth)
-plotHeight <- commandArgs(trailingOnly = TRUE)[3]
-plotHeight <- as.numeric(plotHeight)
-sampleMatrix <- commandArgs(trailingOnly = TRUE)[4]
 
 # Read the sample matrix file
 sampleMatrix <- read.csv(sampleMatrix, header = TRUE, stringsAsFactors = FALSE)

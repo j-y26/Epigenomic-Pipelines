@@ -285,3 +285,34 @@ calculate the distribution.
 ```bash
 ./fragment_size.sh config_atacseq.sh
 ```
+
+The size distribution can be plotted in R, using the `ggplot2` and the `ggpubr`
+packages. We have provided an R script that can be run directly from the command
+line to generate the fragment size distribution plot.
+
+To plot the fragment size distribution, run the following command:
+
+```bash
+Rscript plot_frag_size.R <frag_size_file_dir> <sample_matrix> [<plot_width>] [<plot_height>]
+```
+
+Note that although the script is similar to the one that is used for the
+ATAC-seq pipeline, the usage of this script is different. By specifying the
+required parameters, the script will generate multiple output files, one for
+each mark used in the experiment based on the sample matrix provided. To
+generate the plot, ensure that `<frag_size_file_dir>` are set to the same path
+as the output of the `fragment_size.sh` script.
+
+Furthermore, to be able to plot, a `<sample_matrix>` must have been set up.
+It is up to the user to fill in the metadata of the samples in this `csv` file,
+based on how the experiment was performed. To generate a baseline csv file
+for all samples, users can make use of the `utils/generate_sample_matrix.py` 
+script, which will create a sample matrix with the required columns. In this
+case, the `plot_frag_size.R` scripts requires that the `sample_matrix` file
+contains the following columns:
+
+- `Label`: the label of the sample, which must match the file name of the
+  fragment size distribution file without the `_fragment_size.txt` suffix.
+- `Mark`: the protein target used. A plot will be generated for each unique
+  mark in this column.
+

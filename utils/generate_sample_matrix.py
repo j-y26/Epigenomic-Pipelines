@@ -36,7 +36,7 @@ for root, dirs, files in os.walk(directory):
             # Append sample data to the sample matrix
             sample_matrix.append({
                 "Sample": sample_name,
-                "Label": "",
+                "Label": sample_name,
                 "Group": "",
                 "Replicate": "",
                 "Batch": "",

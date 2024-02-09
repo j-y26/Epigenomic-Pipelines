@@ -286,7 +286,33 @@ calculate the distribution.
 ./fragment_size.sh config_atacseq.sh
 ```
 
-The size distribution can be plotted in R, using the `ggplot2` package. The
-resulting plot can be used to assess the quality of the library and to determine
-the size of the DNA fragments that are sequenced.
+The size distribution can be plotted in R, using the `ggplot2` and the `ggpubr`
+packages. We have provided an R script that can be run directly from the command
+line to generate the fragment size distribution plot.
+
+To plot the fragment size distribution, run the following command:
+
+```bash
+Rscript plot_frag_size.R <frag_size_file_dir> [<plot_width>] [<plot_height>]
+```
+
+Note that although the script is similar to the one that is used for the
+ChIP-seq pipeline, the usage of this script is different. By specifying the
+required parameters, the script will generate a single output file that contains
+the fragment size distribution plot for all samples in the given directory. To
+generate the plot, ensure that `<frag_size_file_dir>` are set to the same path
+as the output of the `fragment_size.sh` script.
+
+The `<plot_width>` and `<plot_height>` parameters are optional and are used to
+specify the width and height of the plot. The default values are `8` and `6`,
+respectively.
+
+An output PDF figure will be saved in the same directory as the input file.
+
+An example of a streamlined analysis after running the `fragment_size.sh` script
+is shown below:
+
+```bash
+Rscript plot_frag_size.R ${alignmentDir}/fragment_size
+```
 

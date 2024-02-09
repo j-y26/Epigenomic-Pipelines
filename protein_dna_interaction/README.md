@@ -316,3 +316,15 @@ contains the following columns:
 - `Mark`: the protein target used. A plot will be generated for each unique
   mark in this column.
 
+The `<plot_width>` and `<plot_height>` parameters are optional and are used to
+specify the width and height of the plot. The default values are `8` and `6`,
+respectively.
+
+An output PDF figure will be saved in the same directory as the input file.
+
+An example of a streamlined analysis after running the `fragment_size.sh` script
+is shown below:
+
+```bash
+Rscript plot_frag_size.R ${alignmentDir}/fragment_size sample_matrix.csv
+```

@@ -84,7 +84,7 @@ plot <- ggplot(fragDist, aes(x = Sample, y = Size, weight = Weight, fill = Sampl
         xlab("")
 
 # Save the plot as a PDF file
-pdfFile <- paste0(outDir, "/", "frag_dist.pdf")
+pdfFile <- paste0(fragSizeDir, "/", "frag_dist.pdf")
 pdf(pdfFile, width = plotWidth, height = plotHeight)
 print(plot)
 dev.off()

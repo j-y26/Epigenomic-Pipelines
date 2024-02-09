@@ -103,7 +103,7 @@ for (mark in marks) {
             xlab("")
 
     # Save the plot as a PDF file
-    pdfFile <- paste0(outDir, "/", mark, "_frag_dist.pdf")
+    pdfFile <- paste0(fragSizeDir, "/", mark, "_frag_dist.pdf")
     pdf(pdfFile, width = 8, height = 6)
     print(plot)
     dev.off()

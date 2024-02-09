@@ -293,7 +293,7 @@ line to generate the fragment size distribution plot.
 To plot the fragment size distribution, run the following command:
 
 ```bash
-Rscript plot_frag_size.R <frag_size_file_dir> [<plot_width>] [<plot_height>]
+Rscript plot_frag_size.R <frag_size_file_dir> <max_fragment_length> [<plot_width>] [<plot_height>]
 ```
 
 Note that although the script is similar to the one that is used for the
@@ -302,6 +302,12 @@ required parameters, the script will generate a single output file that contains
 the fragment size distribution plot for all samples in the given directory. To
 generate the plot, ensure that `<frag_size_file_dir>` are set to the same path
 as the output of the `fragment_size.sh` script.
+
+The `<max_fragment_length>` parameter is used to specify the maximum fragment
+length to be plotted. This value is used to set the x-axis limit of the plot.
+It is recommended to set this value to the same as the `maxInsertLength` value
+set in the `config_atacseq.sh` file to capture all the fragments. This is a
+required input parameter.
 
 The `<plot_width>` and `<plot_height>` parameters are optional and are used to
 specify the width and height of the plot. The default values are `8` and `6`,
@@ -313,6 +319,6 @@ An example of a streamlined analysis after running the `fragment_size.sh` script
 is shown below:
 
 ```bash
-Rscript plot_frag_size.R ${alignmentDir}/fragment_size
+Rscript plot_frag_size.R ${alignmentDir}/fragment_size ${maxInsertLength}
 ```
 

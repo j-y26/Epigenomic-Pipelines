@@ -14,30 +14,32 @@
 # The output of this script is a set of PDF file, which contains the fragment 
 # size distribution plot for each mark.
 
-# Usage: Rscript plot_frag_size.R <frag_size_file_dir> <sample_matrix> [<plot_width>] [<plot_height>]
+# Usage: Rscript plot_frag_size.R <frag_size_file_dir> <sample_matrix> <max_fragment_length> [<plot_width>] [<plot_height>]
 
 # Check if the required arguments were provided
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) < 2) {
-    stop("Usage: Rscript plot_frag_size.R <frag_size_file_dir> <sample_matrix> [<plot_width>] [<plot_height>]")
+    stop("Usage: Rscript plot_frag_size.R <frag_size_file_dir> <sample_matrix> <max_fragment_length> [<plot_width>] [<plot_height>]")
 }
 
 # Define the global variables
 fragSizeDir <- commandArgs(trailingOnly = TRUE)[1]
 if (! dir.exists(fragSizeDir)) {
     stop(cat("The fragment size distribution directory does not exist.\n",
-             "Usage: Rscript plot_frag_size.R <frag_size_file_dir> <sample_matrix> [<plot_width>] [<plot_height>]"))
+             "Usage: Rscript plot_frag_size.R <frag_size_file_dir> <sample_matrix> <max_fragment_length> [<plot_width>] [<plot_height>]"))
 }
 sampleMatrix <- commandArgs(trailingOnly = TRUE)[2]
 if (! file.exists(sampleMatrix)) {
     stop(cat("The sample matrix file does not exist.\n",
-             "Usage: Rscript plot_frag_size.R <frag_size_file_dir> <sample_matrix> [<plot_width>] [<plot_height>]"))
+             "Usage: Rscript plot_frag_size.R <frag_size_file_dir> <sample_matrix> <max_fragment_length> [<plot_width>] [<plot_height>]"))
 }
+maxLength <- commandArgs(trailingOnly = TRUE)[3]
+maxLength <- as.numeric(maxLength)
 
-if (length(commandArgs(trailingOnly = TRUE)) == 4) {
-    plotWidth <- commandArgs(trailingOnly = TRUE)[3]
+if (length(commandArgs(trailingOnly = TRUE)) == 5 {
+    plotWidth <- commandArgs(trailingOnly = TRUE)[4]
     plotWidth <- as.numeric(plotWidth)
-    plotHeight <- commandArgs(trailingOnly = TRUE)[4]
+    plotHeight <- commandArgs(trailingOnly = TRUE)[5]
     plotHeight <- as.numeric(plotHeight)
 } else {
     plotWidth <- 8
@@ -92,7 +94,7 @@ for (mark in marks) {
     library(ggplot2)
     plot <- ggplot(fragDist, aes(x = Sample, y = Size, weight = Weight, fill = Sample)) +
             geom_violin(bw = 5) +
-            scale_y_continuous(limits = c(0, 750), breaks = seq(0, 750, 50)) +
+            scale_y_continuous(limits = c(0, 750), breaks = seq(0, maxLength, 50)) +
             scale_fill_brewer(palette = "Set1") +
             scale_color_brewer(palette = "Set1") +
             theme_bw() +

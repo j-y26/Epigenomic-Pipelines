@@ -27,6 +27,7 @@ experiments.
   - [Post-alignment QC and processing](#post-alignment-qc-and-processing)
     - [Alignment rate](#alignment-rate)
     - [Duplicate removal](#duplicate-removal)
+    - [Read filtering and indexing](#read-filtering-and-indexing)
     - [Fragment size distribution](#fragment-size-distribution)
       - [Extracting fragment size from SAM/BAM files](#extracting-fragment-size-from-sambam-files)
       - [Fragment size QC by deepTools](#fragment-size-qc-by-deeptools)
@@ -271,6 +272,25 @@ The following command removes duplicates from the aligned BAM file:
 Note that we also use `samtools` to sort the BAM file before removing duplicates.
 This is required by `picard`. Furthermore, the path to the `picard.jar` file
 must be set in the configuration file.
+
+### Read filtering and indexing
+
+After removing duplicates, we filter the reads to remove read pairs that are
+not properly mapped. Specifically, we use the `SAM FLAG` to filter the reads
+based on the following criteria, using the `samtools` command:
+
+- Filter out unmapped reads: `samtools view -F 0x04`
+- Keep only properly paired reads: `samtools view -f 0x02`
+
+Further indexing of the BAM file is also performed using `samtools index`.
+Indexing the reads is required for downstream analysis, such as quality control
+and peak calling.
+
+The following command filters the reads and indexes the BAM file:
+
+```bash
+./filter_index_bam.sh config_atacseq.sh
+```
 
 ### Fragment size distribution
 

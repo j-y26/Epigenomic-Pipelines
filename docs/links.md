@@ -64,6 +64,15 @@ Suppose `.` is the root of the project directory.
     ./protein_dna_interaction/post-alignment_processing/dedup_bam.sh
   ```
 
+- Filtering and indexing of aligned reads
+  
+  - `chromatin_accessibility` -> `protein_dna_interaction`
+  
+  ```bash
+  ln ./chromatin_accessibility/post-alignment_processing/filter_index_reads.sh \
+    ./protein_dna_interaction/post-alignment_processing/filter_index_reads.sh
+  ```
+
 - Fragment size distribution
     
   - `chromatin_accessibility` -> `protein_dna_interaction`

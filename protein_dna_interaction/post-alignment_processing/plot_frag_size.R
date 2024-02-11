@@ -36,7 +36,7 @@ if (! file.exists(sampleMatrix)) {
 maxLength <- commandArgs(trailingOnly = TRUE)[3]
 maxLength <- as.numeric(maxLength)
 
-if (length(commandArgs(trailingOnly = TRUE)) == 5 {
+if (length(commandArgs(trailingOnly = TRUE)) == 5) {
     plotWidth <- commandArgs(trailingOnly = TRUE)[4]
     plotWidth <- as.numeric(plotWidth)
     plotHeight <- commandArgs(trailingOnly = TRUE)[5]

@@ -31,6 +31,8 @@ experiments.
     - [Fragment size distribution](#fragment-size-distribution)
       - [Extracting fragment size from SAM/BAM files](#extracting-fragment-size-from-sambam-files)
       - [Fragment size QC by deepTools](#fragment-size-qc-by-deeptools)
+    - [Reproducibility and coverage](#reproducibility-and-coverage)
+      - [Genome-wide read coverage](#genome-wide-read-coverage)
 
 ## Configuration
 
@@ -370,3 +372,30 @@ Hence, a `BED` file containing the blacklisted regions is required. The path to
 the blacklisted regions file must be set in the configuration file. For common
 genomes, our pipeline has already included the blacklisted regions file, which
 is located in the [`utils` directory](https://j-y26.github.io/Epigenomic-Pipelines/utils/docs/resources.html).
+
+### Reproducibility and coverage
+
+The reproducibility of the ATAC-seq data is assessed by the correlation of the
+read coverage between replicates. The read coverage is calculated using the
+`deepTools` package. We will generate a coverage plot and a correlation plot
+to assess the quality of the mapped reads.
+
+#### Genome-wide read coverage
+
+Both plots requires computing the coverage of the aligned reads. Since we are
+interested in the quality of mapped reads for the entire genome, we will use
+the `bins` mode in the `multiBamSummary` command to calculate the coverage of
+the entire genome. The `bins` mode calculates the coverage of the entire genome
+in non-overlapping bins. The default bin size is 10,000 bp, which is
+recommended for the entire genome. Note that users can specify the bin size
+in the configuration file. However, increasing the resolution (smaller bin size)
+will increase the computational time and memory usage, and vice versa.
+
+The following command calculates the coverage of the aligned reads:
+
+```bash
+./multiBamSummary.sh config_atacseq.sh
+```
+
+This will generate a computed coverage file in the `bam_qc` folder under the 
+`alignment` directory.

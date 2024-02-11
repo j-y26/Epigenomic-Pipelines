@@ -61,6 +61,15 @@ PICARD_JAR="/path/to/picard.jar"
 # Path to the blacklist file for the specified genome
 blacklistFile="/path/to/blacklist.bed"
 
+# bin size for the multiBamSummary
+binSize="10000"
+
+
+
+
+
+
+
 
 
 

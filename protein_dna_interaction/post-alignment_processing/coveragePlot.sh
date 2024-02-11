@@ -8,7 +8,8 @@ config_script=$1
 source ${config_script}
 echo "Running with config:"
 echo "  Alignment directory: ${alignmentDir}"
-echo "  binSize: ${binSize}"
+echo "  Number of 1bp regions to sample: ${numberOfSamples}"
+echo "  Blacklist file: ${blacklistFile}"
 
 # [Main]
 
@@ -31,14 +32,23 @@ for file in $(find ${markedSamples} -type f -name "samples_*.txt"); do
         labels="${labels} ${sample}"
     done
 
-    # Run multiBamSummary by deepTools on all samples
-    # Operate on bins for the entire genome
-    multiBamSummary bins \
+    # Generate coverage plot
+
+    plotCoverage \
         --bamfiles ${bamFiles} \
         --labels ${labels} \
+        --plotFile ${alignmentDir}/bam_qc/coverage_plot.pdf \
+        --outRawCounts ${alignmentDir}/bam_qc/coverage_counts.tab \
+        --outCoverageMetrics ${alignmentDir}/bam_qc/coverage_metrics.tab \
+        --skipZeros \
+        --minMappingQuality 20 \
+        --plotFileFormat pdf \
+        --numberOfSamples ${numberOfSamples} \
+        --blackListFileName ${blacklistFile} \
+        --plotHeight ${coveragePlotHeight} \
+        --plotWidth ${coveragePlotWidth} \
         --numberOfProcessors ${threads} \
-        --binSize ${binSize} \
-        --verbose \
-        --outFileName ${alignmentDir}/bam_qc/multiBamSummary_${mark}_${binSize}.npz
+        --verbose
+done
 
 # [END]

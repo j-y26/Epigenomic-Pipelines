@@ -16,16 +16,16 @@
 
 # ====== Global parameters =====================================================
 # Path to the project home directory
-projPath="/your/project/path"
+projPath="/your/project/path"   # <-- Update this
 
 # Path to the directory containing the FASTQ files
 fastqDir="${projPath}/fastq" 
 
 # Lane identifier
-lane="L001" 
+lane="L001"   # <-- Update this
 
 # Number of threads to use for the analysis (check your CPU for this value)
-threads="8" 
+threads="8"   # <-- Update this
 
 # ======= Data preprocessing ===================================================
 # Path to the directory containing the FASTQC output
@@ -40,10 +40,10 @@ trimmedDir="${projPath}/fastq_trimmed"
 bowtieIndex="/path/to/bowtie2_index"
 
 # Path to the genome FASTA file
-genomeFastaFile="/path/to/genome.fa"
+genomeFastaFile="/path/to/genome.fa"  # <-- Update this
 
 # Path to the genome GTF file
-genomeGtfFile="/path/to/genome.gtf"
+genomeGtfFile="/path/to/genome.gtf"   # <-- Update this
 
 # Path to the output directory for the alignment
 alignmentDir="${projPath}/alignment"
@@ -56,15 +56,46 @@ keepSAM="false"
 
 # ====== Post-alignment processing =============================================
 # Path to Picard JAR file
-PICARD_JAR="/path/to/picard.jar"
+PICARD_JAR="/path/to/picard.jar"  # <-- Update this
 
 # Path to the blacklist file for the specified genome
-blacklistFile="/path/to/blacklist.bed"
+blacklistFile="/path/to/blacklist.bed"  # <-- Update this
 
 # bin size for the multiBamSummary
 binSize="10000"
 
+####  Coverage plot
+# Number of 1bp regions to sample for the coverage plot
+numberOfSamples="1000000"
 
+# Height of the coverage plot
+coveragePlotHeight="5"
+
+# Width of the coverage plot
+coveragePlotWidth="15"
+
+#### Correlation plot
+# Method for calculating the correlation, either "pearson" or "spearman"
+correlationMethod="pearson"
+
+# Color map for the correlation plot
+colorMap="viridis"
+
+# Correlation plot height
+correlationPlotHeight="9.5"
+
+# Correlation plot width
+correlationPlotWidth="11"
+
+#### PCA plot
+# Number of top variance bins used for PCA plot
+ntop="1000"
+
+# PCA plot height
+pcaPlotHeight="10"
+
+# PCA plot width
+pcaPlotWidth="10"
 
 
 

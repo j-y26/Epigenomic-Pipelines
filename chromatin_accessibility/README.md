@@ -28,6 +28,8 @@ experiments.
     - [Alignment rate](#alignment-rate)
     - [Duplicate removal](#duplicate-removal)
     - [Fragment size distribution](#fragment-size-distribution)
+      - [Extracting fragment size from SAM/BAM files](#extracting-fragment-size-from-sambam-files)
+      - [Fragment size QC by deepTools](#fragment-size-qc-by-deeptools)
 
 ## Configuration
 
@@ -272,6 +274,8 @@ must be set in the configuration file.
 
 ### Fragment size distribution
 
+#### Extracting fragment size from SAM/BAM files
+
 The fragment size distribution is important to assess the quality of the library
 and to determine the size of the DNA fragments that are sequenced. This result
 is very likely different from the fragment size distribution of the original
@@ -322,3 +326,27 @@ is shown below:
 Rscript plot_frag_size.R ${alignmentDir}/fragment_size ${maxInsertLength}
 ```
 
+#### Fragment size QC by deepTools
+
+Alternatively, `deepTools` can be used to generate the fragment size distribution
+plot and to assess the quality of the library. Note that to use the following
+script in the pipeline, only paired-end data is supported.
+
+The following command generates the fragment size distribution plot using
+`deepTools`:
+
+```bash
+./fragment_size_deeptools.sh config_atacseq.sh
+```
+
+The fragment size distribution plot is generated in the `fragment_size` folder
+under the `alignment` directory. The plot is saved as a PDF file, which is a
+histogram of the fragment size distribution. In addition, a text file is also
+generated that contains the fragment size distribution data.
+
+Unlike the manual extraction of the fragment size from the SAM/BAM files, we
+take advantage of `deepTools's` feature for removing the blacklisted regions.
+Hence, a `BED` file containing the blacklisted regions is required. The path to
+the blacklisted regions file must be set in the configuration file. For common
+genomes, our pipeline has already included the blacklisted regions file, which
+is located in the [`utils` directory](https://j-y26.github.io/Epigenomic-Pipelines/utils/docs/resources.html).

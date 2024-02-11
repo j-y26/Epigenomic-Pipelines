@@ -58,6 +58,8 @@ keepSAM="false"
 # Path to Picard JAR file
 PICARD_JAR="/path/to/picard.jar"
 
+# Path to the blacklist file for the specified genome
+blacklistFile="/path/to/blacklist.bed"
 
 
 

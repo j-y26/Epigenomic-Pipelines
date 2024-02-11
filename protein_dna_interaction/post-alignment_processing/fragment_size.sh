@@ -21,12 +21,12 @@ fi
 
 # Calculate the fragment size for each sample
 
-for file in $(find ${alignmentDir}/bam_nodup -name "*.bam"); do
-    sample=$(basename $file _nodups.bam)
+for file in $(find ${alignmentDir}/filtered_bam -name "*.bam"); do
+    sample=$(basename $file .bam)
     echo "Calculating fragment size for ${sample}"
 
     # Step 1: Extract the 9th column from the BAM file
-    samtools view -F 0x04 -@ ${threads} ${alignmentDir}/bam_nodup/${sample}_nodups.bam | \
+    samtools view -F 0x04 -@ ${threads} ${alignmentDir}/filtered_bam/${sample}.bam | \
 
     # Step 2: Generate the absolute value of the fragment length
     awk -F'\t' 'function abs(x){return ((x < 0.0) ? -x : x)} {print abs($9)}' | \

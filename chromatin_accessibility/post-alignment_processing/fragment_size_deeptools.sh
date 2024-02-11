@@ -22,9 +22,9 @@ fi
 # Using deepTools bamPEFragmentSize to estimate the fragment size of the paired-end reads
 
 # Obtain all BAM files and respective labels, where labels are the sample names
-# with the suffix _nodups.bam and the path to the BAM file removed
-bamFiles=$(ls ${alignmentDir}/bam_nodup/*_nodups.bam)
-labels=$(ls ${alignmentDir}/bam_nodup/*_nodups.bam | sed 's/.*\///g' | sed 's/_nodups.bam//g')
+# with the suffix .bam and the path to the BAM file removed
+bamFiles=$(ls ${alignmentDir}/filtered_bam/*.bam)
+labels=$(ls ${alignmentDir}/filtered_bam/*.bam | sed 's/.*\///g' | sed 's/.bam//g')
 
 # Calculate the fragment size distribution
 # Specifically, reads that overlap with the blacklist regions are removed

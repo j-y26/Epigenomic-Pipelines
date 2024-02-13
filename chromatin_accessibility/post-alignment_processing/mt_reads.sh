@@ -19,7 +19,7 @@ if [ ! -d ${alignmentDir}/mt_reads ]; then
 fi
 
 # Check if the output csv file exists, if so, ask to delete it
-if [ -f ${mt_reads}/mt_reads.csv ]; then
+if [ -f ${alignmentDir}/mt_reads/mt_reads.csv ]; then
     echo "Existing ${alignmentDir}/mt_reads/mt_reads.csv found, delete and proceed? (y/n)"
     read response
     if [ "$response" != "y" ]; then

@@ -9,7 +9,7 @@ plugins:
   - jekyll-sitemap
   - jekyll-feed
 aux_links:
-  "Pipelines on GitHub":
+  "Pipeline Source Code":
     - "//github.com/j-y26/Epigenomic-Pipelines"
 heading_anchors: true
 footer_content: "Copyright &copy; 2023-2024 Jielin Yang. All rights reserved. Distributed by an <a href=\"https://opensource.org/licenses/MIT\" target=\"_blank\" rel=\"noopener\">MIT License</a>"

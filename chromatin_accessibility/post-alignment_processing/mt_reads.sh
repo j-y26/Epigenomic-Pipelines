@@ -18,6 +18,8 @@ if [ ! -d ${alignmentDir}/mt_reads ]; then
     mkdir ${alignmentDir}/mt_reads
 fi
 
+mt_reads="${alignmentDir}/mt_reads"
+
 # Check if the output csv file exists, if so, ask to delete it
 if [ -f ${mt_reads}/mt_reads.csv ]; then
     echo "Existing ${mt_reads}/mt_reads.csv found, delete and proceed? (y/n)"

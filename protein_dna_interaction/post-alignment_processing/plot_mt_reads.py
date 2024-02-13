@@ -30,6 +30,9 @@ for mark in df['mark'].unique():
     # Label the y-axis with percentages
     plt.gca().yaxis.set_major_formatter(plt.FuncFormatter(lambda x, loc: "{:.0f}%".format(x)))
 
+    # Automatically adjust the layout
+    plt.tight_layout()
+
     # Save the plot to pdf
     plt.savefig(os.path.join(sys.argv[2], f'mt_read_plot_{mark}.pdf'))
 

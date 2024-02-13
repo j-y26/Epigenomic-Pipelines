@@ -97,6 +97,10 @@ pcaPlotHeight="10"
 # PCA plot width
 pcaPlotWidth="10"
 
+#### Mitochondrial reads
+# Chromosome name for the mitochondrial chromosome used by the genome reference
+# Commonly, either "chrM" or "MT"
+mtChromosome="MT"
 
 
 

@@ -31,8 +31,8 @@ case ${cutoffAnalysis} in
     true | True | TRUE | T | t )
         cutoffAnalysis="--cutoff-analysis"
         cutoffDir="/cutoff_analysis"
-        if [ ! -d ${peakCallingDir}${cutoffDir} ]; then
-            mkdir ${peakCallingDir}${cutoffDir}
+        if [ ! -d ${peakCallingDir}/macs2${cutoffDir} ]; then
+            mkdir ${peakCallingDir}/macs2${cutoffDir}
         fi
         ;;
     *)

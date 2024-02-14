@@ -56,6 +56,10 @@ fi
 # Subdirectory for peak calling output based on parameters specified
 subDir=${subDir}_nolambda
 
+if [ ! -d ${peakCallingDir}/macs2${cutoffDir}/${subDir} ]; then
+    mkdir ${peakCallingDir}/macs2${cutoffDir}/${subDir}
+fi
+
 # ATAC-seq peaks are cumulated as narrow regions in accessible promoters and 
 # enhancers, so the narrow peak mode is used
 # Since ATACseq does not have control samples, background lambda is used

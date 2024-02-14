@@ -26,9 +26,14 @@ fi
 case ${cutoffAnalysis} in
     true | True | TRUE | T | t )
         cutoff="--cutoff-analysis"
+        cutoffDir="/cutoff_analysis"
+        if [ ! -d ${peakCallingDir}${cutoffDir} ]; then
+            mkdir ${peakCallingDir}${cutoffDir}
+        fi
         ;;
     *)
         cutoff=""
+        cutoffDir=""
         ;;
 esac
 
@@ -51,8 +56,8 @@ for file in $(find ${alignmentDir}/filtered_bam -name "*.bam"); do
         -B \
         --SPMR \
         --call-summits \
-        ${cuttoff} \
-        --outdir ${peakCallingDir}/macs2
+        ${cutoff} \
+        --outdir ${peakCallingDir}/macs2${cutoffDir}
 done
 
 # [END]

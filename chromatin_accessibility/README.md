@@ -36,6 +36,7 @@ experiments.
       - [Genome-wide read coverage](#genome-wide-read-coverage)
       - [Reproducibility](#reproducibility)
     - [Mitochondrial reads](#mitochondrial-reads)
+  - [Peak calling](#peak-calling)
 
 ## Configuration
 
@@ -495,3 +496,44 @@ python3 plot_mt_reads.py ${alignmentDir}/mt_reads/mt_reads.csv ${alignmentDir}/m
 ```
 
 <br><br/>
+
+## Peak calling
+
+The identification of chromatin accessible regions is performed by identifying
+the fragment pileup regions, which are indicative of open chromatin regions.
+This is done by calling peaks using some of the most popular peak calling
+algorithms, such as `MACS2`. The peak calling step is the most important step
+in the ATAC-seq analysis, as it identifies the regions of the genome that are
+enriched for open chromatin.
+
+The following command calls peaks using `MACS2`:
+
+```bash
+./macs2_call_peaks.sh config_atacseq.sh
+```
+
+The `macs2_call_peaks.sh` script calls peaks using the `macs2 callpeak` command.
+
+However, thorough consideration of the parameters used in peak calling is
+required. The parameters used in the `macs2 callpeak` command are critical to
+accurately identify the enriched open chromatin regions. The following parameters
+are used in the `macs2 callpeak` command:
+
+- `-f BAMPE`: the format of the input file
+- `-g ${genomeSize}`: the effective genome size for the reference genome. This number can be determined from deepTools. Some common effective genome sizes are listed along with this [pipeline](../utils/docs/resources.md).
+- `-q ${qValue}`: the q-value threshold for peak calling. This is the minimum FDR at which a peak is called significant. The default value is 0.05, but users can choose to increase or decrease this value. As a common practice for ATAC-seq, a q-value threshold of 0.01 is recommended as a starting point.
+- `-p ${pValue}`: the p-value threshold for peak calling. Unlike the `q-value`, the `p-value` is not corrected for multiple testing and represents the probability of observing a peak by chance. If the `p-value` is set, the `q-value` is ignored. We do not recommend using the `p-value` for peak calling since it increases the false positive rate.
+- `--nolambda`: do not calculate the local lambda, which is used to estimate the background noise. This is recommended for ATAC-seq data since no control (input) sample is used in an ATAC-seq experiment.
+- `-B`: generate bedGraph files of the pileup, which can be used to visualize the pileup in a genome browser.
+- `--SPMR`: use the signal per million reads (SPMR) as the normalization method. This does not affect the peak calling, but is used to normalize the signal for visualization.
+- `--call-summits`: call the summits of the peaks. This is recommended for ATAC-seq data, as it identifies the exact location of the peak.
+
+Due to the cumulative nature of ATAC-seq peaks present in accessible promoters and enhancers, a narrow peak is expected. Therefore, the `MACS2` algorithm here operates on its default setting to call narrow peaks.
+
+As mentioned earlier, a cutoff is required to filter the peaks to keep only the
+significant ones. The `q-value` is the most commonly used cutoff, and it is
+recommended to set the `q-value` to `0.01` as a starting point. However, the
+optimal cutoff value might not be the same for all experiments, and it is
+may be necessary to run cutoff analysis to determine the optimal cutoff value.
+`MACS2` provides a cuttoff analysis mode to determine the optimal cutoff value.
+To do so, in the configuration file, set the `cutoffAnalysis` parameter to `true`.

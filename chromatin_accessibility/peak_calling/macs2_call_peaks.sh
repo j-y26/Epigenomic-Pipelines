@@ -43,7 +43,7 @@ esac
 
 # Determine if p-value is used to replace q-value for peak calling
 # Determine is ${pValue} is set to a numeric value
-if [[ ${pValue} =~ '^0\.[0-9]+$' ]]; then
+if [[ ${pValue} =~ ^0\.[0-9]+$ ]]; then
     cutoff="-p ${pValue}"
     subDir="p${pValue}"
     echo "...Using p-value ${pValue} for peak calling"

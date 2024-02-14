@@ -102,8 +102,21 @@ pcaPlotWidth="10"
 # Commonly, either "chrM" or "MT"
 mtChromosome="MT"
 
+# ====== Peak calling ==========================================================
+# Path to the peak calling directory
+peakCallingDir="${projPath}/peak_calling"
 
+# Effective genome size for the coverage files, used for normalization
+# Refer to utils/resources
+genomeSize="XXXXXXXXXX"
 
+# q-value for MACS2 peak calling
+qvalue="0.01"
+
+# Whether to perform cutoff analysis, must be either "true" or "false"
+# Note that, if true, the analysis tries to determine the cutoff value for the
+# q-value, but it would require a significant higher amount of computational time
+cutoffAnalysis="false"
 
 
 

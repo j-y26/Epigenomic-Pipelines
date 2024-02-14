@@ -111,7 +111,7 @@ peakCallingDir="${projPath}/peak_calling"
 genomeSize="XXXXXXXXXX"
 
 # q-value for MACS2 peak calling
-qvalue="0.01"
+qValue="0.01"
 
 # Whether to perform cutoff analysis, must be either "true" or "false"
 # Note that, if true, the analysis tries to determine the cutoff value for the

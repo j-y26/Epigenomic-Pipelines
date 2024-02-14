@@ -23,12 +23,14 @@ if [ ! -d ${peakCallingDir}/macs2 ]; then
 fi
 
 # Whether to perform cutoff analysis
-if [${cutoffAnalysis} == "true"]; then
-    echo "Cutoff analysis is enabled"
-    cutoff="--cutoff-analysis"
-else
-    cutoff=""
-fi
+case ${cutoffAnalysis} in
+    true | True | TRUE | T | t )
+        cutoff="--cutoff-analysis"
+        ;;
+    *)
+        cutoff=""
+        ;;
+esac
 
 # ATAC-seq peaks are cumulated as narrow regions in accessible promoters and 
 # enhancers, so the narrow peak mode is used
@@ -49,7 +51,7 @@ for file in $(find ${alignmentDir}/filtered_bam -name "*.bam"); do
         -B \
         --SPMR \
         --call-summits \
-        --${cuttoff} \
+        ${cuttoff} \
         --outdir ${peakCallingDir}/macs2
 done
 

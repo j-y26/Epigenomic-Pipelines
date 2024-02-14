@@ -108,10 +108,14 @@ peakCallingDir="${projPath}/peak_calling"
 
 # Effective genome size for the coverage files, used for normalization
 # Refer to utils/resources
-genomeSize="XXXXXXXXXX"
+genomeSize="XXXXXXXXXX"   # <-- Update this
 
 # q-value for MACS2 peak calling
 qValue="0.01"
+
+# p-value for MACS2 peak calling, not recommended to use
+# Note that if p-value is set, q-value is ignored
+pValue=""
 
 # Whether to perform cutoff analysis, must be either "true" or "false"
 # Note that, if true, the analysis tries to determine the cutoff value for the
@@ -129,10 +133,6 @@ outCoverageFormat="bigwig"
 
 # Normalization method for the coverage files, one of RPKM, CPM, BPM, RPGC, None
 coverageNorm="CPM"
-
-# Effective genome size for the coverage files, used for normalization
-# Refer to utils/resources
-genomeSize="XXXXXXXXXX"
 
 # Bin size for the coverage files
 binSize="20"

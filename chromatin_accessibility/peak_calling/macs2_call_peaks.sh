@@ -9,6 +9,10 @@ source ${config_script}
 echo "Running with config:"
 echo "  Alignment directory: ${alignmentDir}"
 echo "  Peak calling directory: ${peakCallingDir}"
+echo "  Genome size: ${genomeSize}"
+echo "  q-value: ${qValue}"
+echo "  p-value: ${pValue}"
+echo "  Perform cutoff analysis: ${cutoffAnalysis}"
 
 # [Main]
 
@@ -25,17 +29,32 @@ fi
 # Whether to perform cutoff analysis
 case ${cutoffAnalysis} in
     true | True | TRUE | T | t )
-        cutoff="--cutoff-analysis"
+        cutoffAnalysis="--cutoff-analysis"
         cutoffDir="/cutoff_analysis"
         if [ ! -d ${peakCallingDir}${cutoffDir} ]; then
             mkdir ${peakCallingDir}${cutoffDir}
         fi
         ;;
     *)
-        cutoff=""
+        cutoffAnalysis=""
         cutoffDir=""
         ;;
 esac
+
+# Determine if p-value is used to replace q-value for peak calling
+# Determine is ${pValue} is set to a numeric value
+if [[ ${pValue} =~ '^[0][.][0-9]+$' ]]; then
+    cutoff="-p ${pValue}"
+    subDir="p${pValue}"
+    echo "...Using p-value ${pValue} for peak calling"
+    echo "...Overriding default q-value"
+else
+    cutoff="-q ${qValue}"
+    subDir="q${qValue}"
+fi
+
+# Subdirectory for peak calling output based on parameters specified
+subDir=${subDir}_nolambda
 
 # ATAC-seq peaks are cumulated as narrow regions in accessible promoters and 
 # enhancers, so the narrow peak mode is used
@@ -51,13 +70,13 @@ for file in $(find ${alignmentDir}/filtered_bam -name "*.bam"); do
         -f BAMPE \
         -g ${genomeSize} \
         -n ${sample} \
-        -q ${qValue} \
+        ${cutoff} \
         --nolambda \
         -B \
         --SPMR \
         --call-summits \
-        ${cutoff} \
-        --outdir ${peakCallingDir}/macs2${cutoffDir}
+        ${cutoffAnalysis} \
+        --outdir ${peakCallingDir}/macs2${cutoffDir}/${subDir}
 done
 
 # [END]

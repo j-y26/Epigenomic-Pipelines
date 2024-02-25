@@ -11,7 +11,7 @@ echo "  Filtered BAM file directory: ${alignmentDir}/filtered_bam"
 echo "  Coverage file path: ${coverageFilePath}"
 echo "  Coverage file format: ${outCoverageFormat}"
 echo "  Normalization method: ${coverageNorm}"
-echo "  Bin size: ${binSize}"
+echo "  Bin size: ${bamCoverageBinSize}"
 echo "  Genome size: ${genomeSize}"
 echo "  Threads: ${threads}"
 
@@ -46,7 +46,7 @@ for file in $(find ${alignmentDir}/filtered_bam -type f -name '*.bam'); do
         --extendReads \
         --ignoreDuplicates \
         --centerReads \
-        --binSize ${binSize} \
+        --binSize ${bamCoverageBinSize} \
         --numberOfProcessors ${threads}
     
 # [END]

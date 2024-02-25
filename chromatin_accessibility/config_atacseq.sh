@@ -145,7 +145,7 @@ outCoverageFormat="bigwig"
 coverageNorm="RPGC"
 
 # Bin size for the coverage files
-binSize="20"
+bamCoverageBinSize="20"
 
 
 

@@ -48,5 +48,6 @@ for file in $(find ${alignmentDir}/filtered_bam -type f -name '*.bam'); do
         --centerReads \
         --binSize ${bamCoverageBinSize} \
         --numberOfProcessors ${threads}
+done
     
 # [END]

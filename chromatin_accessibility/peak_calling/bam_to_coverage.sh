@@ -7,12 +7,14 @@ fi
 config_script=$1
 source ${config_script}
 echo "Running with config:"
-echo "STAROutputDir: ${STAROutputDir}"
-echo "coverageFilePath: ${coverageFilePath}"
-echo "outCoverageFormat: ${outCoverageFormat}"
-echo "coverageNorm: ${coverageNorm}"
-echo "genomeSize: ${genomeSize}"
-echo "binSize: ${binSize}"
+echo "  Filtered BAM file directory: ${alignmentDir}/filtered_bam"
+echo "  Coverage file path: ${coverageFilePath}"
+echo "  Coverage file format: ${outCoverageFormat}"
+echo "  Normalization method: ${coverageNorm}"
+echo "  Bin size: ${binSize}"
+echo "  Genome size: ${genomeSize}"
+echo "  Threads: ${threads}"
+
 
 # [Main]
 
@@ -31,17 +33,18 @@ else
 fi
 
 # Convert BAM to coverage file by iterating through each sample
-# Do not extend reads for RNA-seq data
 
-for file in $(find ${STAROutputDir} -type f -name '*.bam'); do
-    sample=$(basename $file Aligned.sortedByCoord.out.bam)
+for file in $(find ${alignmentDir}/filtered_bam -type f -name '*.bam'); do
+    sample=$(basename $file .bam)
     echo "Converting ${sample} BAM to coverage file"
     bamCoverage \
-        -b ${STAROutputDir}/${sample}Aligned.sortedByCoord.out.bam \
+        -b ${file} \
         -o ${coverageFilePath}/${sample}.${outSuffix} \
         --outFileFormat ${outCoverageFormat} \
         --normalizeUsing ${coverageNorm} \
         --effectiveGenomeSize ${genomeSize} \
+        --extendReads \
+        --ignoreDuplicates \
         --centerReads \
         --binSize ${binSize} \
         --numberOfProcessors ${threads}

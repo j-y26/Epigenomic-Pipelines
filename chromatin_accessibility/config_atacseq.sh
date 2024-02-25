@@ -124,6 +124,8 @@ cutoffAnalysis="false"
 
 # ====== Processing called peaks ===============================================
 
+#### Blacklist filtering
+
 # Folder name of the raw peaks
 # The peak calling step will generate a subfolder under the macs2 directory
 # indicating the parameters used for peak calling
@@ -131,19 +133,16 @@ cutoffAnalysis="false"
 # used for the downstream analysis
 rawPeaks="q0.01_nolambda"  # <-- Update this
 
+#### BAM to coverage
 
-
-
-
-
-# Path to the coverage files for visualizing RNAseq tracks
+# Path to the coverage files
 coverageFilePath="${projPath}/coverage_tracks"
 
 # Coverage file format, either "bedgraph" or "bigwig"
 outCoverageFormat="bigwig"
 
 # Normalization method for the coverage files, one of RPKM, CPM, BPM, RPGC, None
-coverageNorm="CPM"
+coverageNorm="RPGC"
 
 # Bin size for the coverage files
 binSize="20"

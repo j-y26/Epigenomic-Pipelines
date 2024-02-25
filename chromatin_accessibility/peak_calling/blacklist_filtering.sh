@@ -29,7 +29,7 @@ for file in $(find ${peakCallingDir}/macs2/${rawPeaks} -type f -name '*.narrowPe
     echo "Filtering peaks for ${sample}..."
 
     # Filter the peaks
-    bedtools intersect -v -a ${file} -b ${blacklistFile} > 
+    bedtools intersect -v -a ${file} -b ${blacklistFile} > \
       ${peakCallingDir}/filtered_peaks/${sample}.bed
     
     echo "Peaks filtered for ${sample}"

@@ -552,6 +552,16 @@ analyze the peaks that are called in the blacklisted regions.
 Here, we use the `bedtools` command to remove the `.narrowPeak` files output by
 `MACS2` that overlap with the blacklisted regions.
 
+`bedtools` requires that the naming convention of the chromosomes are consistent
+between the `.narrowPeak` file and the blacklisted regions file. Depending on
+the reference genome used, the naming convention of the chromosomes may be
+different. Here, we provide an easy script to remove the leading `chr` from the
+chromosome names in a `bed` file.
+
+```bash
+sed 's/^chr//g' blacklist_genebank_naming.bed > blacklist_ensembl_naming.bed
+```
+
 The following command filters the called peaks to remove the blacklisted regions:
 
 ```bash

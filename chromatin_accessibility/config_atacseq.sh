@@ -122,6 +122,17 @@ pValue=""
 # q-value, but it would require a significant higher amount of computational time
 cutoffAnalysis="false"
 
+# ====== Processing called peaks ===============================================
+
+# Folder name of the raw peaks
+# The peak calling step will generate a subfolder under the macs2 directory
+# indicating the parameters used for peak calling
+# Users must select and specify the folder name of the raw peaks that will be
+# used for the downstream analysis
+rawPeaks="q0.01_nolambda"  # <-- Update this
+
+
+
 
 
 

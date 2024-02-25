@@ -37,6 +37,8 @@ experiments.
       - [Reproducibility](#reproducibility)
     - [Mitochondrial reads](#mitochondrial-reads)
   - [Peak calling](#peak-calling)
+  - [Processing called peaks](#processing-called-peaks)
+    - [Blacklist filtering](#blacklist-filtering)
 
 ## Configuration
 
@@ -537,3 +539,21 @@ optimal cutoff value might not be the same for all experiments, and it is
 may be necessary to run cutoff analysis to determine the optimal cutoff value.
 `MACS2` provides a cuttoff analysis mode to determine the optimal cutoff value.
 To do so, in the configuration file, set the `cutoffAnalysis` parameter to `true`.
+
+## Processing called peaks
+
+### Blacklist filtering
+
+The called peaks are filtered to remove the blacklisted regions. The blacklisted
+regions are regions of the genome where the alignment is not reliable, and are
+commonly used to filter out false positive peaks. Therefore, we do not want to
+analyze the peaks that are called in the blacklisted regions.
+
+Here, we use the `bedtools` command to remove the `.narrowPeak` files output by
+`MACS2` that overlap with the blacklisted regions.
+
+The following command filters the called peaks to remove the blacklisted regions:
+
+```bash
+./blacklist_filtering.sh config_atacseq.sh
+```

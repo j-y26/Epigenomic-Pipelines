@@ -7,10 +7,15 @@ fi
 config_script=$1
 source ${config_script}
 echo "Running with config:"
+echo "  Filtered peak directory: ${peakCallingDir}/filtered_peaks"
 echo "  Coverage file path: ${coverageFilePath}"
 echo "  GTF file: ${genomeGtfFile}"
 
 # Create output directory if it doesn't exist
+if [ ! -d ${peakCallingDir}/peak_coverage ]; then
+    mkdir ${peakCallingDir}/peak_coverage
+fi
+
 if [ ! -d ${peakCallingDir}/tss_coverage ]; then
     mkdir ${peakCallingDir}/tss_coverage
 fi
@@ -24,9 +29,24 @@ if [ -z "${bwFiles}" ]; then
 fi
 
 # Obtain peak and coverage files
-bwFiles=$(find ${coverageFilePath} -name "*.bed" | sort | sed 's|.*/\(.*\)\.bed|'"${coverageFilePath}"'/\1.bw|')
+peakFiles=$(find ${peakCallingDir}/filtered_peaks -name "*.bed" | sort)
+labels=$(find ${peakCallingDir}/filtered_peaks -name "*.bed" | sort | sed 's/.*\///' | sed 's/\.bed//')
+bwFiles=$(find ${peakCallingDir}/filtered_peaks -name "*.bed" | sort | sed 's|.*/\(.*\)\.bed|'"${coverageFilePath}"'/\1.bw|')
 
 # Compute matrix for the peak files
+computeMatrix reference-point \
+    --referencePoint ${referencePoint} \
+    --regionsFileName ${peakFiles} \
+    --scoreFileName ${bwFiles} \
+    --outFileName ${peakCallingDir}/peak_coverage/coverage_matrix_peaks.gz \
+    --outFileNameMatrix ${peakCallingDir}/peak_coverage/coverage_matrix_peaks.tab \
+    --samplesLabel ${labels} \
+    --beforeRegionStartLength ${beforeRegionStartLength} \
+    --afterRegionStartLength ${afterRegionStartLength} \
+    --skipZeros \
+    --numberOfProcessors ${threads}
+
+# Compute matrix for TSS
 computeMatrix reference-point \
     --referencePoint TSS \
     --regionsFileName ${genomeGtfFile} \

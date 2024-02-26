@@ -147,6 +147,23 @@ coverageNorm="RPGC"
 # Bin size for the coverage files
 bamCoverageBinSize="20"
 
+#### Compute matrix
+
+# Reference point for the computeMatrix
+referencePoint="center"
+
+# Length of the region before the start of the peak
+beforeRegionStartLength="3000"
+
+# Length of the region after the end of the peak
+afterRegionStartLength="3000"
+
+# Length of the region before the start of the TSS
+beforeTSSLength="1000"
+
+# Length of the region after the end of the TSS
+afterTSSLength="1000"
+
 
 
 

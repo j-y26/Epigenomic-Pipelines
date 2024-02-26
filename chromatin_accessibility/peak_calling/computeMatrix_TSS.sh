@@ -11,8 +11,8 @@ echo "  Coverage file path: ${coverageFilePath}"
 echo "  GTF file: ${genomeGtfFile}"
 
 # Create output directory if it doesn't exist
-if [ ! -d ${peakCallingDir}/peak_coverage ]; then
-    mkdir ${peakCallingDir}/peak_coverage
+if [ ! -d ${peakCallingDir}/tss_coverage ]; then
+    mkdir ${peakCallingDir}/tss_coverage
 fi
 
 # Test whether any bigwig files exist in the coverage directory
@@ -31,8 +31,8 @@ computeMatrix reference-point \
     --referencePoint TSS \
     --regionsFileName ${genomeGtfFile} \
     --scoreFileName ${bwFiles} \
-    --outFileName ${peakCallingDir}/peak_coverage/coverage_matrix_tss.gz \
-    --outFileNameMatrix ${peakCallingDir}/peak_coverage/coverage_matrix_tss.tab \
+    --outFileName ${peakCallingDir}/tss_coverage/coverage_matrix_tss.gz \
+    --outFileNameMatrix ${peakCallingDir}/tss_coverage/coverage_matrix_tss.tab \
     --smartLabels \
     --beforeRegionStartLength ${beforeTSSLength} \
     --afterRegionStartLength ${afterTSSLength} \

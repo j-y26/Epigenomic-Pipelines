@@ -34,6 +34,7 @@ labels=$(find ${peakCallingDir}/filtered_peaks -name "*.bed" | sort | sed 's/.*\
 bwFiles=$(find ${peakCallingDir}/filtered_peaks -name "*.bed" | sort | sed 's|.*/\(.*\)\.bed|'"${coverageFilePath}"'/\1.bw|')
 
 # Compute matrix for the peak files
+echo "Computing matrix over peaks"
 computeMatrix reference-point \
     --referencePoint ${referencePoint} \
     --regionsFileName ${peakFiles} \
@@ -45,8 +46,10 @@ computeMatrix reference-point \
     --afterRegionStartLength ${afterRegionStartLength} \
     --skipZeros \
     --numberOfProcessors ${threads}
+echo "Matrix computed"
 
 # Compute matrix for TSS
+echo "Computing matrix over TSS"
 computeMatrix reference-point \
     --referencePoint TSS \
     --regionsFileName ${genomeGtfFile} \
@@ -58,5 +61,6 @@ computeMatrix reference-point \
     --afterRegionStartLength ${afterTSSLength} \
     --skipZeros \
     --numberOfProcessors ${threads}
+echo "Matrix computed"
 
 # [END]

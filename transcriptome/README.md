@@ -16,6 +16,7 @@ Here, we describe the analysis from the input fastq files.
 
 - [Transcriptomics](#transcriptomics)
   - [Configuration](#configuration)
+  - [Running the entire pipeline](#running-the-entire-pipeline)
   - [Pre-alignment processing](#pre-alignment-processing)
     - [Quality control](#quality-control)
     - [Trimming](#trimming)
@@ -51,6 +52,54 @@ the most important ones that must be set are:
 In addition, some program used are not linux, but Java-based, and require
 setting the executable (`.jar` file) path in the `config_rnaseq.sh` file. 
 For example, set `TRIMMOMATIC_JAR` to the path of the `trimmomatic-0.39.jar` file.
+
+<br><br/>
+
+## Running the entire pipeline
+
+We understand that a standardized RNA-seq processing pipeline is important to
+remain consistent for all samples in different batches/groups. In the meantime,
+in high-performance computing (HPC) environments, constant submission of jobs
+can be cumbersome. Therefore, we provide a script that runs the entire pipeline
+in one go.
+
+This involves a sequential execution of the scripts in the following order:
+
+1. Quality control on the raw sequencing data
+2. Trimming the reads
+3. Quality control after trimming
+4. Aligning the reads to the reference genome
+5. Sorting the BAM file by name
+6. Generating the count matrix
+7. Converting the BAM file to bigWig format
+
+To run the entire pipeline, we make use of the `&&` operator, which requires
+subsequent commands to run only if the previous command was successful. This
+ensures that the pipeline is run sequentially.
+
+```bash
+~/pre-alignment_processing/fastqc_pre-trimming.sh config_rnaseq.sh && \
+~/pre-alignment_processing/trimming_reads.sh config_rnaseq.sh && \
+~/pre-alignment_processing/fastqc_post-trimming.sh config_rnaseq.sh && \
+~/alignment/star_alignment.sh config_rnaseq.sh && \
+~/post-alignment_processing/sort_bam_by_name.sh config_rnaseq.sh && \
+~/post-alignment_processing/featureCounts_gene.sh config_rnaseq.sh && \
+~/post-alignment_processing/bam_to_coverage.sh config_rnaseq.sh
+```
+
+Note:
+
+- The `&&` operator ensures that the subsequent command is run only if the
+  previous command was successful. Hence, always check the output of each
+  command to ensure that it ran successfully.
+- The `config_rnaseq.sh` file must be set up correctly before running the 
+  pipeline. The paths to the reference genome index file and GTF annotation
+  file must be set in the configuration file.
+- This script assumes that a valid STAR index has been built for the reference
+  genome. If not, run the `build_star_index.sh` script before running the
+  pipeline.
+
+We then describe the details of each step in the pipeline.
 
 <br><br/>
 

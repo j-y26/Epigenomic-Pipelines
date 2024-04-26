@@ -242,7 +242,11 @@ the output of the `star_alignment.sh` script, which is sorted by coordinate.
 The final step in the analysis is to generate the count matrix. This can be done
 using tools such as `featureCounts`, which is a program in the `subread` package
 that can be used to count the number of reads that map to each gene in the
-reference genome.
+reference genome. In the script, `featureCounts` produce the count matrix by
+only considering uniquely mapped reads to increase the confidence of the
+expression estimates. However, make sure to check the quality of the alignment
+to ensure that uniquely mapped reads are sufficient for the analysis (should be
+approximately a minimum of 70-80% of the total reads).
 
 We can perform this via the `featureCounts_gene.sh` script.
 
@@ -269,6 +273,13 @@ the tracks can be compared across different samples.
 
 The `bam_to_coverage.sh` script can be used to convert the BAM file to the bigWig
 format.
+
+Here, we use `deepTools` to convert the BAM file to the bigWig format. Ensure
+this python package is installed in your environment. In addition, before
+converting the BAM file to bigWig, it is important to sort the BAM file by
+coordinate (which is already done as part of STAR's alignment step). We would
+also need to index the BAM file using the `samtools index` command. These steps
+are integrated into the `bam_to_coverage.sh` script.
 
 ```bash
 ./bam_to_coverage.sh config_rnaseq.sh

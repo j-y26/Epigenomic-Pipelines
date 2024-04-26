@@ -35,6 +35,14 @@ fi
 
 for file in $(find ${STAROutputDir} -type f -name '*.bam'); do
     sample=$(basename $file Aligned.sortedByCoord.out.bam)
+
+    # Indexing the BAM file
+    echo "Indexing ${sample} BAM file"
+    samtools index \
+        -@ ${threads} \
+        ${STAROutputDir}/${sample}Aligned.sortedByCoord.out.bam
+
+    # Convert BAM to coverage file
     echo "Converting ${sample} BAM to coverage file"
     bamCoverage \
         -b ${STAROutputDir}/${sample}Aligned.sortedByCoord.out.bam \
@@ -46,4 +54,7 @@ for file in $(find ${STAROutputDir} -type f -name '*.bam'); do
         --binSize ${binSize} \
         --numberOfProcessors ${threads}
     
+    echo "Finished calculating coverage for ${sample}"
+done
+
 # [END]

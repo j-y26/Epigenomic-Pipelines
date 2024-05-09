@@ -4,6 +4,9 @@ LABEL email="jielin.yang@sickkids.ca"
 LABEL version="1.0"
 LABEL description="Docker image for raw data processing of epigenomic NGS data"
 
+# Create a new user
+RUN useradd -ms /bin/bash bioinformatician
+
 # Install Java JDK 17
 RUN apt-get update -y && apt-get install -y openjdk-17-jdk
 

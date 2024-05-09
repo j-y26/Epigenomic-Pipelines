@@ -52,7 +52,7 @@ and dependencies. To use the Docker image, ensure that Docker is installed and
 run the following command:
 
 ```bash
-docker run -it -v ${pwd}:/home jyang26/epigenomic-pipelines:latest
+docker run -it --user $(id -u):$(id -g) -v ${pwd}:/home jyang26/epigenomic-pipelines:latest
 ```
 
 This will download the Docker image and start an interactive shell session.

@@ -78,7 +78,6 @@ for file in $(find ${alignmentDir}/filtered_bam -name "*.bam"); do
         --nolambda \
         -B \
         --SPMR \
-        --call-summits \
         ${cutoffAnalysis} \
         --outdir ${peakCallingDir}/macs2${cutoffDir}/${subDir}
 done

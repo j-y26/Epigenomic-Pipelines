@@ -16,6 +16,7 @@ Here, we describe the analysis from the input fastq files.
 
 - [Transcriptomics](#transcriptomics)
   - [Configuration](#configuration)
+  - [Running the entire pipeline](#running-the-entire-pipeline)
   - [Pre-alignment processing](#pre-alignment-processing)
     - [Quality control](#quality-control)
     - [Trimming](#trimming)
@@ -51,6 +52,54 @@ the most important ones that must be set are:
 In addition, some program used are not linux, but Java-based, and require
 setting the executable (`.jar` file) path in the `config_rnaseq.sh` file. 
 For example, set `TRIMMOMATIC_JAR` to the path of the `trimmomatic-0.39.jar` file.
+
+<br><br/>
+
+## Running the entire pipeline
+
+We understand that a standardized RNA-seq processing pipeline is important to
+remain consistent for all samples in different batches/groups. In the meantime,
+in high-performance computing (HPC) environments, constant submission of jobs
+can be cumbersome. Therefore, we provide a script that runs the entire pipeline
+in one go.
+
+This involves a sequential execution of the scripts in the following order:
+
+1. Quality control on the raw sequencing data
+2. Trimming the reads
+3. Quality control after trimming
+4. Aligning the reads to the reference genome
+5. Sorting the BAM file by name
+6. Generating the count matrix
+7. Converting the BAM file to bigWig format
+
+To run the entire pipeline, we make use of the `&&` operator, which requires
+subsequent commands to run only if the previous command was successful. This
+ensures that the pipeline is run sequentially.
+
+```bash
+~/pre-alignment_processing/fastqc_pre-trimming.sh config_rnaseq.sh && \
+~/pre-alignment_processing/trimming_reads.sh config_rnaseq.sh && \
+~/pre-alignment_processing/fastqc_post-trimming.sh config_rnaseq.sh && \
+~/alignment/star_alignment.sh config_rnaseq.sh && \
+~/post-alignment_processing/sort_bam_by_name.sh config_rnaseq.sh && \
+~/post-alignment_processing/featureCounts_gene.sh config_rnaseq.sh && \
+~/post-alignment_processing/bam_to_coverage.sh config_rnaseq.sh
+```
+
+Note:
+
+- The `&&` operator ensures that the subsequent command is run only if the
+  previous command was successful. Hence, always check the output of each
+  command to ensure that it ran successfully.
+- The `config_rnaseq.sh` file must be set up correctly before running the 
+  pipeline. The paths to the reference genome index file and GTF annotation
+  file must be set in the configuration file.
+- This script assumes that a valid STAR index has been built for the reference
+  genome. If not, run the `build_star_index.sh` script before running the
+  pipeline.
+
+We then describe the details of each step in the pipeline.
 
 <br><br/>
 
@@ -193,7 +242,11 @@ the output of the `star_alignment.sh` script, which is sorted by coordinate.
 The final step in the analysis is to generate the count matrix. This can be done
 using tools such as `featureCounts`, which is a program in the `subread` package
 that can be used to count the number of reads that map to each gene in the
-reference genome.
+reference genome. In the script, `featureCounts` produce the count matrix by
+only considering uniquely mapped reads to increase the confidence of the
+expression estimates. However, make sure to check the quality of the alignment
+to ensure that uniquely mapped reads are sufficient for the analysis (should be
+approximately a minimum of 70-80% of the total reads).
 
 We can perform this via the `featureCounts_gene.sh` script.
 
@@ -220,6 +273,13 @@ the tracks can be compared across different samples.
 
 The `bam_to_coverage.sh` script can be used to convert the BAM file to the bigWig
 format.
+
+Here, we use `deepTools` to convert the BAM file to the bigWig format. Ensure
+this python package is installed in your environment. In addition, before
+converting the BAM file to bigWig, it is important to sort the BAM file by
+coordinate (which is already done as part of STAR's alignment step). We would
+also need to index the BAM file using the `samtools index` command. These steps
+are integrated into the `bam_to_coverage.sh` script.
 
 ```bash
 ./bam_to_coverage.sh config_rnaseq.sh

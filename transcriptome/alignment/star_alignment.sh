@@ -36,7 +36,7 @@ for file in $(find ${trimmedDir} -type f -name '*_R1.fastq.gz'); do
     STAR \
     --runThreadN ${threads} \
     --readFilesCommand zcat \
-    --outFileNamePrefix ${STAROutputDir}/${samplename} \
+    --outFileNamePrefix ${STAROutputDir}/${sample} \
     --outSAMtype BAM SortedByCoordinate \
     --genomeDir ${STARIndexDir} \
     --readFilesIn ${trimmedDir}/${forward_file} ${trimmedDir}/${reverse_file}

@@ -24,7 +24,7 @@ if [ ! -d ${fastqcOutDir} ]; then
     mkdir ${fastqcOutDir}/post_trimming
 fi
 
-if [ ! -d ${fastqcOutDir}/pre_trimming ]; then
+if [ ! -d ${fastqcOutDir}/post_trimming ]; then
     mkdir ${fastqcOutDir}/post_trimming
 fi
 

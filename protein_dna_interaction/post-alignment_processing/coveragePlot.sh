@@ -47,8 +47,7 @@ for file in $(find ${markedSamples} -type f -name "samples_*.txt"); do
         --blackListFileName ${blacklistFile} \
         --plotHeight ${coveragePlotHeight} \
         --plotWidth ${coveragePlotWidth} \
-        --numberOfProcessors ${threads} \
-        --verbose
+        --numberOfProcessors ${threads}
 done
 
 # [END]

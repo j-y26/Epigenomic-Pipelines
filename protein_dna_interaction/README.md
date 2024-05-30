@@ -280,7 +280,7 @@ and processing.
 ### Alignment rate
 
 The alignment rate is show in the `bowtie2.txt` file under the `alignment/bowtie2_summary` folder. The alignment rate
-is calculated as the number of reads that are aligned to the reference genome 
+is calculated as the number of reads that are aligned to the reference genome
 (both uniquely aligned and multi-mapping reads) divided by the total number of
 reads in the fastq files. It is expected that a successful alignment rate is about 80-90%.
 
@@ -519,10 +519,10 @@ For the PCA plot, by default, not all bins with variance are used to calculate
 the PCA. The `ntop` parameter specifies the number of bins with the highest
 variance to be used for the PCA. The default value is 1000, but users can
 choose to increase or decrease this value. When mapping regions of a genome
-that is targeted by a specific protein, it is expected that most parts of the 
+that is targeted by a specific protein, it is expected that most parts of the
 genome are not covered by the reads. In this case, the `ntop` parameter can be
 set to a lower value to capture the variance of the regions that are covered
-by the reads. Yet, a proper value depends on the specific mark used and the 
+by the reads. Yet, a proper value depends on the specific mark used and the
 quality of the antibody used in the experiment.
 
 ### Mitochondrial reads

@@ -37,7 +37,6 @@ plotCoverage \
     --blackListFileName ${blacklistFile} \
     --plotHeight ${coveragePlotHeight} \
     --plotWidth ${coveragePlotWidth} \
-    --numberOfProcessors ${threads} \
-    --verbose
+    --numberOfProcessors ${threads}
 
 # [END]

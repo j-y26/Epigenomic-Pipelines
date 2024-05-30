@@ -28,7 +28,7 @@ for file in $(find ${markedSamples} -type f -name "samples_*.txt"); do
     bamFiles=""
     labels=""
     for sample in ${samples}; do
-        bamFiles="${bamFiles} ${alignmentDir}/filtered_bam/${sample}${bamSuffix}"
+        bamFiles="${bamFiles} ${alignmentDir}/filtered_bam/${sample}.bam"
         labels="${labels} ${sample}"
     done
 

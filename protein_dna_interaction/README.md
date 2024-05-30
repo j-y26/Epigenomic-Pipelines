@@ -341,7 +341,7 @@ file. Here, we use the `fragment_size.sh` script to extract the fragment size
 calculate the distribution.
 
 ```bash
-./fragment_size.sh config_atacseq.sh
+./fragment_size.sh config_chipseq.sh
 ```
 
 The size distribution can be plotted in R, using the `ggplot2` and the `ggpubr`
@@ -455,7 +455,7 @@ plot. We can plot using the `plotCoverage` command in `deepTools`. The following
 command generates the coverage plot:
 
 ```bash
-./coveragePlot.sh config_atacseq.sh
+./coveragePlot.sh config_chipseq.sh
 ```
 
 Note that here we need to specify the number of 1-bp regions to be sampled
@@ -486,7 +486,7 @@ sample matrix and extract the samples for each mark.
 The following command calculates the coverage of the aligned reads:
 
 ```bash
-./coverage.sh config_chipseq.sh
+./multiBamSummary.sh config_chipseq.sh
 ```
 
 This will generate a computed coverage file for all bam files assigned to each
@@ -504,7 +504,7 @@ read coverage. The PCA plot is generated using the `plotPCA` command in
 Using the following script, we together generate the correlation and PCA plots:
 
 ```bash
-./bamQCPlots.sh config_atacseq.sh
+./bamQCPlots.sh config_chipseq.sh
 ```
 
 Note that `plotCorrelation` and `plotPCA` require the computed coverage file

@@ -24,6 +24,7 @@ raw data files for ChIP-seq, CUT&Tag, and CUT&RUN experiments.
     - [Building the reference genome index](#building-the-reference-genome-index)
     - [Alignment of reads](#alignment-of-reads)
     - [Spike-in alignment (optional)](#spike-in-alignment-optional)
+    - [Standardizing the sample names](#standardizing-the-sample-names)
   - [Post-alignment QC and processing](#post-alignment-qc-and-processing)
     - [Alignment rate](#alignment-rate)
     - [Duplicate removal](#duplicate-removal)
@@ -241,6 +242,34 @@ bowtie2 --end-to-end --very-sensitive --no-overlap --no-dovetail --no-mixed --no
     -S output_bowtie2.sam &> bowtie2_summary.txt
 ```
 
+### Standardizing the sample names
+
+Immediately after alignment, it is recommended to standardize the sample names
+to ensure that the downstream analysis clear. The sample names, as well as the
+file names, should clearly indicate the unique sample identifier, the mark
+used, and the replicate number.
+
+Regardless, a sample matrix csv file is required for the pipeline to run
+effectively, since the downstream analysis scripts will process samples by
+grouping them based on the mark used.
+
+To initialize a sample matrix csv, users can use the `utils/generate_sample_matrix.py`. See the [documentation](https://j-y26.github.io/Epigenomic-Pipelines/utils/docs/generate_sample_matrix.html) for more information. This script will generate a baseline sample matrix with the required columns. Users can then fill in the metadata of the samples in this `csv` file, based on how the experiment was performed.
+
+The csv file must contain the following columns:
+
+- `Label`: the label of the sample, which must match the file name of the fastq files
+- `Mark`: the protein target used
+
+Users should manually fill in the metadata of the samples in this `csv` file,
+based on how the experiment was performed. The `Label` column should match the
+desired sample name, and the "Sample" column will match the original file name
+used earlier in the pipeline.
+
+The pipeline has also provided an easy way to standardize the file names
+based on the sample matrix. The python script `utils/file_name_conversion.py`
+can be used to convert the file names based on the sample matrix, from the
+`Sample` column to the `Label` column. See the [documentation](https://j-y26.github.io/Epigenomic-Pipelines/utils/docs/file_name_conversion.html) for more information.
+
 <br><br/>
 
 ## Post-alignment QC and processing
@@ -334,11 +363,8 @@ as the output of the `fragment_size.sh` script.
 
 Furthermore, to be able to plot, a `<sample_matrix>` must have been set up.
 It is up to the user to fill in the metadata of the samples in this `csv` file,
-based on how the experiment was performed. To generate a baseline csv file
-for all samples, users can make use of the `utils/generate_sample_matrix.py` 
-script, which will create a sample matrix with the required columns. In this
-case, the `plot_frag_size.R` scripts requires that the `sample_matrix` file
-contains the following columns:
+based on how the experiment was performed. The `plot_frag_size.R` scripts
+requires that the `sample_matrix` file contains the following columns:
 
 - `Label`: the label of the sample, which must match the file name of the
   fragment size distribution file without the `_fragment_size.txt` suffix.
@@ -386,7 +412,7 @@ matrix as described [here](https://j-y26.github.io/Epigenomic-Pipelines/utils/do
 An working example here is:
 
 ```bash
-python3 samples_for_mark.py ${alignmentDir}/sample_matrix.csv ${alignmentDir}
+python3 samples_for_mark.py sample_matrix.csv ${markedSamples}
 ```
 
 After extracting the samples, we can run the `fragment_size_deeptools.sh` script

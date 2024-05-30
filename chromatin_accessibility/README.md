@@ -599,3 +599,9 @@ The following command computes the matrix of the coverage of the peaks:
 ```bash
 ./computeMatrix.sh config_atacseq.sh
 ```
+
+To generate the profile and heatmap of the coverage, run the following command:
+
+```bash
+./plotProfileHeatmap.sh config_atacseq.sh
+```

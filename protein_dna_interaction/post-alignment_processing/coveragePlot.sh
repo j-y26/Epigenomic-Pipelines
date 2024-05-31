@@ -37,9 +37,9 @@ for file in $(find ${markedSamples} -type f -name "samples_*.txt"); do
     plotCoverage \
         --bamfiles ${bamFiles} \
         --labels ${labels} \
-        --plotFile ${alignmentDir}/bam_qc/coverage_plot.pdf \
-        --outRawCounts ${alignmentDir}/bam_qc/coverage_counts.tab \
-        --outCoverageMetrics ${alignmentDir}/bam_qc/coverage_metrics.tab \
+        --plotFile ${alignmentDir}/bam_qc/${mark}_coverage_plot.pdf \
+        --outRawCounts ${alignmentDir}/bam_qc/${mark}_coverage_counts.tab \
+        --outCoverageMetrics ${alignmentDir}/bam_qc/${mark}_coverage_metrics.tab \
         --skipZeros \
         --minMappingQuality 20 \
         --plotFileFormat pdf \

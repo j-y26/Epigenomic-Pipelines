@@ -48,6 +48,10 @@ for file in $(find ${markedSamples} -type f -name "samples_*.txt"); do
         labels="${labels} ${sample}"
     done
 
+    # Convert space-separated strings into arrays
+    read -a bamFiles <<< "$bamFiles"
+    read -a labels <<< "$labels"
+
     # Calculate the number of total and mitochondrial reads for each sample
 
     # Iterate over the index of bamFiles and labels

@@ -37,6 +37,7 @@ raw data files for ChIP-seq, CUT&Tag, and CUT&RUN experiments.
       - [Genome-wide read coverage](#genome-wide-read-coverage)
       - [Reproducibility](#reproducibility)
     - [Mitochondrial reads](#mitochondrial-reads)
+  - [Peak calling](#peak-calling)
 
 
 ## Configuration
@@ -566,3 +567,21 @@ python3 plot_mt_reads.py ${alignmentDir}/mt_reads/mt_reads.csv ${alignmentDir}/m
 ```
 
 <br><br/>
+
+## Peak calling
+
+After the post-alignment QC and processing, we can now identify the enriched
+regions in the genome. ChIP-seq, CUT&Tag, and CUT&RUN experiments are designed
+to obtain reads localized around protein binding sites. Regions that are truly
+bound by the protein of interest are expected to have a higher read coverage
+compared to the background, termed enriched regions or peaks. The identification
+of these peaks is performed using peak calling algorithms.
+
+Here, we use the `MACS2` peak caller to identify the enriched regions in the
+genome. `MACS2` is a popular peak caller that is widely used in the field of
+genomic data analysis. It is specifically designed for identifying enriched
+regions in ChIP-seq data.
+
+It is important to note that the choice of the parameters in `MACS2` is critical to obtain correctly called peaks. Specifically, CUT&Tag and ChIP-seq data have different characteristics, and the parameters used for peak calling should be adjusted accordingly. Furthermore, depending on the distribution
+characteristics of the mark, narrow or broad peaks should be called independently.
+

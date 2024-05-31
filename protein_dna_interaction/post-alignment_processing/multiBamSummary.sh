@@ -38,7 +38,7 @@ for file in $(find ${markedSamples} -type f -name "samples_*.txt"); do
         --labels ${labels} \
         --numberOfProcessors ${threads} \
         --binSize ${binSize} \
-        --verbose \
         --outFileName ${alignmentDir}/bam_qc/multiBamSummary_${mark}_${binSize}.npz
+done
 
 # [END]

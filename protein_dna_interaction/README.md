@@ -38,6 +38,10 @@ raw data files for ChIP-seq, CUT&Tag, and CUT&RUN experiments.
       - [Reproducibility](#reproducibility)
     - [Mitochondrial reads](#mitochondrial-reads)
   - [Peak calling](#peak-calling)
+    - [MACS2 peak calling](#macs2-peak-calling)
+      - [Annotating samples for peak calling](#annotating-samples-for-peak-calling)
+      - [Extracting samples for peak calling type](#extracting-samples-for-peak-calling-type)
+      - [Peak calling](#peak-calling-1)
 
 
 ## Configuration
@@ -577,6 +581,8 @@ bound by the protein of interest are expected to have a higher read coverage
 compared to the background, termed enriched regions or peaks. The identification
 of these peaks is performed using peak calling algorithms.
 
+### MACS2 peak calling
+
 Here, we use the `MACS2` peak caller to identify the enriched regions in the
 genome. `MACS2` is a popular peak caller that is widely used in the field of
 genomic data analysis. It is specifically designed for identifying enriched
@@ -585,3 +591,49 @@ regions in ChIP-seq data.
 It is important to note that the choice of the parameters in `MACS2` is critical to obtain correctly called peaks. Specifically, CUT&Tag and ChIP-seq data have different characteristics, and the parameters used for peak calling should be adjusted accordingly. Furthermore, depending on the distribution
 characteristics of the mark, narrow or broad peaks should be called independently.
 
+#### Annotating samples for peak calling
+
+Refer to the documentation on histone/chromatin mark peak profiles for more information on the distribution profiles of some common histone marks and RNA polymerase marks. A summary of the distribution profiles of some common histone marks and RNA polymerase marks is provided below:
+
+[Summary of Histone/Chromatin Peak Profiles](../utils/docs/histone_peak_profile.md)
+
+Note that in the `sample_matrix` file, a column titled `Peak_Type` is required to specify the type of peak calling to be performed. The `Peak_Type` column should contain either `narrow` or `broad` for each sample. This column is used to specify the type of peak calling to be performed by `MACS2`.
+
+#### Extracting samples for peak calling type
+
+For uniformed processing of peak calling, we want to extract the list of samples (files) corresponding to each type of peaks. This is done by the `extract_samples_by_peak_type.py` script. The script will be invoked as follows:
+
+```bash
+python3 extract_samples_by_peak_type.py <sample_matrix> <output_dir>
+```
+
+It is recommended to extract the samples for each peak type into a file into
+the `peak_calling` directory. An example of the script is shown below:
+
+```bash
+python3 extract_samples_by_peak_type.py sample_matrix.csv ${peakCallingDir}
+```
+
+#### Peak calling
+
+Thorough consideration of the parameters used in peak calling is
+required. The parameters used in the `macs2 callpeak` command are critical to
+accurately identify the enriched open chromatin regions. The following parameters
+are used in the `macs2 callpeak` command:
+
+- `-f BAMPE`: the format of the input file
+- `-g ${genomeSize}`: the effective genome size for the reference genome. This number can be determined from deepTools. Some common effective genome sizes are listed along with this [pipeline](../utils/docs/resources.md).
+- `-q ${qValue}`: the q-value threshold for peak calling. This is the minimum FDR at which a peak is called significant. The default value is 0.05, but users can choose to increase or decrease this value. As a common practice for ATAC-seq, a q-value threshold of 0.01 is recommended as a starting point.
+- `-p ${pValue}`: the p-value threshold for peak calling. Unlike the `q-value`, the `p-value` is not corrected for multiple testing and represents the probability of observing a peak by chance. If the `p-value` is set, the `q-value` is ignored. We do not recommend using the `p-value` for peak calling since it increases the false positive rate.
+- `--nolambda`: do not calculate the local lambda, which is used to estimate the background noise. This is recommended for ATAC-seq data since no control (input) sample is used in an ATAC-seq experiment.
+- `-B`: generate bedGraph files of the pileup, which can be used to visualize the pileup in a genome browser.
+- `--SPMR`: use the signal per million reads (SPMR) as the normalization method. This does not affect the peak calling, but is used to normalize the signal for visualization.
+- `--call-summits`: call the summits of the peaks. This is recommended for ATAC-seq data, as it identifies the exact location of the peak.
+
+As mentioned earlier, a cutoff is required to filter the peaks to keep only the
+significant ones. The `q-value` is the most commonly used cutoff, and it is
+recommended to set the `q-value` to `0.01` as a starting point. However, the
+optimal cutoff value might not be the same for all experiments, and it is
+may be necessary to run cutoff analysis to determine the optimal cutoff value.
+`MACS2` provides a cuttoff analysis mode to determine the optimal cutoff value.
+To do so, in the configuration file, set the `cutoffAnalysis` parameter to `true`.

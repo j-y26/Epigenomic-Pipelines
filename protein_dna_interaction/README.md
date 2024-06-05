@@ -448,7 +448,7 @@ is located in the [`utils` directory](https://j-y26.github.io/Epigenomic-Pipelin
 
 ### Reproducibility and coverage
 
-The reproducibility of the ATAC-seq data is assessed by the correlation of the
+The reproducibility of the ChIP-seq data is assessed by the correlation of the
 read coverage between replicates. The read coverage is calculated using the
 `deepTools` package. We will generate a coverage plot and a correlation plot
 to assess the quality of the mapped reads.
@@ -499,7 +499,7 @@ mark in the `bam_qc` folder under the `alignment` directory.
 
 #### Reproducibility
 
-The reproducibility of the ATAC-seq data is assessed by the correlation of the
+The reproducibility of the ChIP-seq data is assessed by the correlation of the
 read coverage between replicates. The correlation plot is generated using the
 `plotCorrelation` command in `deepTools`. Furthermore, we can assess the
 reproducibility by performing a principal component analysis (PCA) of the
@@ -623,12 +623,11 @@ are used in the `macs2 callpeak` command:
 
 - `-f BAMPE`: the format of the input file
 - `-g ${genomeSize}`: the effective genome size for the reference genome. This number can be determined from deepTools. Some common effective genome sizes are listed along with this [pipeline](../utils/docs/resources.md).
-- `-q ${qValue}`: the q-value threshold for peak calling. This is the minimum FDR at which a peak is called significant. The default value is 0.05, but users can choose to increase or decrease this value. As a common practice for ATAC-seq, a q-value threshold of 0.01 is recommended as a starting point.
+- `-q ${qValue}`: the q-value threshold for peak calling. This is the minimum FDR at which a peak is called significant. The default value is 0.05, but users can choose to increase or decrease this value. As a common practice for ChIP-seq, a q-value threshold of 0.01 is recommended as a starting point.
 - `-p ${pValue}`: the p-value threshold for peak calling. Unlike the `q-value`, the `p-value` is not corrected for multiple testing and represents the probability of observing a peak by chance. If the `p-value` is set, the `q-value` is ignored. We do not recommend using the `p-value` for peak calling since it increases the false positive rate.
-- `--nolambda`: do not calculate the local lambda, which is used to estimate the background noise. This is recommended for ATAC-seq data since no control (input) sample is used in an ATAC-seq experiment.
 - `-B`: generate bedGraph files of the pileup, which can be used to visualize the pileup in a genome browser.
 - `--SPMR`: use the signal per million reads (SPMR) as the normalization method. This does not affect the peak calling, but is used to normalize the signal for visualization.
-- `--call-summits`: call the summits of the peaks. This is recommended for ATAC-seq data, as it identifies the exact location of the peak.
+- `--call-summits`: call the summits of the peaks. This is recommended for ChIP-seq data, as it identifies the exact location of the peak.
 
 As mentioned earlier, a cutoff is required to filter the peaks to keep only the
 significant ones. The `q-value` is the most commonly used cutoff, and it is
@@ -637,3 +636,16 @@ optimal cutoff value might not be the same for all experiments, and it is
 may be necessary to run cutoff analysis to determine the optimal cutoff value.
 `MACS2` provides a cuttoff analysis mode to determine the optimal cutoff value.
 To do so, in the configuration file, set the `cutoffAnalysis` parameter to `true`.
+
+More specifically, users should consider the following parameters:
+
+- `--nomodel`: whether to disable the shifting model.
+- `--extsize`: the extension size of the reads. This is the size of the DNA fragment that is sequenced. The extension size should be set to the average fragment size of the library. It is required is no shifting model is used.
+- `--nolambda`: whether to disable the local lambda calculation.
+
+The following command performs peak calling using `MACS2`:
+
+```bash
+./macs2_peak_calling.sh config_chipseq.sh
+```
+

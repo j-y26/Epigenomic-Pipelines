@@ -125,6 +125,21 @@ pValue=""
 # q-value, but it would require a significant higher amount of computational time
 cutoffAnalysis="false"
 
+# Whether to use background lambda for MACS2 peak calling
+# By default, MACS2 uses the local lambda as the background lambda, but it is only
+# recommended when control samples are used
+# If no control samples are used, it is recommended to set this to false
+useBackgroundLambda="false"
+
+# Whether to  build the shifting model during peak calling
+# By default, a model is built by MACS2 to predict the shifting size
+# If false, "--nomodel" is specified during peak calling, and "extSize" is used
+useModel="true"
+
+# Extension size for the MACS2 peak calling, the size extended to 3' of the read
+# If "useModel" is false, this value is used
+extsize=200
+
 # ====== Processing called peaks ===============================================
 
 #### Blacklist filtering

@@ -56,6 +56,19 @@ fi
 # Subdirectory for peak calling output based on parameters specified
 subDir=${subDir}_nolambda
 
+# Whether a model is used for peak calling
+case ${useModel} in
+    true | True | TRUE | T | t )
+        model=""
+        extSize=""
+        ;;
+    *)
+        model="--nomodel"
+        extSize="--extsize ${extsize}"
+        subDir="${subDir}_nomodel_ext${extsize}"
+        ;;
+esac
+
 if [ ! -d ${peakCallingDir}/macs2${cutoffDir}/${subDir} ]; then
     mkdir ${peakCallingDir}/macs2${cutoffDir}/${subDir}
 fi
@@ -76,6 +89,8 @@ for file in $(find ${alignmentDir}/filtered_bam -name "*.bam"); do
         -n ${sample} \
         ${cutoff} \
         --nolambda \
+        ${model} \
+        ${extSize} \
         -B \
         --SPMR \
         ${cutoffAnalysis} \

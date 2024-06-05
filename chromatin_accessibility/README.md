@@ -532,6 +532,10 @@ are used in the `macs2 callpeak` command:
 - `--SPMR`: use the signal per million reads (SPMR) as the normalization method. This does not affect the peak calling, but is used to normalize the signal for visualization.
 - `--call-summits`: call the summits of the peaks. This is recommended for ATAC-seq data, as it identifies the exact location of the peak.
 
+Users should also determine whether a model should be built to call peaks.
+If a shifting model is not used, then reads should be extended to the fragment
+length. See the `macs2` documentation for more information.
+
 Due to the cumulative nature of ATAC-seq peaks present in accessible promoters and enhancers, a narrow peak is expected. Therefore, the `MACS2` algorithm here operates on its default setting to call narrow peaks.
 
 As mentioned earlier, a cutoff is required to filter the peaks to keep only the

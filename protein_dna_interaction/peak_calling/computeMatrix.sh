@@ -7,17 +7,17 @@ fi
 config_script=$1
 source ${config_script}
 echo "Running with config:"
-echo "  Filtered peak directory: ${peakCallingDir}/filtered_peaks"
+echo "  Filtered peak directory: ${peakCallingDir}/filtered_peaks/${rawPeaks}"
 echo "  Coverage file path: ${coverageFilePath}"
 echo "  GTF file: ${genomeGtfFile}"
 
 # Create output directory if it doesn't exist
-if [ ! -d ${peakCallingDir}/peak_coverage ]; then
-    mkdir ${peakCallingDir}/peak_coverage
+if [ ! -d ${peakCallingDir}/peak_coverage/${rawPeaks} ]; then
+    mkdir -p ${peakCallingDir}/peak_coverage/${rawPeaks}
 fi
 
-if [ ! -d ${peakCallingDir}/tss_coverage ]; then
-    mkdir ${peakCallingDir}/tss_coverage
+if [ ! -d ${peakCallingDir}/tss_coverage/${rawPeaks} ]; then
+    mkdir -p ${peakCallingDir}/tss_coverage/${rawPeaks}
 fi
 
 # Test whether any bigwig files exist in the coverage directory
@@ -39,7 +39,7 @@ for file in $(find ${markedSamples} -type f -name "samples_*.txt"); do
     labels=""
     bwFiles=""
     for sample in ${samples}; do
-        peakFiles="${peakFiles} $(find ${peakCallingDir}/filtered_peaks -name "${sample}.bed")"
+        peakFiles="${peakFiles} $(find ${peakCallingDir}/filtered_peaks/${rawPeaks} -name "${sample}.bed")"
         labels="${labels} ${sample}"
         bwFiles="${bwFiles} $(find ${coverageFilePath} -name "${sample}.bw")"
     done
@@ -53,8 +53,8 @@ for file in $(find ${markedSamples} -type f -name "samples_*.txt"); do
         --referencePoint ${referencePoint} \
         --regionsFileName ${peakFiles} \
         --scoreFileName ${bwFiles} \
-        --outFileName ${peakCallingDir}/peak_coverage/${mark}_coverage_matrix_peaks.gz \
-        --outFileNameMatrix ${peakCallingDir}/peak_coverage/${mark}_coverage_matrix_peaks.tab \
+        --outFileName ${peakCallingDir}/peak_coverage/${rawPeaks}/${mark}_coverage_matrix_peaks.gz \
+        --outFileNameMatrix ${peakCallingDir}/peak_coverage/${rawPeaks}/${mark}_coverage_matrix_peaks.tab \
         --samplesLabel ${labels} \
         --beforeRegionStartLength ${beforeRegionStartLength} \
         --afterRegionStartLength ${afterRegionStartLength} \
@@ -68,8 +68,8 @@ for file in $(find ${markedSamples} -type f -name "samples_*.txt"); do
         --referencePoint TSS \
         --regionsFileName ${genomeGtfFile} \
         --scoreFileName ${bwFiles} \
-        --outFileName ${peakCallingDir}/tss_coverage/${mark}_coverage_matrix_tss.gz \
-        --outFileNameMatrix ${peakCallingDir}/tss_coverage/${mark}_coverage_matrix_tss.tab \
+        --outFileName ${peakCallingDir}/tss_coverage/${rawPeaks}/${mark}_coverage_matrix_tss.gz \
+        --outFileNameMatrix ${peakCallingDir}/tss_coverage/${rawPeaks}/${mark}_coverage_matrix_tss.tab \
         --smartLabels \
         --beforeRegionStartLength ${beforeTSSLength} \
         --afterRegionStartLength ${afterTSSLength} \

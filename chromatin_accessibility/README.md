@@ -601,6 +601,14 @@ mkdir ${peakCallingDir}/peak_stats
 Rscript plot_peak_stats.R ${peakCallingDir}/filtered_peaks ${peakCallingDir}/peak_stats
 ```
 
+Note that while most peaks usually have a width less than 1 kb, some peaks may
+be much wider. Running the script generates a summary statistics that allows users
+to inspect the peaks size distribution in its naive form. On the other hand,
+to allow better comparison between samples, if the maximum peak width of a sample
+is greater than 10 kb, the script will only consider the maximum peak width of
+at the 90th percentile across all samples. This is to ensure that the peak width
+distribution is not skewed by a few samples with very wide peaks.
+
 ### Visualizing coverage tracks
 
 The coverage of the aligned reads can be visualized in a genome browser to

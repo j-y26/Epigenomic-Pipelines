@@ -706,9 +706,20 @@ An example of a streamlined analysis after running the `blacklist_filtering.sh`
 script is shown below:
 
 ```bash
-mkdir ${peakCallingDir}/peak_stats
-Rscript plot_peak_stats.R ${peakCallingDir}/filtered_peaks sample_matrix.csv ${peakCallingDir}/peak_stats
+peakStatsDir=${peakCallingDir}/peak_stats/${rawPeaks}
+filteredPeaks=${peakCallingDir}/filtered_peaks/${rawPeaks}
+mkdir -p ${peakStatsDir}
+Rscript plot_peak_stats.R ${filteredPeaks} sample_matrix.csv ${peakStatsDir}
 ```
+
+Note that while most peaks usually have a width less than 1 kb, some peaks may
+be much wider. Running the script generates a summary statistics that allows users
+to inspect the peaks size distribution in its naive form. On the other hand,
+to allow better comparison between samples, if the maximum peak width of a sample
+is greater than 10 kb, the script will only consider the maximum peak width of
+at the 90th percentile across all samples of the same mark.
+This is to ensure that the peak width
+distribution is not skewed by a few samples with very wide peaks.
 
 ### Visualizing coverage tracks
 

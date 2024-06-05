@@ -127,7 +127,7 @@ dev.off()
 peakWidthData <- melt(peakWidths)
 colnames(peakWidthData) <- c("PeakWidth", "Sample")
 peakWidthData <- peakWidthData[peakWidthData$PeakWidth <= maxPeakWidth90, ]
-cat("Plotting only peak widths less than ", maxPeakWidth90, ".\n")
+cat("Plotting only peak widths less than ", maxPeakWidth90, "\n")
 peakWidthPlot <- ggplot(peakWidthData, aes(x = PeakWidth, color = Sample)) +
     geom_density() +
     labs(x = "Peak Width", y = "Density") +

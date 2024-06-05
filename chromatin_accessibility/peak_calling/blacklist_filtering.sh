@@ -8,15 +8,15 @@ config_script=$1
 source ${config_script}
 echo "Running with config:"
 echo "  Input peak directory: ${peakCallingDir}/macs2/${rawPeaks}"
-echo "  Filtered peak output directory: ${peakCallingDir}/filtered_peaks"
+echo "  Filtered peak output directory: ${peakCallingDir}/filtered_peaks/${rawPeaks}"
 echo "  Blacklist file: ${blacklistFile}"
 
 
 # [Main]
 
 # Check if the directory exists, if not, create it
-if [ ! -d ${peakCallingDir}/filtered_peaks ]; then
-    mkdir ${peakCallingDir}/filtered_peaks
+if [ ! -d ${peakCallingDir}/filtered_peaks/${rawPeaks} ]; then
+    mkdir -p ${peakCallingDir}/filtered_peaks/${rawPeaks}
 fi
 
 # Filter the peaks using the blacklist file
@@ -30,7 +30,7 @@ for file in $(find ${peakCallingDir}/macs2/${rawPeaks} -type f -name '*.narrowPe
 
     # Filter the peaks
     bedtools intersect -v -a ${file} -b ${blacklistFile} > \
-      ${peakCallingDir}/filtered_peaks/${sample}.bed
+      ${peakCallingDir}/filtered_peaks/${rawPeaks}/${sample}.bed
     
     echo "Peaks filtered for ${sample}"
 done

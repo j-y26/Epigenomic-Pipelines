@@ -42,6 +42,11 @@ raw data files for ChIP-seq, CUT&Tag, and CUT&RUN experiments.
       - [Annotating samples for peak calling](#annotating-samples-for-peak-calling)
       - [Extracting samples for peak calling type](#extracting-samples-for-peak-calling-type)
       - [Peak calling](#peak-calling-1)
+    - [goPeak](#gopeak)
+  - [Processing called peaks](#processing-called-peaks)
+    - [Blacklist filtering](#blacklist-filtering)
+    - [Visualizing coverage tracks](#visualizing-coverage-tracks)
+    - [Peak coverage and distribution](#peak-coverage-and-distribution)
 
 
 ## Configuration
@@ -649,3 +654,68 @@ The following command performs peak calling using `MACS2`:
 ./macs2_peak_calling.sh config_chipseq.sh
 ```
 
+### goPeak
+
+## Processing called peaks
+
+### Blacklist filtering
+
+The called peaks are filtered to remove the blacklisted regions. The blacklisted
+regions are regions of the genome where the alignment is not reliable, and are
+commonly used to filter out false positive peaks. Therefore, we do not want to
+analyze the peaks that are called in the blacklisted regions.
+
+Here, we use the `bedtools` command to remove the `.narrowPeak` files output by
+`MACS2` that overlap with the blacklisted regions.
+
+`bedtools` requires that the naming convention of the chromosomes are consistent
+between the `.narrowPeak` file and the blacklisted regions file. Depending on
+the reference genome used, the naming convention of the chromosomes may be
+different. Here, we provide an easy script to remove the leading `chr` from the
+chromosome names in a `bed` file.
+
+```bash
+sed 's/^chr//g' blacklist_genebank_naming.bed > blacklist_ensembl_naming.bed
+```
+
+The following command filters the called peaks to remove the blacklisted regions:
+
+```bash
+./blacklist_filtering.sh config_chipseq.sh
+```
+
+### Visualizing coverage tracks
+
+The coverage of the aligned reads can be visualized in a genome browser to
+inspect the quality of the data and the called peaks. We will convert the `BAM`
+files used for peak calling to `bigWig` or `bedgraph` files, which are used to 
+visualize the coverage in a genome browser. The files are generated using the
+`bamCoverage` command in `deepTools`.
+
+The following command generates the `bigWig` or `bedgraph` files:
+
+```bash
+./bam_to_coverage.sh config_chipseq.sh
+```
+
+### Peak coverage and distribution
+
+The coverage of the called peaks is assessed to ensure that the peaks are
+enriched for open chromatin. The coverage of the peaks is calculated using the
+`computeMatrix`, and the distribution of the coverage is visualized using the
+`plotProfile` and `plotHeatmap` commands in `deepTools`.
+
+To do so, we will first compute the matrix of the coverage of the peaks, and
+then plot the profile and heatmap of the coverage.
+
+The following command computes the matrix of the coverage of the peaks:
+
+```bash
+./computeMatrix.sh config_chipseq.sh
+```
+
+To generate the profile and heatmap of the coverage, run the following command:
+
+```bash
+./plotProfileHeatmap.sh config_chipseq.sh
+```

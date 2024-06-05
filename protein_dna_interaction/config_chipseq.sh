@@ -149,7 +149,7 @@ extsize=200
 # indicating the parameters used for peak calling
 # Users must select and specify the folder name of the raw peaks that will be
 # used for the downstream analysis
-rawPeaks="q0.01_nolambda"  # <-- Update this
+rawPeaks="no_ctrl_q0.01_nolambda"  # <-- Update this
 
 #### BAM to coverage
 

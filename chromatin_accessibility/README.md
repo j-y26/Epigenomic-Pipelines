@@ -39,6 +39,7 @@ experiments.
   - [Peak calling](#peak-calling)
   - [Processing called peaks](#processing-called-peaks)
     - [Blacklist filtering](#blacklist-filtering)
+    - [Peak statistics](#peak-statistics)
     - [Visualizing coverage tracks](#visualizing-coverage-tracks)
     - [Peak coverage and distribution](#peak-coverage-and-distribution)
 
@@ -572,6 +573,32 @@ The following command filters the called peaks to remove the blacklisted regions
 
 ```bash
 ./blacklist_filtering.sh config_atacseq.sh
+```
+
+### Peak statistics
+
+The statistics of the called peaks are calculated to assess the quality of the
+peaks and provide a summary of the peak calling results. The statistics include
+the number of peaks called and the distribution of the peak widths.
+
+The following command calculates the peak statistics:
+
+```bash
+Rscript plot_peak_stats.R <peak_bed_dir> <output_dir> [<plot_width>] [<plot_height>]
+```
+
+The `<peak_bed_dir>` is the directory containing the filtered peak bed files.
+The `<output_dir>` is the directory where the peak statistics plots and data
+will be saved. The `<plot_width>` and `<plot_height>` parameters are optional
+and are used to specify the width and height of the plot. The default values
+are `8` and `6`, respectively.
+
+An example of a streamlined analysis after running the `blacklist_filtering.sh`
+script is shown below:
+
+```bash
+mkdir ${peakCallingDir}/peak_stats
+Rscript plot_peak_stats.R ${peakCallingDir}/filtered_peaks ${peakCallingDir}/peak_stats
 ```
 
 ### Visualizing coverage tracks

@@ -41,3 +41,5 @@ for peak_type, samples in grouped.items():
 
 print("")
 print('Samples extracted by peak type.')
+
+# [END]

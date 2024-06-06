@@ -684,6 +684,7 @@ The following command filters the called peaks to remove the blacklisted regions
 ```bash
 ./blacklist_filtering.sh config_chipseq.sh
 ```
+
 ### Peak statistics
 
 The statistics of the called peaks are calculated to assess the quality of the

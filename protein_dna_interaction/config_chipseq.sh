@@ -182,7 +182,29 @@ beforeTSSLength="1000"
 # Length of the region after the end of the TSS
 afterTSSLength="1000"
 
+# ====== Find consensus peaks ==================================================
 
+##### By utilizing coverage over multiple samples, the consensus peaks are
+##### identified by the number of replicates that have peaks at a particular
+##### location. The consensus peaks are identified by the following parameters:
+
+# Minimum number of replicates identified as consensus peaks
+minReplicates="2"
+
+# Minimum peak size for the consensus peak calling
+minPeakSize="200"
+
+# Maximum gap size for the consensus peak calling
+maxGapSize="30"
+
+# Genome size file
+genomeSizeFile="/path/to/chrom.sizes"  # <-- Update this
+
+
+##### By finding the overlapping regions by bedtools intersect
+
+# Minimum fraction of peaks needs to be overlapped
+minOverlapFraction="0.5"
 
 
 # [END] 

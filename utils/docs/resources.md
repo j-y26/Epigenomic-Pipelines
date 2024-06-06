@@ -19,6 +19,12 @@ source for more information about the data.
 - [mm10-blacklist.v2.bed.gz](https://github.com/Boyle-Lab/Blacklist/tree/master/lists)
 - [hg38-blacklist.v2.bed.gz](https://github.com/Boyle-Lab/Blacklist/tree/master/lists)
 
+These files name the chromosomes based on the UCSC genome browser convention.
+For users requiring the chromosomes to be named based on the Ensembl convention,
+we have also parsed the files for `mm10`.
+
+All these files have been placed under [utils](..)
+
 ## Compiled Resources
 
 For convenience, some resources are compiled and provided here.

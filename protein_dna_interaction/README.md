@@ -48,6 +48,9 @@ raw data files for ChIP-seq, CUT&Tag, and CUT&RUN experiments.
     - [Peak statistics](#peak-statistics)
     - [Visualizing coverage tracks](#visualizing-coverage-tracks)
     - [Peak coverage and distribution](#peak-coverage-and-distribution)
+  - [Identifying consensus peaks](#identifying-consensus-peaks)
+    - [Calculating replicate coverage over peaks](#calculating-replicate-coverage-over-peaks)
+    - [Intersecting peaks](#intersecting-peaks)
 
 
 ## Configuration
@@ -757,3 +760,78 @@ To generate the profile and heatmap of the coverage, run the following command:
 ```bash
 ./plotProfileHeatmap.sh config_chipseq.sh
 ```
+
+## Identifying consensus peaks
+
+To allow confident peak detection, it is essential to identify the consensus
+peaks across replicates. The consensus peaks are the peaks that are called in
+multiple replicates, and are considered to be the true peaks.
+
+While there are many exiting methods that can be used to identify the consensus
+peaks, they usually involve identifying regions of peaks that are called in
+multiple replicates. Here, we provide two ways to identify the consensus peaks.
+
+Before calling any peaks, it is important to identify the samples that are
+considered as replicates. Here, we have provided a python script that can be
+used to identify the replicates based on the sample matrix.
+
+The following command identifies the replicates based on the sample matrix:
+
+```bash
+python3 extract_replicated_peaks.py <sample_matrix> <output_dir>
+```
+
+In the following scripts we require that these replicate information must be
+placed directly under the `peak_calling/consensus_peaks` directory. Therefore,
+run the following script to ensure the replicate identification files are placed
+in the correct directory:
+
+```bash
+consensusPeaksDir=${peakCallingDir}/consensus_peaks
+python3 extract_replicated_peaks.py sample_matrix.csv ${consensusPeaksDir}
+```
+
+### Calculating replicate coverage over peaks
+
+In this method, we first categorize the genome in to non-equal0size bins based on
+the peak overlap between different replicates. The coverage (number of replicates
+with peaks) covering each bin is then calculated to generate a bedGraph file.
+This bedGraph file can be utilized by `macs2 bdgpeakcall` to call the consensus
+peaks.
+
+The following command calculates the replicate coverage over peaks:
+
+```bash
+./find_consensus_peaks_coverage.sh config_chipseq.sh
+```
+
+Note that just as the earlier steps, identifying the correct peaks depends on
+setting the correct `${rawPeaks}` variable in the configuration file. This
+variable should be able to identify the directory name specifying the original
+peak calling configuration.
+
+Furthermore, an important information is the size of each chomosome. A
+`genome.chrom.sizes` file is required to run the `macs2 bdgpeakcall` command.
+It is a tab-separated file containing the name of the chromosome and the size
+of the chromosome. Note that the chromosome names in the `genome.chrom.sizes`
+file should match the chromosome names in the peak bed files and covers all
+chromosomes listed in the peak bed files. See the 
+[documentation](../utils/docs/update_contig_names.md) for more information.
+If any issue occurs with chromosome name inconsistency.
+
+### Intersecting peaks
+
+Another methods is to intersect the peaks called in different replicates to
+identify the consensus peaks. The `bedtools intersect` command can be used to
+intersect the peaks called in different replicates.
+
+The following command intersects the peaks called in different replicates:
+
+```bash
+./find_consensus_peaks_overlap.sh config_chipseq.sh
+```
+
+Note that it is important to define the minimum fraction of overlap between
+the peaks to be considered as the same peak. This value can be set in the
+configuration file. The default value is `0.5`, which means that at least 50%
+of the peak must overlap to be considered as the same peak between replicates.

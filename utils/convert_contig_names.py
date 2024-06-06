@@ -14,11 +14,11 @@ else:
     chromosome_column = 0
 
 # Read mapping file
-mapping = pd.read_csv(mapping_file, sep='\t', header=None)
+mapping = pd.read_csv(mapping_file, sep='\t', header=None, dtype={0: str, 1: str})
 mapping.columns = ['old', 'new']
 
 # Read input file
-input = pd.read_csv(input_file, sep='\t', header=None)
+input = pd.read_csv(input_file, sep='\t', header=None, dtype={chromosome_column: str})
 
 # Convert chromosome names
 input[chromosome_column] = input[chromosome_column].map(mapping.set_index('old')['new'])

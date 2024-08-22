@@ -35,6 +35,8 @@ compatible shell (e.g. `bash`) and are using a Unix-based operating system.
 
 ## Installation
 
+### Linux
+
 To install the pipelines, clone the repository and install the required
 dependencies.
 
@@ -47,6 +49,8 @@ In this pipeline, we assume that the required tools are installed and available
 in the system path. The required tools are listed in the `requirements.md` file,
 and all tools are publicly available.
 
+### Docker - Linux for Bulk Epigenomic Processing
+
 Alternatively, a Docker image is provided that contains all the required tools
 and dependencies. To use the Docker image, ensure that Docker is installed and
 run the following command:
@@ -56,7 +60,7 @@ docker run -it --user $(id -u):$(id -g) -v ${pwd}:/home jyang26/epigenomic-pipel
 ```
 
 This will download the Docker image and start an interactive shell session.
-Ensure you are in the correct directory where you want to mount the data, or 
+Ensure you are in the correct directory where you want to mount the data or 
 change the `${pwd}` to the correct directory.
 
 To return to the same container once the container is stopped, run the following
@@ -67,6 +71,19 @@ command:
 docker start -i <container_id>
 docker attach <container_id>
 ```
+
+### Docker - Single-cell Epigenomic Analysis
+
+The docker image for single-cell analysis is based on Bioconductor releases.
+Therefore, the image will build a RStudio server environment with version-controlled
+packages installed. To pull and install the container:
+
+```bash
+docker run -e PASSWORD=changeit -v ${pwd}:/home/rstudio/projects -p 8787:8787 jyang26/single-cell-epigenomics:v1.0
+```
+
+A Python environment (Miniconda) is also installed in this environment. CLI of this
+container can be accessed in a similar way.
 
 ## Usage
 

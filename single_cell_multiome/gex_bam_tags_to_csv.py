@@ -7,6 +7,7 @@
 #   - Each column corresponds to a tag
 #   - The values are the tag values, without the tag name or type
 #   - The UMIs are collapsed (i.e., no duplicates)
+#   - Only confidently mapped reads are included (i.e., mapping quality = 255)
 
 # The tags & types that are parsed are:
 #   1. CB:Z: error-corrected and confirmed cell barcode
@@ -52,10 +53,15 @@ with open(output_csv, "w") as f:
     writer = csv.writer(f)
 
     # Write the header
-    writer.writerow(["CB_cell_barcode", "UB_umi_barcode", "MAPQ", "RE_region_type", "GN_gene_name"])
+    writer.writerow(["CB_cell_barcode", "UB_umi_barcode", "RE_region_type", "GN_gene_name"])
 
     # Iterate through the reads
     for read in bam.fetch():
+        # Get the mapping quality, and if it is less than 255, skip the read
+        mapq = read.mapping_quality
+        if mapq < 255:
+            continue
+
         # Get the cell barcode
         cb = read.get_tag("CB") if read.has_tag("CB") else ""
 
@@ -72,16 +78,13 @@ with open(output_csv, "w") as f:
         else:
             umi_dict[cb] = set([ub])
 
-        # Get the mapping quality
-        mapq = read.mapping_quality
-
         # Get the region type
         re = read.get_tag("RE") if read.has_tag("RE") else ""
 
         # Write the tags to the csv file
         gn = read.get_tag("GN") if read.has_tag("GN") else ""
 
-        writer.writerow([cb, ub, mapq, re, gn])
+        writer.writerow([cb, ub, re, gn])
 
 # Close the bam file
 bam.close()

@@ -64,9 +64,13 @@ with open(output_csv, "w") as f:
 
         # Get the cell barcode
         cb = read.get_tag("CB") if read.has_tag("CB") else ""
+        if cb == "":
+            continue
 
         # Get the UMI
         ub = read.get_tag("UB") if read.has_tag("UB") else ""
+        if ub == "":
+            continue
 
         # Check if the cell barcode is already in the dictionary
         if cb in umi_dict:

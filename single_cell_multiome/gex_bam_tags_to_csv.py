@@ -8,6 +8,7 @@
 #   - The values are the tag values, without the tag name or type
 #   - The UMIs are collapsed (i.e., no duplicates)
 #   - Only confidently mapped reads are included (i.e., mapping quality = 255)
+#   - Only cells with valid barcodes are included (CB and UB)
 
 # The tags & types that are parsed are:
 #   1. CB:Z: error-corrected and confirmed cell barcode

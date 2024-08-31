@@ -27,8 +27,11 @@
 #       - CB_cell_barcode: cell barcode
 #       - total_reads: total number of confidently mapped reads
 #       - exon_reads: number of confidently mapped exonic reads
+#       - exon_prop: proportion of confidently mapped exonic reads
 #       - intron_reads: number of confidently mapped intronic reads
+#       - intron_prop: proportion of confidently mapped intronic reads
 #       - intergenic_reads: number of confidently mapped intergenic reads
+#       - intergenic_prop: proportion of confidently mapped intergenic reads
 
 # Usage: python calc_read_type_prop.py <input_csv> <output_csv> [chunk_size]
 
@@ -48,7 +51,7 @@ def default_dict_int():
 # Handle read type counts for each chunk
 def process_chunk(chunk):
     # Exonic (E), Intronic (N), Intergenic (I)
-    print(f"Processing new chunk of {len(chunk)} reads...")
+    print(f"Processing new chunk of {len(chunk)} reads... on process {os.getpid()}")
     read_type_dict = defaultdict(default_dict_int)
     for row in chunk:
         try:

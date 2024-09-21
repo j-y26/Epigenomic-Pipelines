@@ -18,6 +18,7 @@ Here, we describe the analysis from the input fastq files.
   - [Configuration](#configuration)
   - [Running the entire pipeline](#running-the-entire-pipeline)
   - [Pre-alignment processing](#pre-alignment-processing)
+    - [ORA decompression](#ora-decompression)
     - [Quality control](#quality-control)
     - [Trimming](#trimming)
     - [Quality control after trimming](#quality-control-after-trimming)
@@ -36,7 +37,7 @@ Ensure that all the scripts in this folder are executable. If not, run the
 following command:
 
 ```bash
-chmod -R a+x ./transcriptome
+chmod -R a+x ./transcriptomics
 ```
 
 Make sure to set up the proper parameters in the `config_rnaseq.sh` file. The
@@ -104,6 +105,21 @@ We then describe the details of each step in the pipeline.
 <br><br/>
 
 ## Pre-alignment processing
+
+### ORA decompression
+
+Some sequencing centers provide the raw sequencing data in the ORA format, which
+provides a higher compression ratio compared to the standard gzip format. The
+ORA format can be decompressed using the `ora_to_gz.sh` script.
+
+```bash
+./ora_to_gz.sh config_rnaseq.sh
+```
+
+The script utilizes the `orad` program provided by Illumina. For details,
+refer to the [Illumina website](https://support.illumina.com/sequencing/sequencing_software/DRAGENORA.html).
+The `DRAGEN ORA` suite requires a reference to decompress the ORA files. The
+reference can be downloaded from the [Illumina website reference file releases](https://support.illumina.com/downloads/ora-decompression-reference-files.html).
 
 ### Quality control
 

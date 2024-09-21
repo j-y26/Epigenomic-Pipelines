@@ -24,7 +24,9 @@ for file in $(find ${fastqDir} -type f -name '*.fastq.ora'); do
     sample=$(basename $file .fastq.ora)
     echo "Converting ${sample}.fastq.ora to ${sample}.fastq.gz"
     orad --ora-reference ${oraRefDir} \
-         --gz ${fastqDir}/${sample}.fastq.ora
+         --gz \
+         -t ${threads} \
+         ${fastqDir}/${sample}.fastq.ora
     echo "Conversion of ${sample}.fastq.ora to ${sample}.fastq.gz complete"
 done
 

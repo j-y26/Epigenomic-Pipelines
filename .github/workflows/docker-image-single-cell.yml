@@ -1,18 +1,17 @@
-name: Docker Image CI
+name: Docker Image CI Single Cell
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'docker-epigenomics/Dockerfile'
+      - 'docker-single-cell/Dockerfile'
 
   pull_request:
     branches:
       - main
     paths:
-      - 'docker-epigenomics/Dockerfile'
-
+      - 'docker-single-cell/Dockerfile'
 jobs:
 
   build:
@@ -27,7 +26,7 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run:
         echo $DOCKER_PASSWORD | docker login docker.io -u $DOCKER_USER --password-stdin
-    - name: Build the Docker image for Epigenomic Pipelines
-      run: docker build . --file docker-epigenomics/Dockerfile --tag jyang26/epigenomic-pipelines:v1.0
+    - name: Build the Docker image for Single Cell Epigenomic Pipelines
+      run: docker build . --file docker-single-cell/Dockerfile --tag jyang26/single-cell-epigenomics:v1.0
     - name: Push Epigenomic Pipelines to Docker Hub
-      run: docker push jyang26/epigenomic-pipelines:v1.0
+      run: docker push jyang26/single-cell-epigenomics:v1.0

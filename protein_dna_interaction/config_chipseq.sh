@@ -61,6 +61,9 @@ PICARD_JAR="/path/to/picard.jar"  # <-- Update this
 # Path to the blacklist file for the specified genome
 blacklistFile="/path/to/blacklist.bed"  # <-- Update this
 
+# Directory for hosting the sample names for each mark
+markedSamples="${projPath}/marked_samples"
+
 # bin size for the multiBamSummary
 binSize="10000"
 
@@ -122,6 +125,12 @@ pValue=""
 # q-value, but it would require a significant higher amount of computational time
 cutoffAnalysis="false"
 
+# Whether to use background lambda for MACS2 peak calling
+# By default, MACS2 uses the local lambda as the background lambda, but it is only
+# recommended when control samples are used
+# If no control samples are used, it is recommended to set this to false
+useBackgroundLambda="false"
+
 # Whether to  build the shifting model during peak calling
 # By default, a model is built by MACS2 to predict the shifting size
 # If false, "--nomodel" is specified during peak calling, and "extSize" is used
@@ -140,7 +149,7 @@ extsize=200
 # indicating the parameters used for peak calling
 # Users must select and specify the folder name of the raw peaks that will be
 # used for the downstream analysis
-rawPeaks="q0.01_nolambda"  # <-- Update this
+rawPeaks="no_ctrl_q0.01_nolambda"  # <-- Update this
 
 #### BAM to coverage
 
@@ -173,7 +182,29 @@ beforeTSSLength="1000"
 # Length of the region after the end of the TSS
 afterTSSLength="1000"
 
+# ====== Find consensus peaks ==================================================
 
+##### By utilizing coverage over multiple samples, the consensus peaks are
+##### identified by the number of replicates that have peaks at a particular
+##### location. The consensus peaks are identified by the following parameters:
+
+# Minimum number of replicates identified as consensus peaks
+minReplicates="2"
+
+# Minimum peak size for the consensus peak calling
+minPeakSize="200"
+
+# Maximum gap size for the consensus peak calling
+maxGapSize="30"
+
+# Genome size file
+genomeSizeFile="/path/to/chrom.sizes"  # <-- Update this
+
+
+##### By finding the overlapping regions by bedtools intersect
+
+# Minimum fraction of peaks needs to be overlapped
+minOverlapFraction="0.5"
 
 
 # [END] 

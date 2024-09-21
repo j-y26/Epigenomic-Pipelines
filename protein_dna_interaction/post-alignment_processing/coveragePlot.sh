@@ -28,7 +28,7 @@ for file in $(find ${markedSamples} -type f -name "samples_*.txt"); do
     bamFiles=""
     labels=""
     for sample in ${samples}; do
-        bamFiles="${bamFiles} ${alignmentDir}/filtered_bam/${sample}${bamSuffix}"
+        bamFiles="${bamFiles} ${alignmentDir}/filtered_bam/${sample}.bam"
         labels="${labels} ${sample}"
     done
 
@@ -37,9 +37,9 @@ for file in $(find ${markedSamples} -type f -name "samples_*.txt"); do
     plotCoverage \
         --bamfiles ${bamFiles} \
         --labels ${labels} \
-        --plotFile ${alignmentDir}/bam_qc/coverage_plot.pdf \
-        --outRawCounts ${alignmentDir}/bam_qc/coverage_counts.tab \
-        --outCoverageMetrics ${alignmentDir}/bam_qc/coverage_metrics.tab \
+        --plotFile ${alignmentDir}/bam_qc/${mark}_coverage_plot.pdf \
+        --outRawCounts ${alignmentDir}/bam_qc/${mark}_coverage_counts.tab \
+        --outCoverageMetrics ${alignmentDir}/bam_qc/${mark}_coverage_metrics.tab \
         --skipZeros \
         --minMappingQuality 20 \
         --plotFileFormat pdf \
@@ -47,8 +47,7 @@ for file in $(find ${markedSamples} -type f -name "samples_*.txt"); do
         --blackListFileName ${blacklistFile} \
         --plotHeight ${coveragePlotHeight} \
         --plotWidth ${coveragePlotWidth} \
-        --numberOfProcessors ${threads} \
-        --verbose
+        --numberOfProcessors ${threads}
 done
 
 # [END]

@@ -27,7 +27,7 @@ for file in $(find ${markedSamples} -type f -name "samples_*.txt"); do
     bamFiles=""
     labels=""
     for sample in ${samples}; do
-        bamFiles="${bamFiles} ${alignmentDir}/filtered_bam/${sample}${bamSuffix}"
+        bamFiles="${bamFiles} ${alignmentDir}/filtered_bam/${sample}.bam"
         labels="${labels} ${sample}"
     done
 
@@ -38,7 +38,7 @@ for file in $(find ${markedSamples} -type f -name "samples_*.txt"); do
         --labels ${labels} \
         --numberOfProcessors ${threads} \
         --binSize ${binSize} \
-        --verbose \
         --outFileName ${alignmentDir}/bam_qc/multiBamSummary_${mark}_${binSize}.npz
+done
 
 # [END]

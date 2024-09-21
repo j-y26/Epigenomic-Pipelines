@@ -109,4 +109,6 @@ for (mark in marks) {
     dev.off()
 }
 
+cat("Fragment size distribution plots have been generated successfully.\n")
+
 # [END]

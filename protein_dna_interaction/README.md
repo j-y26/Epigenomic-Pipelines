@@ -24,6 +24,7 @@ raw data files for ChIP-seq, CUT&Tag, and CUT&RUN experiments.
     - [Building the reference genome index](#building-the-reference-genome-index)
     - [Alignment of reads](#alignment-of-reads)
     - [Spike-in alignment (optional)](#spike-in-alignment-optional)
+    - [Standardizing the sample names](#standardizing-the-sample-names)
   - [Post-alignment QC and processing](#post-alignment-qc-and-processing)
     - [Alignment rate](#alignment-rate)
     - [Duplicate removal](#duplicate-removal)
@@ -36,6 +37,20 @@ raw data files for ChIP-seq, CUT&Tag, and CUT&RUN experiments.
       - [Genome-wide read coverage](#genome-wide-read-coverage)
       - [Reproducibility](#reproducibility)
     - [Mitochondrial reads](#mitochondrial-reads)
+  - [Peak calling](#peak-calling)
+    - [MACS2 peak calling](#macs2-peak-calling)
+      - [Annotating samples for peak calling](#annotating-samples-for-peak-calling)
+      - [Extracting samples for peak calling type](#extracting-samples-for-peak-calling-type)
+      - [Peak calling](#peak-calling-1)
+    - [goPeak](#gopeak)
+  - [Processing called peaks](#processing-called-peaks)
+    - [Blacklist filtering](#blacklist-filtering)
+    - [Peak statistics](#peak-statistics)
+    - [Visualizing coverage tracks](#visualizing-coverage-tracks)
+    - [Peak coverage and distribution](#peak-coverage-and-distribution)
+  - [Identifying consensus peaks](#identifying-consensus-peaks)
+    - [Calculating replicate coverage over peaks](#calculating-replicate-coverage-over-peaks)
+    - [Intersecting peaks](#intersecting-peaks)
 
 
 ## Configuration
@@ -241,6 +256,34 @@ bowtie2 --end-to-end --very-sensitive --no-overlap --no-dovetail --no-mixed --no
     -S output_bowtie2.sam &> bowtie2_summary.txt
 ```
 
+### Standardizing the sample names
+
+Immediately after alignment, it is recommended to standardize the sample names
+to ensure that the downstream analysis clear. The sample names, as well as the
+file names, should clearly indicate the unique sample identifier, the mark
+used, and the replicate number.
+
+Regardless, a sample matrix csv file is required for the pipeline to run
+effectively, since the downstream analysis scripts will process samples by
+grouping them based on the mark used.
+
+To initialize a sample matrix csv, users can use the `utils/generate_sample_matrix.py`. See the [documentation](https://j-y26.github.io/Epigenomic-Pipelines/utils/docs/generate_sample_matrix.html) for more information. This script will generate a baseline sample matrix with the required columns. Users can then fill in the metadata of the samples in this `csv` file, based on how the experiment was performed.
+
+The csv file must contain the following columns:
+
+- `Label`: the label of the sample, which must match the file name of the fastq files
+- `Mark`: the protein target used
+
+Users should manually fill in the metadata of the samples in this `csv` file,
+based on how the experiment was performed. The `Label` column should match the
+desired sample name, and the "Sample" column will match the original file name
+used earlier in the pipeline.
+
+The pipeline has also provided an easy way to standardize the file names
+based on the sample matrix. The python script `utils/file_name_conversion.py`
+can be used to convert the file names based on the sample matrix, from the
+`Sample` column to the `Label` column. See the [documentation](https://j-y26.github.io/Epigenomic-Pipelines/utils/docs/file_name_conversion.html) for more information.
+
 <br><br/>
 
 ## Post-alignment QC and processing
@@ -251,7 +294,7 @@ and processing.
 ### Alignment rate
 
 The alignment rate is show in the `bowtie2.txt` file under the `alignment/bowtie2_summary` folder. The alignment rate
-is calculated as the number of reads that are aligned to the reference genome 
+is calculated as the number of reads that are aligned to the reference genome
 (both uniquely aligned and multi-mapping reads) divided by the total number of
 reads in the fastq files. It is expected that a successful alignment rate is about 80-90%.
 
@@ -312,7 +355,7 @@ file. Here, we use the `fragment_size.sh` script to extract the fragment size
 calculate the distribution.
 
 ```bash
-./fragment_size.sh config_atacseq.sh
+./fragment_size.sh config_chipseq.sh
 ```
 
 The size distribution can be plotted in R, using the `ggplot2` and the `ggpubr`
@@ -334,11 +377,8 @@ as the output of the `fragment_size.sh` script.
 
 Furthermore, to be able to plot, a `<sample_matrix>` must have been set up.
 It is up to the user to fill in the metadata of the samples in this `csv` file,
-based on how the experiment was performed. To generate a baseline csv file
-for all samples, users can make use of the `utils/generate_sample_matrix.py` 
-script, which will create a sample matrix with the required columns. In this
-case, the `plot_frag_size.R` scripts requires that the `sample_matrix` file
-contains the following columns:
+based on how the experiment was performed. The `plot_frag_size.R` scripts
+requires that the `sample_matrix` file contains the following columns:
 
 - `Label`: the label of the sample, which must match the file name of the
   fragment size distribution file without the `_fragment_size.txt` suffix.
@@ -386,7 +426,7 @@ matrix as described [here](https://j-y26.github.io/Epigenomic-Pipelines/utils/do
 An working example here is:
 
 ```bash
-python3 samples_for_mark.py ${alignmentDir}/sample_matrix.csv ${alignmentDir}
+python3 samples_for_mark.py sample_matrix.csv ${markedSamples}
 ```
 
 After extracting the samples, we can run the `fragment_size_deeptools.sh` script
@@ -417,7 +457,7 @@ is located in the [`utils` directory](https://j-y26.github.io/Epigenomic-Pipelin
 
 ### Reproducibility and coverage
 
-The reproducibility of the ATAC-seq data is assessed by the correlation of the
+The reproducibility of the ChIP-seq data is assessed by the correlation of the
 read coverage between replicates. The read coverage is calculated using the
 `deepTools` package. We will generate a coverage plot and a correlation plot
 to assess the quality of the mapped reads.
@@ -429,7 +469,7 @@ plot. We can plot using the `plotCoverage` command in `deepTools`. The following
 command generates the coverage plot:
 
 ```bash
-./coveragePlot.sh config_atacseq.sh
+./coveragePlot.sh config_chipseq.sh
 ```
 
 Note that here we need to specify the number of 1-bp regions to be sampled
@@ -460,7 +500,7 @@ sample matrix and extract the samples for each mark.
 The following command calculates the coverage of the aligned reads:
 
 ```bash
-./coverage.sh config_chipseq.sh
+./multiBamSummary.sh config_chipseq.sh
 ```
 
 This will generate a computed coverage file for all bam files assigned to each
@@ -468,7 +508,7 @@ mark in the `bam_qc` folder under the `alignment` directory.
 
 #### Reproducibility
 
-The reproducibility of the ATAC-seq data is assessed by the correlation of the
+The reproducibility of the ChIP-seq data is assessed by the correlation of the
 read coverage between replicates. The correlation plot is generated using the
 `plotCorrelation` command in `deepTools`. Furthermore, we can assess the
 reproducibility by performing a principal component analysis (PCA) of the
@@ -478,7 +518,7 @@ read coverage. The PCA plot is generated using the `plotPCA` command in
 Using the following script, we together generate the correlation and PCA plots:
 
 ```bash
-./bamQCPlots.sh config_atacseq.sh
+./bamQCPlots.sh config_chipseq.sh
 ```
 
 Note that `plotCorrelation` and `plotPCA` require the computed coverage file
@@ -493,10 +533,10 @@ For the PCA plot, by default, not all bins with variance are used to calculate
 the PCA. The `ntop` parameter specifies the number of bins with the highest
 variance to be used for the PCA. The default value is 1000, but users can
 choose to increase or decrease this value. When mapping regions of a genome
-that is targeted by a specific protein, it is expected that most parts of the 
+that is targeted by a specific protein, it is expected that most parts of the
 genome are not covered by the reads. In this case, the `ntop` parameter can be
 set to a lower value to capture the variance of the regions that are covered
-by the reads. Yet, a proper value depends on the specific mark used and the 
+by the reads. Yet, a proper value depends on the specific mark used and the
 quality of the antibody used in the experiment.
 
 ### Mitochondrial reads
@@ -540,3 +580,258 @@ python3 plot_mt_reads.py ${alignmentDir}/mt_reads/mt_reads.csv ${alignmentDir}/m
 ```
 
 <br><br/>
+
+## Peak calling
+
+After the post-alignment QC and processing, we can now identify the enriched
+regions in the genome. ChIP-seq, CUT&Tag, and CUT&RUN experiments are designed
+to obtain reads localized around protein binding sites. Regions that are truly
+bound by the protein of interest are expected to have a higher read coverage
+compared to the background, termed enriched regions or peaks. The identification
+of these peaks is performed using peak calling algorithms.
+
+### MACS2 peak calling
+
+Here, we use the `MACS2` peak caller to identify the enriched regions in the
+genome. `MACS2` is a popular peak caller that is widely used in the field of
+genomic data analysis. It is specifically designed for identifying enriched
+regions in ChIP-seq data.
+
+It is important to note that the choice of the parameters in `MACS2` is critical to obtain correctly called peaks. Specifically, CUT&Tag and ChIP-seq data have different characteristics, and the parameters used for peak calling should be adjusted accordingly. Furthermore, depending on the distribution
+characteristics of the mark, narrow or broad peaks should be called independently.
+
+#### Annotating samples for peak calling
+
+Refer to the documentation on histone/chromatin mark peak profiles for more information on the distribution profiles of some common histone marks and RNA polymerase marks. A summary of the distribution profiles of some common histone marks and RNA polymerase marks is provided below:
+
+[Summary of Histone/Chromatin Peak Profiles](../utils/docs/histone_peak_profile.md)
+
+Note that in the `sample_matrix` file, a column titled `Peak_Type` is required to specify the type of peak calling to be performed. The `Peak_Type` column should contain either `narrow` or `broad` for each sample. This column is used to specify the type of peak calling to be performed by `MACS2`.
+
+#### Extracting samples for peak calling type
+
+For uniformed processing of peak calling, we want to extract the list of samples (files) corresponding to each type of peaks. This is done by the `extract_samples_by_peak_type.py` script. The script will be invoked as follows:
+
+```bash
+python3 extract_samples_by_peak_type.py <sample_matrix> <output_dir>
+```
+
+It is recommended to extract the samples for each peak type into a file into
+the `peak_calling` directory. An example of the script is shown below:
+
+```bash
+python3 extract_samples_by_peak_type.py sample_matrix.csv ${peakCallingDir}
+```
+
+#### Peak calling
+
+Thorough consideration of the parameters used in peak calling is
+required. The parameters used in the `macs2 callpeak` command are critical to
+accurately identify the enriched open chromatin regions. The following parameters
+are used in the `macs2 callpeak` command:
+
+- `-f BAMPE`: the format of the input file
+- `-g ${genomeSize}`: the effective genome size for the reference genome. This number can be determined from deepTools. Some common effective genome sizes are listed along with this [pipeline](../utils/docs/resources.md).
+- `-q ${qValue}`: the q-value threshold for peak calling. This is the minimum FDR at which a peak is called significant. The default value is 0.05, but users can choose to increase or decrease this value. As a common practice for ChIP-seq, a q-value threshold of 0.01 is recommended as a starting point.
+- `-p ${pValue}`: the p-value threshold for peak calling. Unlike the `q-value`, the `p-value` is not corrected for multiple testing and represents the probability of observing a peak by chance. If the `p-value` is set, the `q-value` is ignored. We do not recommend using the `p-value` for peak calling since it increases the false positive rate.
+- `-B`: generate bedGraph files of the pileup, which can be used to visualize the pileup in a genome browser.
+- `--SPMR`: use the signal per million reads (SPMR) as the normalization method. This does not affect the peak calling, but is used to normalize the signal for visualization.
+- `--call-summits`: call the summits of the peaks. This is recommended for ChIP-seq data, as it identifies the exact location of the peak.
+
+As mentioned earlier, a cutoff is required to filter the peaks to keep only the
+significant ones. The `q-value` is the most commonly used cutoff, and it is
+recommended to set the `q-value` to `0.01` as a starting point. However, the
+optimal cutoff value might not be the same for all experiments, and it is
+may be necessary to run cutoff analysis to determine the optimal cutoff value.
+`MACS2` provides a cuttoff analysis mode to determine the optimal cutoff value.
+To do so, in the configuration file, set the `cutoffAnalysis` parameter to `true`.
+
+More specifically, users should consider the following parameters:
+
+- `--nomodel`: whether to disable the shifting model.
+- `--extsize`: the extension size of the reads. This is the size of the DNA fragment that is sequenced. The extension size should be set to the average fragment size of the library. It is required is no shifting model is used.
+- `--nolambda`: whether to disable the local lambda calculation.
+
+The following command performs peak calling using `MACS2`:
+
+```bash
+./macs2_peak_calling.sh config_chipseq.sh
+```
+
+### goPeak
+
+## Processing called peaks
+
+### Blacklist filtering
+
+The called peaks are filtered to remove the blacklisted regions. The blacklisted
+regions are regions of the genome where the alignment is not reliable, and are
+commonly used to filter out false positive peaks. Therefore, we do not want to
+analyze the peaks that are called in the blacklisted regions.
+
+Here, we use the `bedtools` command to remove the `.narrowPeak` files output by
+`MACS2` that overlap with the blacklisted regions.
+
+`bedtools` requires that the naming convention of the chromosomes are consistent
+between the `.narrowPeak` file and the blacklisted regions file. Depending on
+the reference genome used, the naming convention of the chromosomes may be
+different. Here, we provide an easy script to remove the leading `chr` from the
+chromosome names in a `bed` file.
+
+```bash
+sed 's/^chr//g' blacklist_genebank_naming.bed > blacklist_ensembl_naming.bed
+```
+
+The following command filters the called peaks to remove the blacklisted regions:
+
+```bash
+./blacklist_filtering.sh config_chipseq.sh
+```
+
+### Peak statistics
+
+The statistics of the called peaks are calculated to assess the quality of the
+peaks and provide a summary of the peak calling results. The statistics include
+the number of peaks called and the distribution of the peak widths.
+
+The following command calculates the peak statistics:
+
+```bash
+Rscript plot_peak_stats.R <peak_bed_dir> <sample_matrix_csv> <output_dir> [<plot_width>] [<plot_height>]
+```
+
+The `<peak_bed_dir>` is the directory containing the filtered peak bed files.
+The `<output_dir>` is the directory where the peak statistics plots and data
+will be saved. The `<plot_width>` and `<plot_height>` parameters are optional
+and are used to specify the width and height of the plot. The default values
+are `8` and `6`, respectively.
+
+An example of a streamlined analysis after running the `blacklist_filtering.sh`
+script is shown below:
+
+```bash
+peakStatsDir=${peakCallingDir}/peak_stats/${rawPeaks}
+filteredPeaks=${peakCallingDir}/filtered_peaks/${rawPeaks}
+mkdir -p ${peakStatsDir}
+Rscript plot_peak_stats.R ${filteredPeaks} sample_matrix.csv ${peakStatsDir}
+```
+
+Note that while most peaks usually have a width less than 1 kb, some peaks may
+be much wider. Running the script generates a summary statistics that allows users
+to inspect the peaks size distribution in its naive form. On the other hand,
+to allow better comparison between samples, if the maximum peak width of a sample
+is greater than 10 kb, the script will only consider the maximum peak width of
+at the 90th percentile across all samples of the same mark.
+This is to ensure that the peak width
+distribution is not skewed by a few samples with very wide peaks.
+
+### Visualizing coverage tracks
+
+The coverage of the aligned reads can be visualized in a genome browser to
+inspect the quality of the data and the called peaks. We will convert the `BAM`
+files used for peak calling to `bigWig` or `bedgraph` files, which are used to 
+visualize the coverage in a genome browser. The files are generated using the
+`bamCoverage` command in `deepTools`.
+
+The following command generates the `bigWig` or `bedgraph` files:
+
+```bash
+./bam_to_coverage.sh config_chipseq.sh
+```
+
+### Peak coverage and distribution
+
+The coverage of the called peaks is assessed to ensure that the peaks are
+enriched for open chromatin. The coverage of the peaks is calculated using the
+`computeMatrix`, and the distribution of the coverage is visualized using the
+`plotProfile` and `plotHeatmap` commands in `deepTools`.
+
+To do so, we will first compute the matrix of the coverage of the peaks, and
+then plot the profile and heatmap of the coverage.
+
+The following command computes the matrix of the coverage of the peaks:
+
+```bash
+./computeMatrix.sh config_chipseq.sh
+```
+
+To generate the profile and heatmap of the coverage, run the following command:
+
+```bash
+./plotProfileHeatmap.sh config_chipseq.sh
+```
+
+## Identifying consensus peaks
+
+To allow confident peak detection, it is essential to identify the consensus
+peaks across replicates. The consensus peaks are the peaks that are called in
+multiple replicates, and are considered to be the true peaks.
+
+While there are many exiting methods that can be used to identify the consensus
+peaks, they usually involve identifying regions of peaks that are called in
+multiple replicates. Here, we provide two ways to identify the consensus peaks.
+
+Before calling any peaks, it is important to identify the samples that are
+considered as replicates. Here, we have provided a python script that can be
+used to identify the replicates based on the sample matrix.
+
+The following command identifies the replicates based on the sample matrix:
+
+```bash
+python3 extract_replicated_peaks.py <sample_matrix> <output_dir>
+```
+
+In the following scripts we require that these replicate information must be
+placed directly under the `peak_calling/consensus_peaks` directory. Therefore,
+run the following script to ensure the replicate identification files are placed
+in the correct directory:
+
+```bash
+consensusPeaksDir=${peakCallingDir}/consensus_peaks
+python3 extract_replicated_peaks.py sample_matrix.csv ${consensusPeaksDir}
+```
+
+### Calculating replicate coverage over peaks
+
+In this method, we first categorize the genome in to non-equal0size bins based on
+the peak overlap between different replicates. The coverage (number of replicates
+with peaks) covering each bin is then calculated to generate a bedGraph file.
+This bedGraph file can be utilized by `macs2 bdgpeakcall` to call the consensus
+peaks.
+
+The following command calculates the replicate coverage over peaks:
+
+```bash
+./find_consensus_peaks_coverage.sh config_chipseq.sh
+```
+
+Note that just as the earlier steps, identifying the correct peaks depends on
+setting the correct `${rawPeaks}` variable in the configuration file. This
+variable should be able to identify the directory name specifying the original
+peak calling configuration.
+
+Furthermore, an important information is the size of each chomosome. A
+`genome.chrom.sizes` file is required to run the `macs2 bdgpeakcall` command.
+It is a tab-separated file containing the name of the chromosome and the size
+of the chromosome. Note that the chromosome names in the `genome.chrom.sizes`
+file should match the chromosome names in the peak bed files and covers all
+chromosomes listed in the peak bed files. See the 
+[documentation](../utils/docs/update_contig_names.md) for more information.
+If any issue occurs with chromosome name inconsistency.
+
+### Intersecting peaks
+
+Another methods is to intersect the peaks called in different replicates to
+identify the consensus peaks. The `bedtools intersect` command can be used to
+intersect the peaks called in different replicates.
+
+The following command intersects the peaks called in different replicates:
+
+```bash
+./find_consensus_peaks_overlap.sh config_chipseq.sh
+```
+
+Note that it is important to define the minimum fraction of overlap between
+the peaks to be considered as the same peak. This value can be set in the
+configuration file. The default value is `0.5`, which means that at least 50%
+of the peak must overlap to be considered as the same peak between replicates.

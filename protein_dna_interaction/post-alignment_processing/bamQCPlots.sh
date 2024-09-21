@@ -42,7 +42,7 @@ for file in $(find ${markedSamples} -type f -name "samples_*.txt"); do
     done
 
     # Find the coverage file for the current mark
-    coverageFile=${alignmentDir}/bam_qc/multiBamSummary_${binSize}_${mark}.npz
+    coverageFile=${alignmentDir}/bam_qc/multiBamSummary_${mark}_${binSize}.npz
 
     # Check if the file exists, if not, skip the current mark
     if [ ! -f ${coverageFile} ]; then

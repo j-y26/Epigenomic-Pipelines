@@ -39,6 +39,7 @@ experiments.
   - [Peak calling](#peak-calling)
   - [Processing called peaks](#processing-called-peaks)
     - [Blacklist filtering](#blacklist-filtering)
+    - [Peak statistics](#peak-statistics)
     - [Visualizing coverage tracks](#visualizing-coverage-tracks)
     - [Peak coverage and distribution](#peak-coverage-and-distribution)
 
@@ -532,6 +533,10 @@ are used in the `macs2 callpeak` command:
 - `--SPMR`: use the signal per million reads (SPMR) as the normalization method. This does not affect the peak calling, but is used to normalize the signal for visualization.
 - `--call-summits`: call the summits of the peaks. This is recommended for ATAC-seq data, as it identifies the exact location of the peak.
 
+Users should also determine whether a model should be built to call peaks.
+If a shifting model is not used, then reads should be extended to the fragment
+length. See the `macs2` documentation for more information.
+
 Due to the cumulative nature of ATAC-seq peaks present in accessible promoters and enhancers, a narrow peak is expected. Therefore, the `MACS2` algorithm here operates on its default setting to call narrow peaks.
 
 As mentioned earlier, a cutoff is required to filter the peaks to keep only the
@@ -570,6 +575,40 @@ The following command filters the called peaks to remove the blacklisted regions
 ./blacklist_filtering.sh config_atacseq.sh
 ```
 
+### Peak statistics
+
+The statistics of the called peaks are calculated to assess the quality of the
+peaks and provide a summary of the peak calling results. The statistics include
+the number of peaks called and the distribution of the peak widths.
+
+The following command calculates the peak statistics:
+
+```bash
+Rscript plot_peak_stats.R <peak_bed_dir> <output_dir> [<plot_width>] [<plot_height>]
+```
+
+The `<peak_bed_dir>` is the directory containing the filtered peak bed files.
+The `<output_dir>` is the directory where the peak statistics plots and data
+will be saved. The `<plot_width>` and `<plot_height>` parameters are optional
+and are used to specify the width and height of the plot. The default values
+are `8` and `6`, respectively.
+
+An example of a streamlined analysis after running the `blacklist_filtering.sh`
+script is shown below:
+
+```bash
+mkdir ${peakCallingDir}/peak_stats
+Rscript plot_peak_stats.R ${peakCallingDir}/filtered_peaks ${peakCallingDir}/peak_stats
+```
+
+Note that while most peaks usually have a width less than 1 kb, some peaks may
+be much wider. Running the script generates a summary statistics that allows users
+to inspect the peaks size distribution in its naive form. On the other hand,
+to allow better comparison between samples, if the maximum peak width of a sample
+is greater than 10 kb, the script will only consider the maximum peak width of
+at the 90th percentile across all samples. This is to ensure that the peak width
+distribution is not skewed by a few samples with very wide peaks.
+
 ### Visualizing coverage tracks
 
 The coverage of the aligned reads can be visualized in a genome browser to
@@ -598,4 +637,10 @@ The following command computes the matrix of the coverage of the peaks:
 
 ```bash
 ./computeMatrix.sh config_atacseq.sh
+```
+
+To generate the profile and heatmap of the coverage, run the following command:
+
+```bash
+./plotProfileHeatmap.sh config_atacseq.sh
 ```

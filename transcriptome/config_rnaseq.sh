@@ -28,6 +28,10 @@ lane="L001"
 threads="8" 
 
 # ======= Data preprocessing ===================================================
+# Path to the ORA reference file directory, required by Illumina's DRAGEN ORA
+# ORA reference files can be found in https://support.illumina.com/downloads/ora-decompression-reference-files.html
+oraRefDir="/path/to/ora_ref"
+
 # Path to the directory containing the FASTQC output
 fastqcOutDir="${projPath}/fastqc_output" 
 

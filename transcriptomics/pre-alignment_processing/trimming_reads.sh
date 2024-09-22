@@ -46,4 +46,7 @@ for file in $(find ${fastqDir} -type f -name '*_R1_*.fastq.gz'); do
         ILLUMINACLIP:${TRIMMOMATIC_ADAPTER_FILE}:2:30:10 LEADING:20 TRAILING:20 SLIDINGWINDOW:5:20 MINLEN:36
 done
 
+# Remove unpaired files
+rm -r ${trimmedDir}/unpaired
+
 # [END]

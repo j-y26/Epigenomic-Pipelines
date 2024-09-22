@@ -30,18 +30,24 @@ for file in $(find ${alignmentDir}/bam -type f -name '*_bowtie2.bam'); do
         ${alignmentDir}/bam/${sample}_bowtie2.bam
     echo "BAM file sorted"
 
-    # Step 2: Remove duplicates
-    echo "Removing duplicates for ${sample}..."
+    # Step 2: Mark duplicates
+    echo "Marking duplicates for ${sample}..."
     java -jar ${PICARD_JAR} MarkDuplicates \
         I=${alignmentDir}/bam/${sample}_coord_sorted.bam \
-        O=${alignmentDir}/bam_nodup/${sample}_nodups.bam \
+        O=${alignmentDir}/bam_nodup/${sample}_markdups.bam \
         M=${alignmentDir}/bam_nodup/${sample}_dups_metrics.txt \
-        REMOVE_DUPLICATES=true
-    echo "Duplicates removed"
+        REMOVE_DUPLICATES=false
+    echo "Duplicates marked"
 
-    # Step 3: Remove intermediate files
+    # Step 3: Remove duplicates
+    samtools view -@ $threads -b -F 0x0400 \
+        ${alignmentDir}/bam_nodup/${sample}_markdups.bam > \
+        ${alignmentDir}/bam_nodup/${sample}_nodup.bam
+
+    # Step 4: Remove intermediate files
     echo "Removing intermediate files for ${sample}..."
     rm ${alignmentDir}/bam/${sample}_coord_sorted.bam
+    rm ${alignmentDir}/bam/${sample}_markdups.bam
     echo "Intermediate files removed"
 
     echo "Sample ${sample} deduplication complete"

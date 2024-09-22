@@ -1,11 +1,8 @@
 FROM ubuntu:22.04
 LABEL maintainer="Jielin Yang"
 LABEL email="jielin.yang@sickkids.ca"
-LABEL version="1.0"
+LABEL version="1.1"
 LABEL description="Docker image for raw data processing of epigenomic NGS data"
-
-# Create a new user
-RUN useradd -ms /bin/bash bioinformatician
 
 # Install Java JDK 17
 RUN apt-get update -y && apt-get install -y openjdk-17-jdk
@@ -62,40 +59,40 @@ RUN pip3 install pyBigWig==0.3.18
 RUN pip3 install pyfaidx==0.7.2.1
 RUN pip3 install pyyaml==6.0
 RUN pip3 install py2bit==0.3.0
-RUN pip3 install cython
+RUN pip3 install cython==0.29.37
 
 
 #######################
-# HTSlib 1.17
+# HTSlib 1.21
 #######################
-RUN mkdir -p /opt/htslib-1.17
-ENV HTSLIB_DIR=/opt/htslib-1.17
+RUN mkdir -p /opt/htslib-1.21
+ENV HTSLIB_DIR=/opt/htslib-1.21
 
 WORKDIR /tmp
-RUN wget https://github.com/samtools/htslib/releases/download/1.17/htslib-1.17.tar.bz2 -O htslib-1.17.tar.bz2 \
-    && tar -xjf htslib-1.17.tar.bz2 \
-    && cd /tmp/htslib-1.17 \
+RUN wget https://github.com/samtools/htslib/releases/download/1.21/htslib-1.21.tar.bz2 -O htslib-1.21.tar.bz2 \
+    && tar -xjf htslib-1.21.tar.bz2 \
+    && cd /tmp/htslib-1.21 \
     && ./configure --prefix=$HTSLIB_DIR \
     && make \
     && make install \
     && cd .. \
-    && rm -rf htslib-1.17 htslib-1.17.tar.bz2
+    && rm -rf htslib-1.21 htslib-1.21.tar.bz2
 
 #######################
-# SAMtools 1.17
+# SAMtools 1.21
 #######################
-RUN mkdir -p /opt/samtools-1.17
-ENV SAMTOOLS_DIR=/opt/samtools-1.17
+RUN mkdir -p /opt/samtools-1.21
+ENV SAMTOOLS_DIR=/opt/samtools-1.21
 
 WORKDIR /tmp
-RUN wget https://sourceforge.net/projects/samtools/files/samtools/1.17/samtools-1.17.tar.bz2/download -O samtools-1.17.tar.bz2 \
-    && tar -xjf samtools-1.17.tar.bz2 \
-    && cd /tmp/samtools-1.17 \
+RUN wget https://sourceforge.net/projects/samtools/files/samtools/1.21/samtools-1.21.tar.bz2/download -O samtools-1.21.tar.bz2 \
+    && tar -xjf samtools-1.21.tar.bz2 \
+    && cd /tmp/samtools-1.21 \
     && ./configure --prefix=$SAMTOOLS_DIR \
     && make \
     && make install \
     && cd .. \
-    && rm -rf samtools-1.17 samtools-1.17.tar.bz2
+    && rm -rf samtools-1.21 samtools-1.21.tar.bz2
 
 #######################
 # BEDtools 2.30.0
@@ -110,16 +107,16 @@ RUN wget https://github.com/arq5x/bedtools2/releases/download/v2.30.0/bedtools-2
     && rm bedtools-2.30.0.tar.gz
 
 #######################
-# Bowtie2 2.5.1
+# Bowtie2 2.5.4
 #######################
 WORKDIR /tmp
-RUN wget https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.5.1/bowtie2-2.5.1-source.zip/download -O bowtie2-2.5.1-source.zip \
-    && unzip bowtie2-2.5.1-source.zip \
-    && cd /tmp/bowtie2-2.5.1 \
+RUN wget https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.5.4/bowtie2-2.5.4-source.zip/download -O bowtie2-2.5.4-source.zip \
+    && unzip bowtie2-2.5.4-source.zip \
+    && cd /tmp/bowtie2-2.5.4 \
     && make \
     && cd .. \
-    && mv bowtie2-2.5.1 /opt \
-    && rm bowtie2-2.5.1-source.zip
+    && mv bowtie2-2.5.4 /opt \
+    && rm bowtie2-2.5.4-source.zip
 
 #######################
 # STAR 2.7.10b
@@ -174,10 +171,10 @@ RUN wget http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmoma
     && rm Trimmomatic-0.39.zip
 
 #######################
-# Picard 3.0.0
+# Picard 3.2.0
 #######################
 WORKDIR /tmp
-RUN wget https://github.com/broadinstitute/picard/releases/download/3.0.0/picard.jar \
+RUN wget https://github.com/broadinstitute/picard/releases/download/3.2.0/picard.jar \
     && mv picard.jar /opt
 
 
@@ -204,24 +201,19 @@ RUN wget http://homer.ucsd.edu/homer/configureHomer.pl \
 
 
 #######################
-# Deeptools 3.5.1
+# Deeptools 3.5.5
 #######################
-RUN pip3 install deeptools==3.5.1
-
-#######################
-# MACS3 3.0.0
-#######################
-RUN pip3 install macs3
+RUN pip3 install deeptools==3.5.5
 
 # Export PATH to include all the programs
-RUN export PATH=$PATH:/opt/stringtie-2.2.1:/opt/samtools-1.17/bin:/opt/htslib-1.17/bin:/opt/bedtools2/bin:/opt/bowtie2-2.5.1:/opt/STAR-2.7.10b/source:/opt/subread-2.0.3-Linux-x86_64/bin:/opt
+RUN export PATH=$PATH:/opt/samtools-1.21/bin:/opt/htslib-1.21/bin:/opt/bedtools2/bin:/opt/bowtie2-2.5.4:/opt/STAR-2.7.10b/source:/opt/subread-2.0.3-Linux-x86_64/bin:/opt
 
 # Create .bash_profile and add the first line
 RUN echo ". ~/.profile" >> /root/.bash_profile
 
 # Add the rest of the lines to set PATH
-RUN echo "export PATH=$PATH:/opt/stringtie-2.2.1:/opt/samtools-1.17/bin: \
-    /opt/htslib-1.17/bin:/opt/bedtools2/bin:/opt/bowtie2-2.5.1: \
+RUN echo "export PATH=$PATH:/opt/samtools-1.21/bin: \
+    /opt/htslib-1.21/bin:/opt/bedtools2/bin:/opt/bowtie2-2.5.4: \
     /opt/STAR-2.7.10b/source:/opt/subread-2.0.3-Linux-x86_64/bin:/opt: \
     /opt/homer/bin" >> /root/.bash_profile
 

@@ -24,14 +24,14 @@ if [ ! -d ${fastqcOutDir} ]; then
     mkdir ${fastqcOutDir}/post_trimming
 fi
 
-if [ ! -d ${fastqcOutDir}/pre_trimming ]; then
+if [ ! -d ${fastqcOutDir}/post_trimming ]; then
     mkdir ${fastqcOutDir}/post_trimming
 fi
 
 # Loop through the directory to match patterns ending in _R1_*.fastq.gz
 # and run FastQC on the paired files
 
-for file in $(find ${trimmedDir} -type f -name '*_R1_*.fastq.gz'); do
+for file in $(find ${trimmedDir} -type f -name '*_R1.fastq.gz'); do
     sample=$(basename $file _trimmed_R1.fastq.gz)
     echo "Running FastQC on ${sample} after trimming"
     forward_file="${sample}_trimmed_R1.fastq.gz"

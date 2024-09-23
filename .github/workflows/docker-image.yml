@@ -28,6 +28,6 @@ jobs:
       run:
         echo $DOCKER_PASSWORD | docker login docker.io -u $DOCKER_USER --password-stdin
     - name: Build the Docker image for Epigenomic Pipelines
-      run: docker build . --file docker-epigenomics/Dockerfile --tag jyang26/epigenomic-pipelines:v1.0
+      run: docker build . --file docker-epigenomics/Dockerfile --tag jyang26/epigenomic-pipelines:v1.1
     - name: Push Epigenomic Pipelines to Docker Hub
-      run: docker push jyang26/epigenomic-pipelines:v1.0
+      run: docker push jyang26/epigenomic-pipelines:v1.1

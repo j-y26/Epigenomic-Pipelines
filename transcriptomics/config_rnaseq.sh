@@ -34,18 +34,20 @@ threads="8"
 oraRefDir="/path/to/ora_ref"
 
 # Path to the directory containing the FASTQC output
-fastqcOutDir="${projPath}/fastqc_output" 
-
-# Path to the Trimmomatic JAR file
-TRIMMOMATIC_JAR="/path/to/trimmomatic.jar" 
-
-# Path to the Trimmomatic adapter file
-TRIMMOMATIC_ADAPTER_FILE="/path/to/adapter.fa" 
-# Note that the adapter must be chosen corresponding to the library generation method
-# These fasta files are usually stored along with the Trimmomatic JAR file
+fastqcOutDir="${projPath}/fastqc_output"
 
 # Path to the directory containing the trimmed FASTQ files
 trimmedDir="${projPath}/fastq_trimmed" 
+
+# Path to the Trimmomatic JAR file [Deprecated]
+# Ignored if use fastp for trimming
+TRIMMOMATIC_JAR="/path/to/trimmomatic.jar" 
+
+# Path to the Trimmomatic adapter file [Deprecated]
+# Ignored if use fastp for trimming
+TRIMMOMATIC_ADAPTER_FILE="/path/to/adapter.fa" 
+# Note that the adapter must be chosen corresponding to the library generation method
+# These fasta files are usually stored along with the Trimmomatic JAR file
 
 # ====== Alignment =============================================================
 # Path to the STAR index directory

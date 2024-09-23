@@ -158,12 +158,19 @@ located along with the `.jar` file, it is important to choose the correct
 adapter sequences for the specific library preparation kit used. Consult the 
 instruction for the kit to select the correct adapter sequences.
 
-The trimming step make use of the `trimming_reads.sh` script, where we perform
+The trimming step make use of the `trimming_reads_fastp.sh` script, where we perform
 trimming on the raw sequencing data.
 
 ```bash
-./trimming_reads.sh config_rnaseq.sh
+./trimming_reads_fastp.sh config_rnaseq.sh
 ```
+
+Here, we use fastp because it is faster than Trimmomatic and provides similar
+performance. In addition, the program provides polyG and polyX trimming, which
+is useful for removing artifacts in the reads. PolyG can arise in the NextSeq
+and NovaSeq platforms due to a lack of signal at the ends of the reads (read2).
+PolyT can arise due to the polyA tail in the mRNA or issue with the oligo-dT
+beads during library preparation.
 
 ### Quality control after trimming
 

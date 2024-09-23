@@ -21,17 +21,7 @@ echo "  threads: ${threads}"
 
 if [ ! -d ${trimmedDir} ]; then
     mkdir ${trimmedDir}
-    mkdir ${trimmedDir}/unpaired
-    mkdir ${trimmedDir}/filtered_out
     mkdir ${trimmedDir}/fastp_report
-fi
-
-if [ ! -d ${trimmedDir}/unpaired ]; then
-    mkdir ${trimmedDir}/unpaired
-fi
-
-if [ ! -d ${trimmedDir}/filtered_out ]; then
-    mkdir ${trimmedDir}/filtered_out
 fi
 
 if [ ! -d ${trimmedDir}/fastp_report ]; then

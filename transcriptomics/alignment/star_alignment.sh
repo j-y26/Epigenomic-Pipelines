@@ -27,12 +27,12 @@ fi
 # Loop through the directory to match patterns ending in _R1_*.fastq.gz
 # We use trimmed files for alignment, so we need to loop through the trimmed directory
 
-for file in $(find ${trimmedDir} -type f -name '*_R1.fastq.gz'); do
-    sample=$(basename $file _trimmed_R1.fastq.gz)
+for file in $(find ${trimmedDir} -type f -name '*R1_trimmed.fastq.gz'); do
+    sample=$(basename $file _R1_trimmed.fastq.gz)
     echo "Aligning ${sample} to reference genome..."
     echo "This may take a while..."
-    forward_file="${sample}_trimmed_R1.fastq.gz"
-    reverse_file="${sample}_trimmed_R2.fastq.gz"
+    forward_file="${sample}_R1_trimmed.fastq.gz"
+    reverse_file="${sample}_R2_trimmed.fastq.gz"
     STAR \
     --runThreadN ${threads} \
     --readFilesCommand zcat \

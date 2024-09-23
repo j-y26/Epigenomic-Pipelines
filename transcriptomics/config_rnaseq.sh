@@ -64,6 +64,14 @@ genomeGtfFile="/path/to/genome.gtf"
 # Path to the output directory for the alignment
 STAROutputDir="${projPath}/star_output"
 
+# Temporary FIFO file directory
+# STAR requires a temporary directory to store FIFO files, which should be on
+# a linux filesystem.
+# If useTempFIFO is set to "false", this temporary directory will the same
+# as the STAROutputDir
+useTempFIFO="false"   # Must be either "true" or "false"
+tempFIFODir="/tmp"
+
 # ====== Post-alignment processing =============================================
 # Path to the directory containing the BAM files sorted by name
 nameSortedDir="${projPath}/samtools_sort_name"

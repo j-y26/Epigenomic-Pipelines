@@ -10,6 +10,13 @@ echo "Running with config:"
 echo "STARIndexDir: ${STARIndexDir}"
 echo "STAROutputDir: ${STAROutputDir}"
 
+if [ ${useTempFIFO} == "true" ]; then
+    echo "Using temporary FIFO directory: ${tempFIFODir}"
+
+else
+    echo "Using STAROutputDir as temporary FIFO directory"
+fi
+
 # [Main]
 
 # Check to ensure that the reference genome directory exists
@@ -33,14 +40,28 @@ for file in $(find ${trimmedDir} -type f -name '*R1_trimmed.fastq.gz'); do
     echo "This may take a while..."
     forward_file="${sample}_R1_trimmed.fastq.gz"
     reverse_file="${sample}_R2_trimmed.fastq.gz"
+
+    # Create a temporary directory for the FIFO files
+    if [ ${useTempFIFO} == "true" ]; then
+        outTempDir="--outTmpDir ${tempFIFODir}/${sample}"
+    else
+        outTempDir=""
+    fi
+
     STAR \
     --runThreadN ${threads} \
     --readFilesCommand zcat \
     --outFileNamePrefix ${STAROutputDir}/${sample} \
     --outSAMtype BAM SortedByCoordinate \
     --genomeDir ${STARIndexDir} \
+    ${outTempDir} \
     --readFilesIn ${trimmedDir}/${forward_file} ${trimmedDir}/${reverse_file}
     echo "Alignment for ${sample} complete"
+
+    # Remove the temporary directory if it was created
+    if [ ${useTempFIFO} == "true" ]; then
+        rm -r ${tempFIFODir}/${sample}
+    fi
 done
 
 # [END]

@@ -2,26 +2,33 @@
 # find the promoter regions of each transcript with user defined regions upstream and downstream of the TSS
 # Output a bed file with the promoter regions, with gene id and gene symbol as the name field
 
-# Usage: python generate_promoter_bed.py -t <transcript_file> -o <output_file> -u <upstream> -d <downstream>
+# Usage: python generate_promoter_bed.py -t <transcript_file> -o <output_file> -c <chrom_sizes> -u <upstream> -d <downstream> -p
 
 import argparse
 import pandas as pd
 import numpy as np
 
-def generate_promoter_bed(transcript_file, output_file, upstream, downstream):
+def generate_promoter_bed(transcript_file, output_file, upstream, downstream, protein_coding_only, chrom_sizes):
     # Print the parameters
     print("\n")
     print("Generating promoter regions with the following parameters:")
     print("Transcript annotation file: " + transcript_file)
     print("Output file: " + output_file)
-    print("Upstream: " + str(upstream))
-    print("Downstream: " + str(downstream))
+    print("Upstream: " + str(upstream) + "bp")
+    print("Downstream: " + str(downstream) + "bp")
 
     # Read in the transcript annotation file
-    transcripts = pd.read_csv(transcript_file, sep="\t", header=0)
+    transcripts = pd.read_csv(transcript_file, sep="\t", header=0,
+                              dtype={"transcript_id": str, 
+                                     "gene_name": str, 
+                                     "chromosome": str, 
+                                     "transcript_strand": str, 
+                                     "transcript_start": int, 
+                                     "transcript_end": int})
 
-    # Keep only protein coding genes
-    transcripts = transcripts[transcripts["transcript_type"] == "protein_coding"]
+    # Keep only protein coding genes, if needed
+    if protein_coding_only:
+        transcripts = transcripts[transcripts["transcript_type"] == "protein_coding"]
 
     # Extract the transcript_id, gene_name, chromosome, strand, start and end positions
     transcripts = transcripts[["transcript_id", "gene_name", "chromosome", "transcript_strand", "transcript_start", "transcript_end"]]
@@ -37,6 +44,12 @@ def generate_promoter_bed(transcript_file, output_file, upstream, downstream):
     # If any of the start or end positions are negative, set them to 0
     transcripts["promoter_start"] = transcripts["promoter_start"].clip(lower=0)
     transcripts["promoter_end"] = transcripts["promoter_end"].clip(lower=0)
+
+    # Read in the chromosome sizes file
+    chrom_sizes = pd.read_csv(chrom_sizes, sep="\t", header=None, names=["chromosome", "size"])
+    # If any of the promoter regions are beyond the chromosome size, set them to the chromosome size
+    transcripts = pd.merge(transcripts, chrom_sizes, on="chromosome", how="left")
+    transcripts["promoter_end"] = transcripts[["promoter_end", "size"]].min(axis=1)
 
     # Generate the bed file
     bed = transcripts[["chromosome", "promoter_start", "promoter_end", "gene_name", "transcript_id", "transcript_strand"]]
@@ -60,6 +73,11 @@ def main():
         required=True)
     
     parser.add_argument(
+        '-c', '--chrom_sizes', 
+        help='Chromosome sizes file', 
+        required=True)
+    
+    parser.add_argument(
         '-u', '--upstream', 
         type=int, 
         default=3000, 
@@ -70,11 +88,17 @@ def main():
         type=int, default=1000, 
         help='Number of bases downstream of the TSS. Default 1000')
     
+    parser.add_argument(
+        '-p', '--protein-coding-only',
+        action='store_true',
+        help='Keep only protein coding genes'
+    )
+    
     parser.print_help()
     args = parser.parse_args()
 
     # Generate the promoter regions
-    generate_promoter_bed(args.transcript_file, args.output_file, args.upstream, args.downstream)
+    generate_promoter_bed(args.transcript_file, args.output_file, args.upstream, args.downstream, args.protein_coding_only, args.chrom_sizes)
 
     print("Promoter regions BED file generated: " + args.output_file)
 

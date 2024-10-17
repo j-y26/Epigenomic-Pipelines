@@ -32,7 +32,7 @@ cvbio UpdateContigNames \
     --skip-missing false
 ```
 
-An alternatively we provided a script to parse any tab-delimited file with the
+An alternative we provided a script to parse any tab-delimited file with the
 chromosome names. The script is located at [convert_contig_names.py](../convert_contig_names.py)
 
 ```bash

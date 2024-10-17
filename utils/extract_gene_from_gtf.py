@@ -24,15 +24,6 @@ with open(gtf_file, 'r') as f:
                     gene_name = line[8].split(';')[2].split(' ')[2].replace('"', '')
                     gene_type = line[8].split(';')[4].split(' ')[2].replace('"', '')
                     chromosome = line[0]
-                    # if chromosome is a number, add 'chr'
-                    # if chromosome is a == 'X' or 'Y', add 'chr'
-                    # if chromosome is a 'MT', add 'chr'
-                    if chromosome == 'MT':
-                        chromosome = 'chrM'
-                    elif chromosome == 'X' or chromosome == 'Y':
-                        chromosome = 'chr' + chromosome
-                    elif chromosome.isdigit():
-                        chromosome = 'chr' + chromosome
                     gene_start = line[3]
                     gene_end = line[4]
                     gene_strand = line[6]

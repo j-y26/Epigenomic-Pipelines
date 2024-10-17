@@ -36,15 +36,6 @@ with open(gtf_file, 'r') as f:
                         transcript_type = transcript_type_match.group(1)
 
                     chromosome = line[0]
-                    # if chromosome is a number, add 'chr'
-                    # if chromosome is a == 'X' or 'Y', add 'chr'
-                    # if chromosome is a 'MT', add 'chr'
-                    if chromosome == 'MT':
-                        chromosome = 'chrM'
-                    elif chromosome == 'X' or chromosome == 'Y':
-                        chromosome = 'chr' + chromosome
-                    elif chromosome.isdigit():
-                        chromosome = 'chr' + chromosome
                     transcript_start = line[3]
                     transcript_end = line[4]
                     transcript_strand = line[6]

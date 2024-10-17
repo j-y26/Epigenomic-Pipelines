@@ -9,6 +9,14 @@ import pandas as pd
 import numpy as np
 
 def generate_promoter_bed(transcript_file, output_file, upstream, downstream):
+    # Print the parameters
+    print("\n")
+    print("Generating promoter regions with the following parameters:")
+    print("Transcript annotation file: " + transcript_file)
+    print("Output file: " + output_file)
+    print("Upstream: " + str(upstream))
+    print("Downstream: " + str(downstream))
+
     # Read in the transcript annotation file
     transcripts = pd.read_csv(transcript_file, sep="\t", header=0)
 
@@ -55,12 +63,12 @@ def main():
         '-u', '--upstream', 
         type=int, 
         default=3000, 
-        help='Number of bases upstream of the TSS')
+        help='Number of bases upstream of the TSS. Default 3000')
     
     parser.add_argument(
         '-d', '--downstream', 
         type=int, default=1000, 
-        help='Number of bases downstream of the TSS')
+        help='Number of bases downstream of the TSS. Default 1000')
     
     parser.print_help()
     args = parser.parse_args()

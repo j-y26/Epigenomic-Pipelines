@@ -4,6 +4,7 @@
 # Usage: python extract_gene_from_gtf.py <gtf_file> <output_file>
 
 import sys
+import re
 
 gtf_file = sys.argv[1]
 output_file = sys.argv[2]
@@ -20,11 +21,25 @@ with open(gtf_file, 'r') as f:
             else:
                 line = line.strip().split('\t')
                 if line[2] == 'gene':
-                    gene_id = line[8].split(';')[0].split(' ')[1].replace('"', '')
-                    gene_name = line[8].split(';')[2].split(' ')[2].replace('"', '')
-                    gene_type = line[8].split(';')[4].split(' ')[2].replace('"', '')
+                    # Extract gene_id using regular expression
+                    gene_id_match = re.search(r'gene_id "([^"]+)"', line[8])
+                    if gene_id_match:
+                        gene_id = gene_id_match.group(1)
+
+                    # Extract gene_name using regular expression
+                    gene_name_match = re.search(r'gene_name "([^"]+)"', line[8])
+                    if gene_name_match:
+                        gene_name = gene_name_match.group(1)
+
+                    # Extract gene_type using regular expression
+                    gene_type_match = re.search(r'gene_biotype "([^"]+)"', line[8])
+                    if gene_type_match:
+                        gene_type = gene_type_match.group(1)
+
                     chromosome = line[0]
                     gene_start = line[3]
                     gene_end = line[4]
                     gene_strand = line[6]
+
+                    # Write to output file
                     o.write(gene_id + '\t' + gene_name + '\t' + gene_type + '\t' + chromosome + '\t' + gene_start + '\t' + gene_end + '\t' + gene_strand + '\n')

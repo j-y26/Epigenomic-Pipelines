@@ -1,45 +1,55 @@
 # Extracting gene information from gtf file
 # Input: gtf file
 # Output: gene information file (gene_id, gene_name, gene_type, chromosome, gene_start, gene_end, gene_strand), tab separated
-# Usage: python extract_gene_from_gtf.py <gtf_file> <output_file>
+# Usage: python extract_gene_from_gtf.py -i/--input <gtf_file> -o/--output <output_file>
 
 import sys
 import re
+import argparse
 
-gtf_file = sys.argv[1]
-output_file = sys.argv[2]
+def gene_from_gtf(gtf_file, output_file):
+    with open(gtf_file, 'r') as f:
+        with open(output_file, 'w') as o:
+            # write header
+            o.write('gene_id' + '\t' + 'gene_name' + '\t' + 'gene_type' + '\t' + 'chromosome' + '\t' + 'gene_start' + '\t' + 'gene_end' + '\t' + 'gene_strand' + '\n')
 
-with open(gtf_file, 'r') as f:
-    with open(output_file, 'w') as o:
-        # write header
-        o.write('gene_id' + '\t' + 'gene_name' + '\t' + 'gene_type' + '\t' + 'chromosome' + '\t' + 'gene_start' + '\t' + 'gene_end' + '\t' + 'gene_strand' + '\n')
+            # Iterate through each line in the gtf file
+            for line in f:
+                if line.startswith('#'):
+                    continue
+                else:
+                    line = line.strip().split('\t')
+                    if line[2] == 'gene':
+                        # Extract gene_id using regular expression
+                        gene_id_match = re.search(r'gene_id "([^"]+)"', line[8])
+                        if gene_id_match:
+                            gene_id = gene_id_match.group(1)
 
-        # Iterate through each line in the gtf file
-        for line in f:
-            if line.startswith('#'):
-                continue
-            else:
-                line = line.strip().split('\t')
-                if line[2] == 'gene':
-                    # Extract gene_id using regular expression
-                    gene_id_match = re.search(r'gene_id "([^"]+)"', line[8])
-                    if gene_id_match:
-                        gene_id = gene_id_match.group(1)
+                        # Extract gene_name using regular expression
+                        gene_name_match = re.search(r'gene_name "([^"]+)"', line[8])
+                        if gene_name_match:
+                            gene_name = gene_name_match.group(1)
 
-                    # Extract gene_name using regular expression
-                    gene_name_match = re.search(r'gene_name "([^"]+)"', line[8])
-                    if gene_name_match:
-                        gene_name = gene_name_match.group(1)
+                        # Extract gene_type using regular expression
+                        gene_type_match = re.search(r'gene_biotype "([^"]+)"', line[8])
+                        if gene_type_match:
+                            gene_type = gene_type_match.group(1)
 
-                    # Extract gene_type using regular expression
-                    gene_type_match = re.search(r'gene_biotype "([^"]+)"', line[8])
-                    if gene_type_match:
-                        gene_type = gene_type_match.group(1)
+                        chromosome = line[0]
+                        gene_start = line[3]
+                        gene_end = line[4]
+                        gene_strand = line[6]
 
-                    chromosome = line[0]
-                    gene_start = line[3]
-                    gene_end = line[4]
-                    gene_strand = line[6]
+                        # Write to output file
+                        o.write(gene_id + '\t' + gene_name + '\t' + gene_type + '\t' + chromosome + '\t' + gene_start + '\t' + gene_end + '\t' + gene_strand + '\n')
 
-                    # Write to output file
-                    o.write(gene_id + '\t' + gene_name + '\t' + gene_type + '\t' + chromosome + '\t' + gene_start + '\t' + gene_end + '\t' + gene_strand + '\n')
+def main():
+    parser = argparse.ArgumentParser(description='Extracting gene information from gtf file')
+    parser.add_argument('-i', '--input', help='Input gtf file', required=True)
+    parser.add_argument('-o', '--output', help='Output file', required=True)
+    args = parser.parse_args()
+
+    gene_from_gtf(args.input, args.output)
+
+if __name__ == '__main__':
+    main()

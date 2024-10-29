@@ -9,50 +9,53 @@
 # - PeakType
 # - FileName
 
-# Usage: python3 sample_matrix.py <directory> <suffix> <output_file>
+# Usage: python generate_sample_matrix.py -d/--dir <directory> 
+#                                         -s/--suffix <suffix>
+#                                         -o/--output <output_file>
 
 import os
 import sys
 import pandas as pd
+import argparse
 
-# Check if the number of arguments is correct
-if len(sys.argv) != 4:
-    print("Usage: python3 sample_matrix.py <directory> <suffix> <output_file>")
-    sys.exit(1)
+def generate_sample_matrix(directory, suffix, output_file):
+    # Traverse the directory to find files with the specified suffix
+    sample_matrix = []
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.endswith(suffix):
+                # Extract sample name
+                sample_name = file[:-len(suffix)]
+                
+                # Append sample data to the sample matrix
+                sample_matrix.append({
+                    "Sample": sample_name,
+                    "Label": sample_name,
+                    "Group": "",
+                    "Replicate": "",
+                    "Batch": "",
+                    "Mark": "",
+                    "PeakType": "",
+                    "FileName": file
+                })
 
-# Parse the command line arguments
-directory = sys.argv[1]
-suffix = sys.argv[2]
-output_file = sys.argv[3]
+    # Convert the sample matrix to a pandas DataFrame
+    sample_matrix_df = pd.DataFrame(sample_matrix)
+    sample_matrix_df.to_csv(output_file, index=False)
 
-# Traverse the directory to find files with the specified suffix
-sample_matrix = []
-for root, dirs, files in os.walk(directory):
-    for file in files:
-        if file.endswith(suffix):
-            # Extract sample name
-            sample_name = file[:-len(suffix)]
-            
-            # Append sample data to the sample matrix
-            sample_matrix.append({
-                "Sample": sample_name,
-                "Label": sample_name,
-                "Group": "",
-                "Replicate": "",
-                "Batch": "",
-                "Mark": "",
-                "PeakType": "",
-                "FileName": file
-            })
+    print("Sample matrix generated successfully!")
+    print(f"Sample matrix saved to {output_file}")
 
-# Convert the sample matrix to a pandas DataFrame
-sample_matrix_df = pd.DataFrame(sample_matrix)
-sample_matrix_df.to_csv(output_file, index=False)
+def main():
+    parser = argparse.ArgumentParser(description="Generate a sample matrix csv file for files in a directory")
+    parser.add_argument("-d", "--dir", type=str, required=True, help="Directory containing the files")
+    parser.add_argument("-s", "--suffix", type=str, required=True, help="Suffix of the files to include")
+    parser.add_argument("-o", "--output", type=str, required=True, help="Output file to save the sample matrix")
+    args = parser.parse_args()
 
-print("Sample matrix generated successfully!")
-print(f"Sample matrix saved to {output_file}")
+    generate_sample_matrix(args.dir, args.suffix, args.output)
 
-# Exit the program
-sys.exit(0)
+if __name__ == "__main__":
+    main()
 
 # [END]

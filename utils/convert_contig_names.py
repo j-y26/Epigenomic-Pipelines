@@ -1,31 +1,53 @@
 # Convert chromosome names in a input file based on a mapping file
 
-# Usage: python3 convert_contig_names.py <input_file> <mapping_file> <output_file> [<chromosome_column>]
+# Usage: python convert_contig_names.py -i/--input <input_file> 
+#                                       -m/--mapping <mapping_file>
+#                                       -o/--output <output_file>
+#                                       -c/--chromosome-column [<chromosome_column>]
+#                                       -s/--separator [<separator>]
 
 import sys
 import pandas as pd
+import argparse
 
-input_file = sys.argv[1]
-mapping_file = sys.argv[2]
-output_file = sys.argv[3]
-if len(sys.argv) > 4:
-    chromosome_column = int(sys.argv[4]) - 1
-else:
-    chromosome_column = 0
+# Function to map chromosome names
+def map_chromosome_names(input_file, mapping_file, output_file, chromosome_column, separator):
+    # Check separator
+    if separator == 'tab':
+        separator = '\t'
+    elif separator == 'comma':
+        separator = ','
+    else:
+        sys.exit('Invalid separator. Use tab or comma')
 
-# Read mapping file
-mapping = pd.read_csv(mapping_file, sep='\t', header=None, dtype={0: str, 1: str})
-mapping.columns = ['old', 'new']
+    # Read mapping file
+    mapping = pd.read_csv(mapping_file, sep=separator, header=None, dtype={0: str, 1: str})
+    mapping.columns = ['old', 'new']
 
-# Read input file
-input = pd.read_csv(input_file, sep='\t', header=None, dtype={chromosome_column: str})
+    # Read input file
+    input = pd.read_csv(input_file, sep=separator, header=None, dtype={chromosome_column: str})
 
-# Convert chromosome names
-input[chromosome_column] = input[chromosome_column].map(mapping.set_index('old')['new'])
+    # Convert chromosome names
+    input[chromosome_column] = input[chromosome_column].map(mapping.set_index('old')['new'])
 
-# Write output
-input.to_csv(output_file, sep='\t', header=False, index=False)
+    # Write output
+    input.to_csv(output_file, sep=separator, header=False, index=False)
 
-print('Done!')
+# Main
+def main():
+    # Parse arguments
+    parser = argparse.ArgumentParser(description='Convert chromosome names from one stype to another in a input file based on a mapping file')
+    parser.add_argument('-i', '--input', help='Input file', required=True)
+    parser.add_argument('-m', '--mapping', help='Mapping file', required=True)
+    parser.add_argument('-o', '--output', help='Output file', required=True)
+    parser.add_argument('-c', '--chromosome-column', help='Chromosome column', type=int, required=True)
+    parser.add_argument('-s', '--separator', help='Column separator, tab or comma, default is tab', default='tab')
+    args = parser.parse_args()
+
+    # Map chromosome names
+    map_chromosome_names(args.input, args.mapping, args.output, args.chromosome_column, args.separator)
+
+if __name__ == '__main__':
+    main()
 
 # [END]

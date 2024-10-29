@@ -4,7 +4,12 @@
 
 - [Introduction](#introduction)
 - [Implemented Pipelines](#implemented-pipelines)
+- [Dependencies](#dependencies)
 - [Installation](#installation)
+  - [Linux](#linux)
+  - [Executables](#executables)
+  - [Docker - Linux for Bulk Epigenomic Processing](#docker---linux-for-bulk-epigenomic-processing)
+  - [Docker - Single-cell Epigenomic Analysis](#docker---single-cell-epigenomic-analysis)
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
@@ -33,6 +38,17 @@ framework. The pipelines are implemented primarily using shell scripts, where
 each step is implemented as a separate script. Ensure that you are using a
 compatible shell (e.g. `bash`) and are using a Unix-based operating system.
 
+## Dependencies
+
+The pipelines require the following tools and dependencies:
+
+```
+- Python 3.7+
+- R 4.0+
+```
+For additional command-line tools and software dependencies, please refer to
+the [documentation](doc/requirements.md) for the pipelines.
+
 ## Installation
 
 ### Linux
@@ -48,6 +64,30 @@ cd Epigenomic-Pipelines
 In this pipeline, we assume that the required tools are installed and available
 in the system path. The required tools are listed in the `requirements.md` file,
 and all tools are publicly available.
+
+### Executables
+
+To convert the python scripts into executables, simply run the following command:
+
+```bash
+make
+```
+
+This will create the executables in the `bin` directory. Ensure that the `bin`
+directory is in the system path to use the executables.
+
+```bash
+export PATH=$PATH:/path/to/Epigenomic-Pipelines/bin
+```
+
+The `/bin` directory already exists when you clone the repository, and all
+files are executable. However, running make will ensure that the necessary
+dependencies are installed. Alternatively, you can install the dependencies by
+running the following command:
+
+```bash
+make install
+```
 
 ### Docker - Linux for Bulk Epigenomic Processing
 

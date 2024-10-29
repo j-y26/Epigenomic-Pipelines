@@ -1,8 +1,10 @@
+#!/usr/bin/env python
 # Extracting exon information from gtf file
 # Input: gtf file
 # Output: exon information file (exon_id, exon_number, exon_start, exon_end, exon_strand, chromosome, gene_id, gene_name), tab separated
 # Usage: python extract_exon_from_gtf.py -i/--input <gtf_file> -o/--output <output_file>
 
+import sys
 import re
 import argparse
 

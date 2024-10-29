@@ -21,9 +21,11 @@ source for more information about the data.
 
 These files name the chromosomes based on the UCSC genome browser convention.
 For users requiring the chromosomes to be named based on the Ensembl convention,
-we have also parsed the files for `mm10`.
+we have also parsed the files for `mm10`. Chromosome names are available in the
+UCSC format and the Ensembl format.
 
-All these files have been placed under [utils](..)
+All these files have been placed under [utils/resources](../resources) for
+convenience.
 
 ## Compiled Resources
 

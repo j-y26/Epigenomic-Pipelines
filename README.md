@@ -47,7 +47,7 @@ The pipelines require the following tools and dependencies:
 - R 4.0+
 ```
 For additional command-line tools and software dependencies, please refer to
-the [documentation](doc/requirements.md) for the pipelines.
+the [documentation](docs/requirements.md) for the pipelines.
 
 ## Installation
 
@@ -156,7 +156,7 @@ A general example for executing the scripts is as follows:
 
 To reduce the risk of errors, some scripts that perform common tasks are created
 using symbolic links. These scripts can be used the same way as the original
-scripts. Documentation of these symbolic links can be found [here](docs/symlinks.md).
+scripts. Documentation of these symbolic links can be found [here](docs/links.md).
 
 ## Contributing
 

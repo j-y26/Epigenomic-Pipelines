@@ -22,9 +22,9 @@ install: $(REQUIREMENTS)
 $(BIN_DIR)/%: $(UTILS_DIR)/%.py | $(BIN_DIR)
 	@echo "Making $@ from $<"
 
-	# Add shebang, copy to bin directory, and make executable
+	@# Add shebang, copy to bin directory, and make executable
 	@echo "#!/usr/bin/env python" | cat - $< > $@
-	chmod +x $@
+	@chmod +x $@
 
 # Create the bin directory if it does not exist
 $(BIN_DIR):

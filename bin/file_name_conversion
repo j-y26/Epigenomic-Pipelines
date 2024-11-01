@@ -12,7 +12,6 @@
 # For example: sample_bowtie2.bam has the extension _bowtie2.bam
 
 import os
-import sys
 import pandas as pd
 import argparse
 

@@ -1,0 +1,39 @@
+#!/usr/bin/env python
+# List the names of all utility scripts in the epigenomic-pipelines repository
+
+# Usage: python epigenomic-pipelines.py
+
+tools_info = {
+    "convert_contig_names": "Converting contig (chromosome) names in a tab-delimited file between different naming conventions (USCS, Ensembl, NCBI, etc.)",
+    "extract_exon_from_gtf": "Extracting exon features from a GTF file",
+    "extract_gene_from_gtf": "Extracting gene features from a GTF file",
+    "extract_transcript_from_gtf": "Extracting transcript features from a GTF file",
+    "file_name_conversion": "Systematically converting file names in a directory based on an index file",
+    "generate_promoter_bed": "Generating a BED file of promoter regions based on a GTF file",
+    "generate_sample_matrix": "Generating a sample matrix from a directory of files, used upstream of 'file_name_conversion'",
+    "multi_fasta_select": "Selecting sequences from a multi-FASTA file based on a list of sequence IDs"
+}
+
+
+def main():
+    print("Epigenomic Pipelines")
+    print("Author: Jielin Yang")
+    print("A collection of utility scripts for epigenomic data analysis")
+    print("Version: 0.1.1")
+    print("")
+    print("List of utility scripts in epigenomic-pipelines:")
+    
+    # Set the width for alignment based on the longest key in tools_info
+    max_key_length = max(len(tool) for tool in tools_info)
+    padding = 4  # Additional padding after the longest key length
+
+    for tool, description in tools_info.items():
+        # Align each tool name to the left with `max_key_length + padding` spacing
+        print(f"    {tool.ljust(max_key_length + padding)}{description}")
+    
+    print("")
+    print("For more information on each utility script, run the script with the `--help` flag.")
+    print("Visit https://j-y26.github.io/Epigenomic-Pipelines for detailed documentation.")
+
+if __name__ == "__main__":
+    main()

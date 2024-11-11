@@ -21,6 +21,9 @@ def map_chromosome_names(input_file, mapping_file, output_file, chromosome_colum
     else:
         sys.exit('Invalid separator. Use tab or comma')
 
+    # Convert 1-indexed to 0-indexed column
+    chromosome_column = chromosome_column - 1 if chromosome_column > 0 else sys.exit('Invalid column index')
+
     # Read mapping file
     mapping = pd.read_csv(mapping_file, sep=separator, header=None, dtype={0: str, 1: str})
     mapping.columns = ['old', 'new']
@@ -41,7 +44,7 @@ def main():
     parser.add_argument('-i', '--input', help='Input file', required=True)
     parser.add_argument('-m', '--mapping', help='Mapping file', required=True)
     parser.add_argument('-o', '--output', help='Output file', required=True)
-    parser.add_argument('-c', '--chromosome-column', help='Chromosome column', type=int, required=True)
+    parser.add_argument('-c', '--chromosome-column', help='Chromosome column, 1-indexed, default is 1', type=int, default=1)
     parser.add_argument('-s', '--separator', help='Column separator, tab or comma, default is tab', default='tab')
     args = parser.parse_args()
 

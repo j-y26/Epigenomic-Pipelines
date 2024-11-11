@@ -10,7 +10,8 @@ tools_info = {
     "file_name_conversion": "Systematically converting file names in a directory based on an index file",
     "generate_promoter_bed": "Generating a BED file of promoter regions based on a GTF file",
     "generate_sample_matrix": "Generating a sample matrix from a directory of files, used upstream of 'file_name_conversion'",
-    "multi_fasta_select": "Selecting sequences from a multi-FASTA file based on a list of sequence IDs"
+    "multi_fasta_select": "Selecting sequences from a multi-FASTA file based on a list of sequence IDs",
+    "bed_select": "Selecting regions from a BED file based on a list of region IDs"
 }
 
 

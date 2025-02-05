@@ -72,6 +72,16 @@ STAROutputDir="${projPath}/star_output"
 useTempFIFO="false"   # Must be either "true" or "false"
 tempFIFODir="/tmp"
 
+### Only used when running star_alignment_short_fragment.sh
+# Reduce requirement for filtering based on fragment length
+# The following parameters are used to filter out reads based on fragment length:
+# outFilterScoreMinOverLread: minimum score of a read alignment as a fraction of the read length
+# outFilterMatchNminOverLread: minimum number of matched bases in a read alignment as a fraction of the read length
+# outFilterMismatchNmax: maximum number of mismatches in a read alignment
+filterLreadScore="0"
+filterLreadMatch="0"
+filterMismatchNmax="2"
+
 # ====== Post-alignment processing =============================================
 # Path to the directory containing the BAM files sorted by name
 nameSortedDir="${projPath}/samtools_sort_name"

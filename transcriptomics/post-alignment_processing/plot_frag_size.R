@@ -34,7 +34,7 @@ if (length(commandArgs(trailingOnly = TRUE)) == 4) {
     plotHeight <- commandArgs(trailingOnly = TRUE)[4]
     plotHeight <- as.numeric(plotHeight)
 } else {
-    plotWidth <- 8
+    plotWidth <- 10
     plotHeight <- 6
 }
 
@@ -72,20 +72,23 @@ for (sample in samples) {
 fragDist$Sample <- factor(fragDist$Sample, levels = samples)
 
 # Plot the fragment size distribution as a violin plot, using ggplot2
+n_samples <- length(unique(fragDist$Sample))
+colors <- viridis::viridis(n_samples)
+
 library(ggplot2)
 plot <- ggplot(fragDist, aes(x = Sample, y = Size, weight = Weight, fill = Sample)) +
         geom_violin(bw = 5) +
         scale_y_continuous(limits = c(0, maxLength), breaks = seq(0, maxLength, 50)) +
-        scale_fill_brewer(palette = "Set1") +
-        scale_color_brewer(palette = "Set1") +
+        scale_fill_manual(values = colors) +
+        scale_color_manual(values = colors) +
         theme_bw() +
         ggpubr::rotate_x_text(angle = 45) +
         ylab("Fragment size (bp)") +
         xlab("")
 
-# Save the plot as a PDF file
-pdfFile <- paste0(fragSizeDir, "/", "frag_dist.pdf")
-pdf(pdfFile, width = plotWidth, height = plotHeight)
+# Save the plot as a PNG file
+pngFile <- paste0(fragSizeDir, "/", "frag_dist.png")
+png(pngFile, width = plotWidth, height = plotHeight, units = "in", res = 1000)
 print(plot)
 dev.off()
 

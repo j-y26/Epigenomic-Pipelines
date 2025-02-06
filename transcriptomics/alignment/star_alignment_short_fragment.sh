@@ -66,11 +66,6 @@ for file in $(find ${trimmedDir} -type f -name '*R1_trimmed.fastq.gz'); do
     --outFilterMatchNminOverLread ${filterLreadMatch} \
     --outFilterMismatchNmax ${filterMismatchNmax} \
     echo "Alignment for ${sample} complete"
-
-    # Remove the temporary directory if it was created
-    if [ ${useTempFIFO} == "true" ]; then
-        rm -r ${tempFIFODir}/${sample}
-    fi
 done
 
 # [END]

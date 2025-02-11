@@ -36,16 +36,24 @@ if [ ! -d ${STAROutputDir} ]; then
     mkdir ${STAROutputDir}
 fi
 
+# Check whether rRNA cleaning is enabled
+if [ ${rRNAFiltering} == "true" ]; then
+    trimmedDir=${rRNAcleanDir}
+    suffix="cleaned.fastq.gz"
+else
+    suffix="trimmed.fastq.gz"
+fi
+
 # Align the reads to the reference genome
 # Loop through the directory to match patterns ending in _R1_*.fastq.gz
 # We use trimmed files for alignment, so we need to loop through the trimmed directory
 
-for file in $(find ${trimmedDir} -type f -name '*R1_trimmed.fastq.gz'); do
-    sample=$(basename $file _R1_trimmed.fastq.gz)
+for file in $(find ${trimmedDir} -type f -name '*R1_*.fastq.gz'); do
+    sample=$(basename $file _R1_${suffix})
     echo "Aligning ${sample} to reference genome..."
     echo "This may take a while..."
-    forward_file="${sample}_R1_trimmed.fastq.gz"
-    reverse_file="${sample}_R2_trimmed.fastq.gz"
+    forward_file="${sample}_R1_${suffix}"
+    reverse_file="${sample}_R2_${suffix}"
 
     # Create a temporary directory for the FIFO files
     if [ ${useTempFIFO} == "true" ]; then

@@ -49,6 +49,33 @@ TRIMMOMATIC_ADAPTER_FILE="/path/to/adapter.fa"
 # Note that the adapter must be chosen corresponding to the library generation method
 # These fasta files are usually stored along with the Trimmomatic JAR file
 
+### For checking rRNA contamination
+
+# Whether rRNA filtering is enabled
+# If set to "true", the pipeline will filter out reads that align to rRNA
+# If set to "false", the pipeline will skip the rRNA filtering step
+rRNAFiltering="false" # Must be either "true" or "false"
+
+# Path to the rRNA FASTA file
+# This is a species specific file containing the rRNA sequences
+rRNAFastaFile="/path/to/rRNA.fa"
+
+# Path to the rRNA GTF file
+rRNAGtfFile="/path/to/rRNA.gtf"
+
+# Path to the SortMeRNA reference file
+# SortMeRNA already provides some pre-built databases that include multi-taxon rRNA species
+sortmernaRef="/path/to/sortmerna_ref"
+
+# SortmeRNA working directory
+sortmernaWorkDir="${USER}/sortmerna"
+
+# Path to the output directory for the rRNA alignment, fastq files that align to rRNA
+rRNAalignDir="${projPath}/rRNA_filtering/rRNA_aligned"
+
+# Path to the output directory for the rRNA contamination free fastq files
+rRNAcleanDir="${projPath}/rRNA_filtering/rRNA_cleaned"
+
 # ====== Alignment =============================================================
 # Path to the STAR index directory
 STARIndexDir="/path/to/STARIndex"

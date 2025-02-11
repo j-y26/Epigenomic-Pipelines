@@ -26,7 +26,7 @@ echo "Counting reads ..."
 featureCounts \
   -T ${threads} \
   -p --countReadPairs \
-  -t gene \
+  -t exon \
   -g gene_id \
   -s 1 \
   -a ${genomeGtfFile} \

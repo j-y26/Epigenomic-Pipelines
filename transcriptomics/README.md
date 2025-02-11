@@ -22,6 +22,8 @@ Here, we describe the analysis from the input fastq files.
     - [Quality control](#quality-control)
     - [Trimming](#trimming)
     - [Quality control after trimming](#quality-control-after-trimming)
+    - [rRNA Contamination Analysis and Cleaning \[Optional\]](#rrna-contamination-analysis-and-cleaning-optional)
+    - [Quality control after rRNA cleaning](#quality-control-after-rrna-cleaning)
   - [Alignment](#alignment)
     - [Building STAR index](#building-star-index)
     - [Alignment](#alignment-1)
@@ -80,7 +82,7 @@ ensures that the pipeline is run sequentially.
 
 ```bash
 ~/pre-alignment_processing/fastqc_pre-trimming.sh config_rnaseq.sh && \
-~/pre-alignment_processing/trimming_reads.sh config_rnaseq.sh && \
+~/pre-alignment_processing/trimming_reads_fastp.sh config_rnaseq.sh && \
 ~/pre-alignment_processing/fastqc_post-trimming.sh config_rnaseq.sh && \
 ~/alignment/star_alignment.sh config_rnaseq.sh && \
 ~/post-alignment_processing/sort_bam_by_name.sh config_rnaseq.sh && \
@@ -151,19 +153,19 @@ After checking the quality of the raw data, it is important to remove low qualit
 bases and adapter sequences. This can be done using tools such as Trimmomatic,
 which is a flexible read trimming tool for Illumina NGS data.
 
-Trimmomatic is a Java-based program, and the path to the `.jar` file must be set
-in the `config_rnaseq.sh` file. In addition, the adapter sequences must be
-provided to the program. While the program has a default set of adapter sequences,
-located along with the `.jar` file, it is important to choose the correct
-adapter sequences for the specific library preparation kit used. Consult the 
-instruction for the kit to select the correct adapter sequences.
-
 The trimming step make use of the `trimming_reads_fastp.sh` script, where we perform
 trimming on the raw sequencing data.
 
 ```bash
 ./trimming_reads_fastp.sh config_rnaseq.sh
 ```
+
+Trimmomatic is a Java-based program, and the path to the `.jar` file must be set
+in the `config_rnaseq.sh` file. In addition, the adapter sequences must be
+provided to the program. While the program has a default set of adapter sequences,
+located along with the `.jar` file, it is important to choose the correct
+adapter sequences for the specific library preparation kit used. Consult the 
+instruction for the kit to select the correct adapter sequences.
 
 Here, we use fastp because it is faster than Trimmomatic and provides similar
 performance. In addition, the program provides polyG and polyX trimming, which
@@ -184,6 +186,54 @@ another round of quality control using FastQC. This is done using the
 
 We should expect to see an improvement in the quality of the reads after trimming.
 This will facilitate a better alignment to the reference genome.
+
+### rRNA Contamination Analysis and Cleaning [Optional]
+
+Ribosomal RNA (rRNA) contamination is a common issue in RNA-seq data, especially
+when the RNA is not polyA-selected, i.e., in rRNA-depleted samples. rRNA
+depletion efficiency can vary, especially in low-quality RNA samples, and
+contamination can affect the downstream analysis, particularly the estimation
+of gene expression levels.
+
+To check for rRNA contamination, we use `SortMeRNA`, which is a program that
+can be used to filter rRNA reads from the RNA-seq data. The program requires
+a reference database of rRNA sequences, which can be downloaded from the
+`SortMeRNA` website. Furthermore, we also use species-specific annotation of
+rRNA sequences, which can be downloaded from databases such as Ensembl or UCSC.
+To extract the `FASTA` sequences of the rRNA genes, we use first select the
+rRNA genes from the GTF annotation file and then extract the sequences from
+the reference genome FASTA file. This is easily achieved using the `grep` and
+`bedtools getfasta` commands.
+
+To check for rRNA contamination, we use the `sortmerna_rRNA.sh` script.
+
+```bash
+./sortmerna_align.sh config_rnaseq.sh
+```
+
+The script will output aligned and unaligned reads. The program also outputs the
+proportion of reads that align to the rRNA database. Unaligned reads are in
+the `fastq` format and can be used for downstream analysis, which are cleaned
+reads that do not contain rRNA contamination.
+
+An alignment file is also generated in the BAM format, which can be visualized
+using tools such as `IGV` to check the alignment of the reads to the rRNA genes.
+
+### Quality control after rRNA cleaning
+
+After cleaning the rRNA reads, it is important to check the quality of the
+cleaned reads. This can be done using tools such as FastQC, which provides
+information about the quality of the reads, including per base sequence quality,
+per base sequence content, sequence length distribution, and overrepresented
+sequences. A shift of GC content towards the center should be expected after
+rRNA cleaning, since rRNA reads are usually GC-rich.
+
+The quality control step after rRNA cleaning make use of the `fastqc_post-sortmerna.sh`
+script.
+
+```bash
+./fastqc_post-sortmerna.sh config_rnaseq.sh
+```
 
 <br><br/>
 
@@ -231,6 +281,22 @@ to a human-readable SAM format using the `samtools view` command. Furthermore,
 the default behavior of the pipeline ensures that the BAM file is sorted by
 coordinate, which are usually required for indexing the BAM file and for
 some downstream analysis.
+
+In case where the alignment fails to the having very short fragments 
+(Umapped: too short), this is primarily due to the fact that RNA degradation is
+severe and the RNA fragments are too short to be aligned. In such cases, it is
+recommended to use the `--outFilterMatchNminOverLread` parameter to increase the
+minimum match length. This parameter specifies the minimum fraction of the read
+length that must match the reference genome. The default value is 0.66, which
+means that at least 66% of the read length must match the reference genome. If
+the RNA fragments are very short, this parameter can be decreased.
+
+The `star_alignment_short_fragment.sh` script can be used to align the reads
+with short fragments. However, parameters need to be optimized.
+
+```bash
+./star_alignment_short_fragment.sh config_rnaseq.sh
+```
 
 <br><br/>
 

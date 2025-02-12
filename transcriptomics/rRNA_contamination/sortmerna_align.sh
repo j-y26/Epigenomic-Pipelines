@@ -20,7 +20,7 @@ if [ ! -d ${rRNAalignDir} ]; then
     mkdir -p ${rRNAalignDir}
 fi
 
-if [ ! -d ${rRNAalignDir} ]; then
+if [ ! -d ${rRNAalignDir}/alignment ]; then
     mkdir -p ${rRNAalignDir}/alignment
 fi
 

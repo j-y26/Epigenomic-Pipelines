@@ -31,7 +31,7 @@ fi
 # Loop through the directory to match patterns ending in _R1_*.fastq.gz
 # and run FastQC on the paired files
 
-for file in $(find ${trimmedDir} -type f -name '*R1_cleaned.fastq.gz'); do
+for file in $(find ${rRNAcleanDir} -type f -name '*R1_cleaned.fastq.gz'); do
     sample=$(basename $file _R1_cleaned.fastq.gz)
     echo "Running FastQC on ${sample} after cleaning rRNA reads"
     forward_file="${sample}_R1_cleaned.fastq.gz"

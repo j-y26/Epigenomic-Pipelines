@@ -20,10 +20,6 @@ if [ ! -d ${rRNAalignDir} ]; then
     mkdir -p ${rRNAalignDir}
 fi
 
-if [ ! -d ${rRNAalignDir}/alignment ]; then
-    mkdir -p ${rRNAalignDir}/alignment
-fi
-
 if [ ! -d ${rRNAcleanDir} ]; then
     mkdir -p ${rRNAcleanDir}
 fi
@@ -83,6 +79,7 @@ for file in $(find ${trimmedDir} -type f -name '*R1_trimmed.fastq.gz'); do
       --fastx \
       --out2 \
       --sam \
+      --SQ \
       --num_alignments 1 \
       --workdir ${sortmernaWorkDir} \
       --threads ${threads}
@@ -99,17 +96,6 @@ for file in $(find ${trimmedDir} -type f -name '*R1_trimmed.fastq.gz'); do
 
     mv ${rRNAcleanDir}/${sample}_cleaned_fwd.fq.gz ${rRNAcleanDir}/${sample}_R1_cleaned.fastq.gz
     mv ${rRNAcleanDir}/${sample}_cleaned_rev.fq.gz ${rRNAcleanDir}/${sample}_R2_cleaned.fastq.gz
-
-    # Converting sam files to bam files
-    echo "Converting sam files to bam files..."
-    pigz -d -p ${threads} ${rRNAalignDir}/${sample}_aligned.sam.gz
-    samtools view -bS ${rRNAalignDir}/${sample}_aligned.sam > ${rRNAalignDir}/alignment/${sample}_rRNA_aligned.bam
-
-    # Remove the sam file
-    rm ${rRNAalignDir}/${sample}_aligned.sam
-
-    echo "Conversion complete"
-    echo "rRNA cleaning for ${sample} complete"
 done
 
 # [END]

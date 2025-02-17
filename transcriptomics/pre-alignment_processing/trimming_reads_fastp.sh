@@ -43,7 +43,8 @@ for file in $(find ${fastqDir} -type f -name '*_R1_*.fastq.gz'); do
     --trim_poly_x \
     -w ${threads} \
     -h ${trimmedDir}/fastp_report/${sample}_fastp_report.html \
-    -j ${trimmedDir}/fastp_report/${sample}_fastp_report.json &> ${trimmedDir}/fastp_report/${sample}_fastp_summary.txt
+    -j ${trimmedDir}/fastp_report/${sample}_fastp_report.json 2>&1 | \
+    tee ${trimmedDir}/fastp_report/${sample}_fastp_summary.txt
 
     echo "Done trimming ${sample}"
 done

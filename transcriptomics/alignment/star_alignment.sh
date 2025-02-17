@@ -33,7 +33,7 @@ fi
 # Check whether rRNA cleaning is enabled
 if [ ${rRNAFiltering} == "true" ]; then
     trimmedDir=${rRNAcleanDir}
-    suffix="cleaned.fastq.gz"
+    suffix="cleaned_repaired.fastq.gz"
 else
     suffix="trimmed.fastq.gz"
 fi

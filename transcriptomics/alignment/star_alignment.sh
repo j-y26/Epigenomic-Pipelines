@@ -13,6 +13,13 @@ echo "STAROutputDir: ${STAROutputDir}"
 if [ ${useTempFIFO} == "true" ]; then
     echo "Using temporary FIFO directory: ${tempFIFODir}"
 
+    # Set ulimit to 102400 to avoid "too many open files" error in the temporary FIFO directory
+    currDir=$(pwd)
+    echo "Setting ulimit to 102400"
+    cd ${tempFIFODir}
+    ulimit -n 102400
+    cd ${currDir}
+
 else
     echo "Using STAROutputDir as temporary FIFO directory"
 fi
@@ -42,7 +49,7 @@ fi
 # Loop through the directory to match patterns ending in _R1_*.fastq.gz
 # We use trimmed files for alignment, so we need to loop through the trimmed directory
 
-for file in $(find ${trimmedDir} -type f -name '*R1_*.fastq.gz'); do
+for file in $(find ${trimmedDir} -type f -name "*R1_${suffix}"); do
     sample=$(basename $file _R1_${suffix})
     echo "Aligning ${sample} to reference genome..."
     echo "This may take a while..."

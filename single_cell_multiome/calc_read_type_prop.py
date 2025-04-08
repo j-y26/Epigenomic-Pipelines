@@ -33,7 +33,7 @@
 #       - intergenic_reads: number of confidently mapped intergenic reads
 #       - intergenic_prop: proportion of confidently mapped intergenic reads
 
-# Usage: python calc_read_type_prop.py <input_csv> <output_csv> [chunk_size]
+# Usage: python calc_read_type_prop.py -i <input_csv> -o <output_csv> -c [<chunk_size>]
 
 # [Main]
 
@@ -43,6 +43,7 @@ import csv
 from multiprocessing import Pool, cpu_count
 from collections import defaultdict
 import itertools
+import argparse
 
 # Define default dictionary structure
 def default_dict_int():
@@ -87,7 +88,7 @@ def main(input_csv, output_csv, chunk_size):
         header = next(reader) # Skip the header
         
         # Assign chucks to be processed by available CPUs while reading the file
-        available_cpus = cpu_count() - 1
+        available_cpus = cpu_count() - 1 
         if available_cpus < 1:
             available_cpus = 1
         
@@ -130,19 +131,14 @@ def main(input_csv, output_csv, chunk_size):
 
 # Check if the script is being run directly
 if __name__ == "__main__":
-    # Check if the input arguments are correct
-    if len(sys.argv) < 3:
-        print("Usage: python calc_read_type_prop.py <input_csv> <output_csv> [chunk_size]")
-        sys.exit(1)
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description="Calculate the proportion of reads of each type in each cell barcode.")
+    parser.add_argument("-i", "--input_csv", required=True, help="Input csv file")
+    parser.add_argument("-o", "--output_csv", required=True, help="Output csv file")
+    parser.add_argument("-c", "--chunk_size", type=int, default=1000000, help="Chunk size for processing (default: 1000000)")
+    args = parser.parse_args()
 
-    # Input arguments
-    input_csv = sys.argv[1]
-    output_csv = sys.argv[2]
-    chunk_size = int(sys.argv[3]) if len(sys.argv) == 4 else 100000
-
-    print(f"Input csv: {input_csv}")
-
-    # Run the main function
-    main(input_csv, output_csv, chunk_size)
+    # Run the main function with the provided arguments
+    main(args.input_csv, args.output_csv, args.chunk_size)
 
 # [END]

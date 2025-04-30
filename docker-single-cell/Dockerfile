@@ -50,22 +50,19 @@ RUN curl -sSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64
 # Install R packages
 RUN R --vanilla -e ' \
   options(repos = c(CRAN = "https://cran.rstudio.com")); \
-  install.packages(c("tidyverse", "dplyr", "devtools", "formatR", "remotes", "selectr", "caTools", "ggplot2", "rmarkdown", "httr", "knitr", "xaringan", "bookdown", "data.table", "tidyr", "shiny", "plotly", "kableExtra", "stringr", "stringi", "DT", "reshape2", "here", "pheatmap", "cowplot", "ggrepel", "readxl", "writexl", "readr", "CVXR", "mixtools", "randomForest", "minerva", "igraph", "ggfortify", "rlang", "sf", "reticulate"), repos = "https://cran.rstudio.com", dependencies = TRUE) \
+  install.packages(c("tidyverse", "dplyr", "devtools", "formatR", "remotes", "selectr", "caTools", "ggplot2", "rmarkdown", "httr", "knitr", "xaringan", "bookdown", "data.table", "tidyr", "shiny", "plotly", "kableExtra", "stringr", "stringi", "DT", "reshape2", "here", "pheatmap", "cowplot", "ggrepel", "readxl", "writexl", "readr", "CVXR", "mixtools", "randomForest", "minerva", "igraph", "ggfortify", "rlang", "sf", "reticulate"), repos = "https://cran.rstudio.com") \
 '
 
 RUN R --vanilla -e ' \
   options(repos = c(CRAN = "https://cran.rstudio.com")); \
-  BiocManager::install(c("AnnotationDbi", "AUCell", "clusterProfiler", "ComplexHeatmap", "decoupleR", "enrichplot", "infercnv", "Nebulosa", "org.Hs.eg.db", "org.Mm.eg.db", "UCell", "BiocFileCache", "dittoSeq", "scuttle", "DelayedArray", "IRanges", "MAST", "monocle", "rtracklayer", "S4Vectors", "SummarizedExperiment", "Rsamtools", "BSgenome", "biovizBase", "Biostrings", "multtest", "glmGamPoi", "GEOquery", "DESeq2", "edgeR", "limma", "biomaRt", "GEOmetadb", "BiocGenerics", "Biobase", "GSEABase", "GSVA", "BiocStyle", "fgsea", "BiocParallel", "GSA", "RCy3", "circlize", "chromVAR", "gprofiler2", "viper", "minet", "scater", "scran", "SingleCellExperiment", "DropletUtils", "SingleR", "celldex", "SpatialExperiment", "nnSVG", "DelayedMatrixStats", "lme4", "batchelor", "HDF5Array", "terra", "ggrastr", "harmony", "motifmatchr", "TFBSTools", "JASPAR2020", "GenomeInfoDb", "BSgenome.Hsapiens.UCSC.hg38", "EnsDb.Hsapiens.v86", "BSgenome.Mmusculus.UCSC.mm10", "EnsDb.Mmusculus.v79", "GenomicRanges", "GenomicFeatures", "AnnotationHub", "Biostrings", "ChIPseeker", "ATACseqQC"), dependencies = TRUE); \
+  BiocManager::install(c("AnnotationDbi", "AUCell", "clusterProfiler", "ComplexHeatmap", "decoupleR", "enrichplot", "infercnv", "Nebulosa", "org.Hs.eg.db", "org.Mm.eg.db", "UCell", "BiocFileCache", "dittoSeq", "scuttle", "DelayedArray", "IRanges", "MAST", "monocle", "rtracklayer", "S4Vectors", "SummarizedExperiment", "Rsamtools", "BSgenome", "biovizBase", "Biostrings", "glmGamPoi", "GEOquery", "DESeq2", "edgeR", "limma", "biomaRt", "GEOmetadb", "BiocGenerics", "Biobase", "GSEABase", "GSVA", "BiocStyle", "fgsea", "BiocParallel", "GSA", "RCy3", "circlize", "chromVAR", "gprofiler2", "SingleCellExperiment", "HDF5Array", "terra", "ggrastr", "harmony", "motifmatchr", "TFBSTools", "JASPAR2020", "GenomeInfoDb", "GenomicRanges", "GenomicFeatures", "AnnotationHub", "Biostrings", "ChIPseeker")); \
   devtools::install_github("stjude/ChIPseqSpikeInFree"); \
   devtools::install_github("satijalab/seurat-data"); \
   devtools::install_github("satijalab/azimuth"); \
   devtools::install_github("satijalab/seurat-wrappers"); \
   devtools::install_github("chris-mcginnis-ucsf/DoubletFinder", force = TRUE); \
-  devtools::install_github("j-y26/bioToolkit"); \
-  devtools::install_github("cole-trapnell-lab/monocle3"); \
   devtools::install_github("immunogenomics/presto"); \
   devtools::install_github("bnprks/BPCells/r"); \
-  devtools::install_github("jinworks/CellChat") \
 '
 
 RUN R --vanilla -e ' \

@@ -119,11 +119,15 @@ Therefore, the image will build a RStudio server environment with version-contro
 packages installed. To pull and install the container:
 
 ```bash
-docker run -e PASSWORD=changeit -v ${pwd}:/home/rstudio/projects -p 8787:8787 jyang26/single-cell-epigenomics:v1.0
+docker run -e PASSWORD=changeit -v ${PWD}:/home/rstudio/projects -p 8787:8787 jyang26/sc_spatial_epigenomics:v1.1
 ```
 
 A Python environment (Miniconda) is also installed in this environment. CLI of this
-container can be accessed in a similar way.
+container can be accessed as the root user.
+
+```bash
+docker exec -it <CONTAINER ID> /bin/bash
+```
 
 ## Usage
 

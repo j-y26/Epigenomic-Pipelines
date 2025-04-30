@@ -45,8 +45,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install Miniconda
 RUN curl -sSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh && \
     bash /tmp/miniconda.sh -b -p /opt/miniconda && \
-    rm /tmp/miniconda.sh && \
-    source /opt/miniconda/bin/activate
+    rm /tmp/miniconda.sh
 
 # Install R packages
 RUN R --vanilla -e ' \

@@ -24,10 +24,28 @@ for file in $(find ${alignmentDir}/bam -type f -name '*_bowtie2.bam'); do
     sample=$(basename $file _bowtie2.bam)
     echo "Processing sample ${sample}..."
 
+    # Step 0: Add read groups if not already present to void Picard errors
+    echo "Checking read groups for ${sample}..."
+    if ! samtools view -H ${alignmentDir}/bam/${sample}_bowtie2.bam | grep -q '@RG'; then
+        echo "No read groups found for ${sample}."
+        echo "Adding read groups to ${sample}..."
+        java -jar ${PICARD_JAR} AddOrReplaceReadGroups \
+            I=${alignmentDir}/bam/${sample}_bowtie2.bam \
+            O=${alignmentDir}/bam/${sample}_bowtie2_rg.bam \
+            RGID=${sample} \
+            RGLB=lib1 \
+            RGPL=ILLUMINA \
+            RGPU=unit1 \
+            RGSM=${sample}
+        echo "Read groups added"
+    else
+        echo "Read groups already present for ${sample}"
+    fi
+
     # Step 1: Sort the bam file by coordinates
     echo "Sorting BAM file for ${sample}..."
     samtools sort -@ $threads -o ${alignmentDir}/bam/${sample}_coord_sorted.bam \
-        ${alignmentDir}/bam/${sample}_bowtie2.bam
+        ${alignmentDir}/bam/${sample}_bowtie2_rg.bam
     echo "BAM file sorted"
 
     # Step 2: Mark duplicates
@@ -40,14 +58,17 @@ for file in $(find ${alignmentDir}/bam -type f -name '*_bowtie2.bam'); do
     echo "Duplicates marked"
 
     # Step 3: Remove duplicates
+    echo "Removing duplicates for ${sample}..."
     samtools view -@ $threads -b -F 0x0400 \
         ${alignmentDir}/bam_nodup/${sample}_markdups.bam > \
         ${alignmentDir}/bam_nodup/${sample}_nodup.bam
+    echo "Duplicates removed"
 
     # Step 4: Remove intermediate files
     echo "Removing intermediate files for ${sample}..."
+    rm ${alignmentDir}/bam/${sample}_bowtie2_rg.bam
     rm ${alignmentDir}/bam/${sample}_coord_sorted.bam
-    rm ${alignmentDir}/bam/${sample}_markdups.bam
+    rm ${alignmentDir}/bam_nodup/${sample}_markdups.bam
     echo "Intermediate files removed"
 
     echo "Sample ${sample} deduplication complete"

@@ -58,15 +58,17 @@ for file in $(find ${alignmentDir}/bam -type f -name '*_bowtie2.bam'); do
     echo "Duplicates marked"
 
     # Step 3: Remove duplicates
+    echo "Removing duplicates for ${sample}..."
     samtools view -@ $threads -b -F 0x0400 \
         ${alignmentDir}/bam_nodup/${sample}_markdups.bam > \
         ${alignmentDir}/bam_nodup/${sample}_nodup.bam
+    echo "Duplicates removed"
 
     # Step 4: Remove intermediate files
     echo "Removing intermediate files for ${sample}..."
     rm ${alignmentDir}/bam/${sample}_bowtie2_rg.bam
     rm ${alignmentDir}/bam/${sample}_coord_sorted.bam
-    rm ${alignmentDir}/bam/${sample}_markdups.bam
+    rm ${alignmentDir}/bam_nodup/${sample}_markdups.bam
     echo "Intermediate files removed"
 
     echo "Sample ${sample} deduplication complete"

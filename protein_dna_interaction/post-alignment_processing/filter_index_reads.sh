@@ -23,7 +23,7 @@ fi
 # 3. Index the sorted reads
 
 for file in $(find ${alignmentDir}/bam_nodup -type f -name "*.bam"); do
-    sample=$(basename $file _nodups.bam)
+    sample=$(basename $file _nodup.bam)
     echo "Filtering and indexing ${sample}..."
 
     # Step 1: Filter out unmapped reads and keep only properly paired reads
